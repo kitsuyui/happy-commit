@@ -13506,7 +13506,7 @@ function buildMessage(context) {
  * @returns {LuckyCommitResult}
  */
 function checkLuckyCommitId(commitId) {
-    const match = commitId.match(/(7{2,})/);
+    const match = commitId.match(/(7{3,})/);
     if (match) {
         return {
             lucky: true,
