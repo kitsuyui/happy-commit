@@ -71,7 +71,7 @@ interface LuckyCommitResult {
  * @returns {LuckyCommitResult}
  */
 function checkLuckyCommitId(commitId: string): LuckyCommitResult {
-  const match = commitId.match(/(7{2,})/);
+  const match = commitId.match(/(7{3,})/);
   if (match) {
     return {
       lucky: true,
