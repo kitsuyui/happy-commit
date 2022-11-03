@@ -1,5 +1,7 @@
 # lucky-commit
 
+[![codecov](https://codecov.io/gh/kitsuyui/lucky-commit/branch/main/graph/badge.svg?token=FM7RYWGV0P)](https://codecov.io/gh/kitsuyui/lucky-commit)
+
 - GitHub Action to celebrate your commits on PR.
 
 ## Example
