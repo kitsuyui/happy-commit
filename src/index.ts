@@ -1,6 +1,6 @@
-import * as core from "@actions/core";
-import * as github from "@actions/github";
-import { Octokit } from "@octokit/action";
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { Octokit } from '@octokit/action';
 
 async function run() {
   try {
@@ -11,8 +11,8 @@ async function run() {
     const commitIds = await getCommitIds(octokit);
     const message = buildMessage({ commitIds, prNum });
     await updateMessage(octokit, prNum, userLogin, message);
-  } catch (error: any) {
-    core.setFailed(error.message);
+  } catch (error) {
+    core.setFailed('Unexpected error');
   }
 }
 
@@ -37,27 +37,31 @@ function buildMessage(context: LuckyJudgeContext): MessageContext {
   let lucky = false;
 
   if (isEveryDigit7(prNum) || isLuckyNumberBase10(prNum)) {
-    messages.push(`- Now pull request issue number reaches **${prNum}**. It's time to celebrate!`);
+    messages.push(
+      `- Now pull request issue number reaches **${prNum}**. It's time to celebrate!`
+    );
     lucky = true;
   }
 
   for (const commitId of commitIds) {
     const result = checkLuckyCommitId(commitId);
     if (result.lucky) {
-      messages.push(`- Commit \`${commitId}\` is lucky! It contains **${result.match}**!.`);
+      messages.push(
+        `- Commit \`${commitId}\` is lucky! It contains **${result.match}**!.`
+      );
       lucky = true;
     }
   }
   if (lucky) {
     return {
       lucky,
-      body: "# :tada: Lucky commit!\n" + messages.join("\n"),
+      body: '# :tada: Lucky commit!\n' + messages.join('\n'),
     };
   }
   return {
     lucky: false,
-    body: "",
-  }
+    body: '',
+  };
 }
 
 interface LuckyCommitResult {
@@ -80,7 +84,7 @@ function checkLuckyCommitId(commitId: string): LuckyCommitResult {
   }
   return {
     lucky: false,
-    match: "",
+    match: '',
   };
 }
 
@@ -89,7 +93,7 @@ function checkLuckyCommitId(commitId: string): LuckyCommitResult {
  * @param num {number} the number to be checked
  * @returns {boolean} true if the number is lucky
  */
-function isEveryDigit7(num: number): boolean {
+export function isEveryDigit7(num: number): boolean {
   if (num.toString().match(/^7{2,}$/)) {
     return true;
   }
@@ -101,7 +105,7 @@ function isEveryDigit7(num: number): boolean {
  * @param num {number} the number to be checked
  * @returns {boolean} true if the number is lucky
  */
-function isLuckyNumberBase10(num: number): boolean {
+export function isLuckyNumberBase10(num: number): boolean {
   if (num.toString().match(/^[1]0+$/)) {
     return true;
   }
@@ -113,7 +117,7 @@ function isLuckyNumberBase10(num: number): boolean {
  * if lucky and past comment does not exist, create it.
  * if lucky and past comment exists, update it.
  * if not lucky, delete the comment.
- * 
+ *
  * @param octokit {Octokit} the octokit instance
  * @param prNum {number} the PR number
  * @param userLogin {string} the user login name
@@ -179,7 +183,7 @@ async function getFirstComment(
     if (comment.user?.login === userLogin) {
       return {
         id: comment.id,
-        body: comment.body_text || "",
+        body: comment.body_text || '',
       };
     }
   }
@@ -207,7 +211,12 @@ async function getCommitIds(octokit: Octokit): Promise<string[]> {
  * @returns user login {string}
  */
 async function getUserLogin(octokit: Octokit) {
-  const resp: any = await octokit.graphql(`
+  interface Result {
+    viewer: {
+      login: string;
+    };
+  }
+  const resp: Result = await octokit.graphql(`
 query {
   viewer {
     login
@@ -217,5 +226,5 @@ query {
 }
 
 if (require.main === module) {
-  run().then(() => {});
+  run().then();
 }

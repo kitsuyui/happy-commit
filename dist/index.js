@@ -7752,7 +7752,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __nccwpck_require__(2623);
+	const supportsColor = __nccwpck_require__(6011);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -8012,6 +8012,22 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
+
+
+/***/ }),
+
+/***/ 7878:
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = (flag, argv = process.argv) => {
+	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
+	const position = argv.indexOf(prefix + flag);
+	const terminatorPosition = argv.indexOf('--');
+	return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
+};
 
 
 /***/ }),
@@ -10259,6 +10275,149 @@ function onceStrict (fn) {
   f.called = false
   return f
 }
+
+
+/***/ }),
+
+/***/ 6011:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const os = __nccwpck_require__(2037);
+const tty = __nccwpck_require__(6224);
+const hasFlag = __nccwpck_require__(7878);
+
+const {env} = process;
+
+let forceColor;
+if (hasFlag('no-color') ||
+	hasFlag('no-colors') ||
+	hasFlag('color=false') ||
+	hasFlag('color=never')) {
+	forceColor = 0;
+} else if (hasFlag('color') ||
+	hasFlag('colors') ||
+	hasFlag('color=true') ||
+	hasFlag('color=always')) {
+	forceColor = 1;
+}
+
+if ('FORCE_COLOR' in env) {
+	if (env.FORCE_COLOR === 'true') {
+		forceColor = 1;
+	} else if (env.FORCE_COLOR === 'false') {
+		forceColor = 0;
+	} else {
+		forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
+	}
+}
+
+function translateLevel(level) {
+	if (level === 0) {
+		return false;
+	}
+
+	return {
+		level,
+		hasBasic: true,
+		has256: level >= 2,
+		has16m: level >= 3
+	};
+}
+
+function supportsColor(haveStream, streamIsTTY) {
+	if (forceColor === 0) {
+		return 0;
+	}
+
+	if (hasFlag('color=16m') ||
+		hasFlag('color=full') ||
+		hasFlag('color=truecolor')) {
+		return 3;
+	}
+
+	if (hasFlag('color=256')) {
+		return 2;
+	}
+
+	if (haveStream && !streamIsTTY && forceColor === undefined) {
+		return 0;
+	}
+
+	const min = forceColor || 0;
+
+	if (env.TERM === 'dumb') {
+		return min;
+	}
+
+	if (process.platform === 'win32') {
+		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
+		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
+		const osRelease = os.release().split('.');
+		if (
+			Number(osRelease[0]) >= 10 &&
+			Number(osRelease[2]) >= 10586
+		) {
+			return Number(osRelease[2]) >= 14931 ? 3 : 2;
+		}
+
+		return 1;
+	}
+
+	if ('CI' in env) {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+			return 1;
+		}
+
+		return min;
+	}
+
+	if ('TEAMCITY_VERSION' in env) {
+		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
+	}
+
+	if (env.COLORTERM === 'truecolor') {
+		return 3;
+	}
+
+	if ('TERM_PROGRAM' in env) {
+		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+		switch (env.TERM_PROGRAM) {
+			case 'iTerm.app':
+				return version >= 3 ? 3 : 2;
+			case 'Apple_Terminal':
+				return 2;
+			// No default
+		}
+	}
+
+	if (/-256(color)?$/i.test(env.TERM)) {
+		return 2;
+	}
+
+	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+		return 1;
+	}
+
+	if ('COLORTERM' in env) {
+		return 1;
+	}
+
+	return min;
+}
+
+function getSupportLevel(stream) {
+	const level = supportsColor(stream, stream && stream.isTTY);
+	return translateLevel(level);
+}
+
+module.exports = {
+	supportsColor: getSupportLevel,
+	stdout: translateLevel(supportsColor(true, tty.isatty(1))),
+	stderr: translateLevel(supportsColor(true, tty.isatty(2)))
+};
 
 
 /***/ }),
@@ -13417,7 +13576,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 1395:
+/***/ 5090:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -13455,6 +13614,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isLuckyNumberBase10 = exports.isEveryDigit7 = void 0;
 const core = __importStar(__nccwpck_require__(9855));
 const github = __importStar(__nccwpck_require__(122));
 const action_1 = __nccwpck_require__(6846);
@@ -13470,7 +13630,7 @@ function run() {
             yield updateMessage(octokit, prNum, userLogin, message);
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed('Unexpected error');
         }
     });
 }
@@ -13492,12 +13652,12 @@ function buildMessage(context) {
     if (lucky) {
         return {
             lucky,
-            body: "# :tada: Lucky commit!\n" + messages.join("\n"),
+            body: '# :tada: Lucky commit!\n' + messages.join('\n'),
         };
     }
     return {
         lucky: false,
-        body: "",
+        body: '',
     };
 }
 /**
@@ -13515,7 +13675,7 @@ function checkLuckyCommitId(commitId) {
     }
     return {
         lucky: false,
-        match: "",
+        match: '',
     };
 }
 /**
@@ -13529,6 +13689,7 @@ function isEveryDigit7(num) {
     }
     return false;
 }
+exports.isEveryDigit7 = isEveryDigit7;
 /**
  * 10, 100, 1000, ... is lucky number
  * @param num {number} the number to be checked
@@ -13540,6 +13701,7 @@ function isLuckyNumberBase10(num) {
     }
     return false;
 }
+exports.isLuckyNumberBase10 = isLuckyNumberBase10;
 /**
  * Update the comment of the current PR
  * if lucky and past comment does not exist, create it.
@@ -13592,7 +13754,7 @@ function getFirstComment(octokit, prNum, userLogin) {
             if (((_a = comment.user) === null || _a === void 0 ? void 0 : _a.login) === userLogin) {
                 return {
                     id: comment.id,
-                    body: comment.body_text || "",
+                    body: comment.body_text || '',
                 };
             }
         }
@@ -13629,7 +13791,7 @@ query {
     });
 }
 if (require.main === require.cache[eval('__filename')]) {
-    run().then(() => { });
+    run().then();
 }
 
 
@@ -13639,14 +13801,6 @@ if (require.main === require.cache[eval('__filename')]) {
 /***/ ((module) => {
 
 module.exports = eval("require")("encoding");
-
-
-/***/ }),
-
-/***/ 2623:
-/***/ ((module) => {
-
-module.exports = eval("require")("supports-color");
 
 
 /***/ }),
@@ -13829,7 +13983,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(1395);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(5090);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
