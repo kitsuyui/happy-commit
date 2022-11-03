@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "build": "ncc build index.ts --license licenses.txt"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "@octokit/action": "^4.0.10"
+  },
+  "name": "lucky-commit",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "repository": "git@github.com:kitsuyui/lucky-commit.git",
+  "author": "kitsuyui <kitsuyui@kitsuyui.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "typescript": "^4.8.4"
+  }
+}

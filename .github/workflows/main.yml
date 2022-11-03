@@ -1,0 +1,11 @@
+on:
+  - pull_request
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - uses: kitsuyui/lucky-commit
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

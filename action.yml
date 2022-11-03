@@ -1,0 +1,9 @@
+name: 'lucky-commit'
+description: 'Celebrate pull-request when it contais a lucky commit'
+inputs:
+  GITHUB_TOKEN:
+    description: 'GITHUB_TOKEN'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
