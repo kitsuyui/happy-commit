@@ -10,10 +10,10 @@
     "@actions/github": "^5.1.1",
     "@octokit/action": "^4.0.10"
   },
-  "name": "lucky-commit",
+  "name": "happy-commit",
   "version": "0.0.1",
   "main": "dist/index.js",
-  "repository": "git@github.com:kitsuyui/lucky-commit.git",
+  "repository": "git@github.com:kitsuyui/happy-commit.git",
   "author": "kitsuyui <kitsuyui@kitsuyui.com>",
   "license": "MIT",
   "devDependencies": {
