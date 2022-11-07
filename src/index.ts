@@ -55,7 +55,7 @@ function buildMessage(context: LuckyJudgeContext): MessageContext {
   if (lucky) {
     return {
       lucky,
-      body: '# :tada: Lucky commit!\n' + messages.join('\n'),
+      body: '# :tada: Happy commit!\n' + messages.join('\n'),
     };
   }
   return {
