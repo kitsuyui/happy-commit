@@ -1,4 +1,4 @@
-name: 'lucky-commit'
+name: 'happy-commit'
 description: 'Celebrate pull-request when it contais a lucky commit'
 inputs:
   GITHUB_TOKEN:
