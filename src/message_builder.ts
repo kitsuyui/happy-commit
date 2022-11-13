@@ -6,7 +6,7 @@ import {
   MessageForRule,
 } from './interfaces';
 
-class MessageBuilder {
+export class MessageBuilder {
   rules: MessageForRule[];
   baseTemplate: string;
 

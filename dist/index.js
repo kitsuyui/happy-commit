@@ -14501,7 +14501,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.buildMessage = void 0;
+exports.buildMessage = exports.MessageBuilder = void 0;
 const mustache_1 = __importDefault(__nccwpck_require__(8272));
 class MessageBuilder {
     constructor(rules, baseTemplate) {
@@ -14543,6 +14543,7 @@ class MessageBuilder {
         };
     }
 }
+exports.MessageBuilder = MessageBuilder;
 function buildMessage(context) {
     const mb = new MessageBuilder([
         {

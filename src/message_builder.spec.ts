@@ -1,6 +1,27 @@
-import { buildMessage } from './message_builder';
+import { LuckyJudgeContext, MessageContext } from './interfaces';
+import { MessageBuilder } from './message_builder';
 
-describe('buildMessage', () => {
+describe('MessageBuilder', () => {
+  function buildMessage(context: LuckyJudgeContext): MessageContext {
+    const mb = new MessageBuilder(
+      [
+        {
+          kind: 'pr',
+          rule: /(?:[1]0+)/,
+          message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
+        },
+        {
+          kind: 'commit',
+          rule: /(?:7{3,})/,
+          message:
+            'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+        },
+      ],
+      `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`
+    );
+    return mb.build(context);
+  }
+
   it('builds congratulatory message when inputs lucky commit ids', () => {
     const context = {
       commitIds: [
