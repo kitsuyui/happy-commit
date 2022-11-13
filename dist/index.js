@@ -13513,6 +13513,141 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 978:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getUserLogin = exports.getCommitIds = exports.updateMessage = void 0;
+const github = __importStar(__nccwpck_require__(5438));
+/**
+ * Update the comment of the current PR
+ * if lucky and past comment does not exist, create it.
+ * if lucky and past comment exists, update it.
+ * if not lucky, delete the comment.
+ *
+ * @param octokit {Octokit} the octokit instance
+ * @param prNum {number} the PR number
+ * @param userLogin {string} the user login name
+ * @param message {MessageContext} the message context
+ */
+function updateMessage(octokit, prNum, userLogin, message) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const context = github.context;
+        const pastComment = yield getFirstComment(octokit, prNum, userLogin);
+        const { lucky, body } = message;
+        if (lucky) {
+            // if there is a comment from the current user and the message is different, update it
+            if (pastComment && pastComment.body !== body) {
+                yield octokit.issues.updateComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id, body }));
+            }
+            else {
+                // if there is no comment from the current user, create it
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: prNum, body }));
+            }
+        }
+        else {
+            // if there is a comment from the current user, delete it
+            if (pastComment) {
+                yield octokit.issues.deleteComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id }));
+            }
+        }
+    });
+}
+exports.updateMessage = updateMessage;
+/**
+ * Get the first comment of the current PR by the current user
+ * @param octokit {Octokit} the octokit instance
+ * @param prNum {number} the PR number
+ * @param userLogin {string} the user login name
+ * @returns comment id {LastComment}
+ */
+function getFirstComment(octokit, prNum, userLogin) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const context = github.context;
+        // get comments on the PR
+        const comments = yield octokit.issues.listComments(Object.assign(Object.assign({}, context.repo), { issue_number: prNum }));
+        // find the comment by the current user if it exists
+        for (const comment of comments.data) {
+            if (((_a = comment.user) === null || _a === void 0 ? void 0 : _a.login) === userLogin) {
+                return {
+                    id: comment.id,
+                    body: comment.body_text || '',
+                };
+            }
+        }
+        return null;
+    });
+}
+/**
+ * Get commit ids of the current PR
+ * @param octokit {Octokit} the octokit instance
+ * @returns commit ids {string[]}
+ */
+function getCommitIds(octokit) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const context = github.context;
+        const commits = yield octokit.pulls.listCommits(Object.assign(Object.assign({}, context.repo), { pull_number: context.issue.number }));
+        return commits.data.map((commit) => commit.sha);
+    });
+}
+exports.getCommitIds = getCommitIds;
+/**
+ * Get login name of the current user
+ * By default, this returns `github-actions[bot]`
+ * @param octokit {Octokit} the octokit instance
+ * @returns user login {string}
+ */
+function getUserLogin(octokit) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const resp = yield octokit.graphql(`
+query {
+  viewer {
+    login
+  }
+}`);
+        return resp.viewer.login;
+    });
+}
+exports.getUserLogin = getUserLogin;
+
+
+/***/ }),
+
 /***/ 6144:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -13551,36 +13686,52 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isLuckyNumberBase10 = exports.isEveryDigit7 = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const action_1 = __nccwpck_require__(1231);
+const github_1 = __nccwpck_require__(978);
+const message_builder_1 = __nccwpck_require__(2920);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const context = github.context;
             const octokit = new action_1.Octokit();
-            const userLogin = yield getUserLogin(octokit);
+            const userLogin = yield (0, github_1.getUserLogin)(octokit);
             const prNum = context.issue.number;
-            const commitIds = yield getCommitIds(octokit);
-            const message = buildMessage({ commitIds, prNum });
-            yield updateMessage(octokit, prNum, userLogin, message);
+            const commitIds = yield (0, github_1.getCommitIds)(octokit);
+            const message = (0, message_builder_1.buildMessage)({ commitIds, prNum });
+            yield (0, github_1.updateMessage)(octokit, prNum, userLogin, message);
         }
         catch (error) {
             core.setFailed('Unexpected error');
         }
     });
 }
+if (require.main === require.cache[eval('__filename')]) {
+    run().then();
+}
+
+
+/***/ }),
+
+/***/ 2920:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.buildMessage = void 0;
+const rules_1 = __nccwpck_require__(1058);
 function buildMessage(context) {
     const { commitIds, prNum } = context;
     const messages = [];
     let lucky = false;
-    if (isEveryDigit7(prNum) || isLuckyNumberBase10(prNum)) {
+    if ((0, rules_1.isEveryDigit7)(prNum) || (0, rules_1.isLuckyNumberBase10)(prNum)) {
         messages.push(`- Now pull request issue number reaches **${prNum}**. It's time to celebrate!`);
         lucky = true;
     }
     for (const commitId of commitIds) {
-        const result = checkLuckyCommitId(commitId);
+        const result = (0, rules_1.checkLuckyCommitId)(commitId);
         if (result.lucky) {
             messages.push(`- Commit \`${commitId}\` is lucky! It contains **${result.match}**!.`);
             lucky = true;
@@ -13597,24 +13748,18 @@ function buildMessage(context) {
         body: '',
     };
 }
-/**
- * check if the commit id is lucky
- * @param commitId {string} the commit id
- * @returns {LuckyCommitResult}
- */
-function checkLuckyCommitId(commitId) {
-    const match = commitId.match(/(7{3,})/);
-    if (match) {
-        return {
-            lucky: true,
-            match: match[0],
-        };
-    }
-    return {
-        lucky: false,
-        match: '',
-    };
-}
+exports.buildMessage = buildMessage;
+
+
+/***/ }),
+
+/***/ 1058:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkLuckyCommitId = exports.isLuckyNumberBase10 = exports.isEveryDigit7 = void 0;
 /**
  * 77, 777, ... is lucky number
  * @param num {number} the number to be checked
@@ -13640,96 +13785,24 @@ function isLuckyNumberBase10(num) {
 }
 exports.isLuckyNumberBase10 = isLuckyNumberBase10;
 /**
- * Update the comment of the current PR
- * if lucky and past comment does not exist, create it.
- * if lucky and past comment exists, update it.
- * if not lucky, delete the comment.
- *
- * @param octokit {Octokit} the octokit instance
- * @param prNum {number} the PR number
- * @param userLogin {string} the user login name
- * @param message {MessageContext} the message context
+ * check if the commit id is lucky
+ * @param commitId {string} the commit id
+ * @returns {LuckyCommitResult}
  */
-function updateMessage(octokit, prNum, userLogin, message) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const context = github.context;
-        const pastComment = yield getFirstComment(octokit, prNum, userLogin);
-        const { lucky, body } = message;
-        if (lucky) {
-            // if there is a comment from the current user and the message is different, update it
-            if (pastComment && pastComment.body !== body) {
-                yield octokit.issues.updateComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id, body }));
-            }
-            else {
-                // if there is no comment from the current user, create it
-                yield octokit.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: prNum, body }));
-            }
-        }
-        else {
-            // if there is a comment from the current user, delete it
-            if (pastComment) {
-                yield octokit.issues.deleteComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id }));
-            }
-        }
-    });
+function checkLuckyCommitId(commitId) {
+    const match = commitId.match(/(7{3,})/);
+    if (match) {
+        return {
+            lucky: true,
+            match: match[0],
+        };
+    }
+    return {
+        lucky: false,
+        match: '',
+    };
 }
-/**
- * Get the first comment of the current PR by the current user
- * @param octokit {Octokit} the octokit instance
- * @param prNum {number} the PR number
- * @param userLogin {string} the user login name
- * @returns comment id {LastComment}
- */
-function getFirstComment(octokit, prNum, userLogin) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const context = github.context;
-        // get comments on the PR
-        const comments = yield octokit.issues.listComments(Object.assign(Object.assign({}, context.repo), { issue_number: prNum }));
-        // find the comment by the current user if it exists
-        for (const comment of comments.data) {
-            if (((_a = comment.user) === null || _a === void 0 ? void 0 : _a.login) === userLogin) {
-                return {
-                    id: comment.id,
-                    body: comment.body_text || '',
-                };
-            }
-        }
-        return null;
-    });
-}
-/**
- * Get commit ids of the current PR
- * @param octokit {Octokit} the octokit instance
- * @returns commit ids {string[]}
- */
-function getCommitIds(octokit) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const context = github.context;
-        const commits = yield octokit.pulls.listCommits(Object.assign(Object.assign({}, context.repo), { pull_number: context.issue.number }));
-        return commits.data.map((commit) => commit.sha);
-    });
-}
-/**
- * Get login name of the current user
- * By default, this returns `github-actions[bot]`
- * @param octokit {Octokit} the octokit instance
- * @returns user login {string}
- */
-function getUserLogin(octokit) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const resp = yield octokit.graphql(`
-query {
-  viewer {
-    login
-  }
-}`);
-        return resp.viewer.login;
-    });
-}
-if (require.main === require.cache[eval('__filename')]) {
-    run().then();
-}
+exports.checkLuckyCommitId = checkLuckyCommitId;
 
 
 /***/ }),
