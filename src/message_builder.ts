@@ -5,8 +5,9 @@ import {
   MessageContext,
   MessageForRule,
 } from './interfaces';
+import { Rules, RulesKey } from './rules';
 
-export class MessageBuilder {
+class MessageBuilder {
   rules: MessageForRule[];
   baseTemplate: string;
 
@@ -56,22 +57,39 @@ export class MessageBuilder {
   }
 }
 
-export function buildMessage(context: LuckyJudgeContext): MessageContext {
-  const mb = new MessageBuilder(
-    [
-      {
-        kind: 'pr',
-        rule: /(?:[1]0+)/,
-        message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
-      },
-      {
-        kind: 'commit',
-        rule: /(?:7{3,})/,
-        message:
-          'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
-      },
-    ],
-    `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`
-  );
-  return mb.build(context);
+const defaultRules = {
+  pr_reaches_power_of_10: true,
+  pr_reaches_power_of_2: true,
+  pr_reaches_777: true,
+  commit_hits_777: true,
+  commit_hits_same_numbers: true,
+  commit_hits_123: true,
+  commit_hits_hexspeak: true,
+  commit_hits_666: true,
+};
+
+export class CustomMessageBuilder {
+  builder: MessageBuilder;
+
+  constructor(
+    message: string,
+    overrides: { [key in RulesKey]?: boolean } = {},
+    additionalRules: MessageForRule[] = []
+  ) {
+    const rules: MessageForRule[] = [...additionalRules].concat(
+      Object.entries(Rules)
+        .filter(([key]) => {
+          if (key in overrides) {
+            return overrides[key as RulesKey];
+          }
+          return defaultRules[key as RulesKey];
+        })
+        .map(([, value]) => value)
+    );
+    this.builder = new MessageBuilder(rules, message);
+  }
+
+  build(context: LuckyJudgeContext): MessageContext {
+    return this.builder.build(context);
+  }
 }

@@ -1,5 +1,6 @@
 import { LuckyJudgeContext, MessageContext, MessageForRule } from './interfaces';
-export declare class MessageBuilder {
+import { RulesKey } from './rules';
+declare class MessageBuilder {
     rules: MessageForRule[];
     baseTemplate: string;
     constructor(rules: MessageForRule[], baseTemplate: string);
@@ -7,5 +8,12 @@ export declare class MessageBuilder {
     commitRules(): MessageForRule[];
     build(context: LuckyJudgeContext): MessageContext;
 }
-export declare function buildMessage(context: LuckyJudgeContext): MessageContext;
+export declare class CustomMessageBuilder {
+    builder: MessageBuilder;
+    constructor(message: string, overrides?: {
+        [key in RulesKey]?: boolean;
+    }, additionalRules?: MessageForRule[]);
+    build(context: LuckyJudgeContext): MessageContext;
+}
+export {};
 //# sourceMappingURL=file:///Users/yui/Documents/Develop/repo/github.com/kitsuyui/happy-commit/src/dist

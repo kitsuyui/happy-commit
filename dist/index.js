@@ -14477,7 +14477,8 @@ function run() {
             const userLogin = yield (0, github_1.getUserLogin)(octokit);
             const prNum = context.issue.number;
             const commitIds = yield (0, github_1.getCommitIds)(octokit);
-            const message = (0, message_builder_1.buildMessage)({ commitIds, prNum });
+            const mb = new message_builder_1.CustomMessageBuilder(`# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`);
+            const message = mb.build({ commitIds, prNum });
             yield (0, github_1.updateMessage)(octokit, prNum, userLogin, message);
         }
         catch (error) {
@@ -14501,8 +14502,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.buildMessage = exports.MessageBuilder = void 0;
+exports.CustomMessageBuilder = void 0;
 const mustache_1 = __importDefault(__nccwpck_require__(8272));
+const rules_1 = __nccwpck_require__(1058);
 class MessageBuilder {
     constructor(rules, baseTemplate) {
         this.rules = rules;
@@ -14543,23 +14545,86 @@ class MessageBuilder {
         };
     }
 }
-exports.MessageBuilder = MessageBuilder;
-function buildMessage(context) {
-    const mb = new MessageBuilder([
-        {
-            kind: 'pr',
-            rule: /(?:[1]0+)/,
-            message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
-        },
-        {
-            kind: 'commit',
-            rule: /(?:7{3,})/,
-            message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
-        },
-    ], `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`);
-    return mb.build(context);
+const defaultRules = {
+    pr_reaches_power_of_10: true,
+    pr_reaches_power_of_2: true,
+    pr_reaches_777: true,
+    commit_hits_777: true,
+    commit_hits_same_numbers: true,
+    commit_hits_123: true,
+    commit_hits_hexspeak: true,
+    commit_hits_666: true,
+};
+class CustomMessageBuilder {
+    constructor(message, overrides = {}, additionalRules = []) {
+        const rules = [...additionalRules].concat(Object.entries(rules_1.Rules)
+            .filter(([key]) => {
+            if (key in overrides) {
+                return overrides[key];
+            }
+            return defaultRules[key];
+        })
+            .map(([, value]) => value));
+        this.builder = new MessageBuilder(rules, message);
+    }
+    build(context) {
+        return this.builder.build(context);
+    }
 }
-exports.buildMessage = buildMessage;
+exports.CustomMessageBuilder = CustomMessageBuilder;
+
+
+/***/ }),
+
+/***/ 1058:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Rules = void 0;
+exports.Rules = {
+    pr_reaches_power_of_10: {
+        kind: 'pr',
+        rule: /(?:[1]0+)/,
+        message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
+    },
+    pr_reaches_power_of_2: {
+        kind: 'pr',
+        rule: /(?:(512|1024|2048|4096|8192|16384|32768|65536))/,
+        message: `Now pull request issue number reaches **{{prNum}}** (power of 2). It's time to celebrate!`,
+    },
+    pr_reaches_777: {
+        kind: 'pr',
+        rule: /(?:7{3,})/,
+        message: `Now pull request issue number reaches **{{prNum}}** (777). It's time to celebrate!`,
+    },
+    commit_hits_777: {
+        kind: 'commit',
+        rule: /(?:7{3,})/,
+        message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    },
+    commit_hits_same_numbers: {
+        kind: 'commit',
+        rule: /(?:([0-9a-f])\1{4,})/,
+        message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    },
+    commit_hits_123: {
+        kind: 'commit',
+        rule: /(?:(?:123)4?5?6?7?8?9?)/,
+        message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    },
+    commit_hits_hexspeak: {
+        kind: 'commit',
+        rule: /(?:(?:f00d|feed|cafe|c0ffee|deadbeef|defecated|0ffice|badcable))/i,
+        message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    },
+    commit_hits_666: {
+        kind: 'commit',
+        rule: /(?:666)/,
+        message: 'Commit `{{commitId}}` is unlucky... It contains **{{matched}}**!.',
+    },
+};
 
 
 /***/ }),
