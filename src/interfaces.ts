@@ -17,3 +17,13 @@ export interface LuckyCommitResult {
   lucky: boolean;
   match: string;
 }
+
+export type Rule = RegExp;
+
+export type Message = string;
+
+export interface MessageForRule {
+  kind: 'commit' | 'pr';
+  message: string;
+  rule: Rule;
+}

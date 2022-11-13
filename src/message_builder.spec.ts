@@ -16,6 +16,7 @@ describe('buildMessage', () => {
         '# :tada: Happy commit!',
         `- Now pull request issue number reaches **10000**. It's time to celebrate!`,
         '- Commit `123456789123456789d777beefdeadbeefdeadbe` is lucky! It contains **777**!.',
+        '',
       ].join('\n'),
     });
   });
