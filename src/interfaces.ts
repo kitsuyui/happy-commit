@@ -24,6 +24,17 @@ export type Message = string;
 
 export interface MessageForRule {
   kind: 'commit' | 'pr';
-  message: string;
   rule: Rule;
+  message: string;
 }
+export type MessageForRuleSet = MessageForRule[];
+export type NamedMessageForRuleSet = {
+  [key: string]: MessageForRule;
+};
+
+export type RuleStringPattern = {
+  kind: 'pr' | 'commit';
+  rule: string;
+  message: string;
+};
+export type RuleStringPatterns = RuleStringPattern[];

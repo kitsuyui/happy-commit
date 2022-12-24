@@ -4,6 +4,10 @@ inputs:
   GITHUB_TOKEN:
     description: 'GITHUB_TOKEN'
     required: true
+  additional_rules:
+    description: 'Additional rules to check'
+    required: false
+
 runs:
   using: 'node16'
   main: 'dist/index.js'

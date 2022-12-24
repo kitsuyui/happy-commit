@@ -1,4 +1,48 @@
-export const Rules = {
+import {
+  MessageForRuleSet,
+  NamedMessageForRuleSet,
+  RuleStringPatterns,
+} from './interfaces';
+import { validateRules } from './validate';
+
+export type RuleStringPattern = {
+  kind: 'pr' | 'commit';
+  rule: string;
+  message: string;
+};
+
+function parseRulePatternFromJson(json: string): RuleStringPatterns {
+  let parsed;
+  try {
+    parsed = JSON.parse(json);
+  } catch (e: unknown) {
+    throw new Error('Invalid JSON');
+  }
+  const validated = validateRules(parsed);
+  if (validated) {
+    return parsed as RuleStringPatterns;
+  }
+  throw new Error('Invalid rules' + JSON.stringify(validateRules.errors));
+}
+
+export function parseRules(json: string): MessageForRuleSet {
+  const parsed = parseRulePatternFromJson(json);
+  const rules: MessageForRuleSet = [];
+  for (const rule of parsed) {
+    try {
+      rules.push({
+        kind: rule.kind,
+        rule: new RegExp(rule.rule),
+        message: rule.message,
+      });
+    } catch (e: unknown) {
+      throw new Error(`Invalid rule: ${rule.rule}`);
+    }
+  }
+  return rules;
+}
+
+export const Rules: NamedMessageForRuleSet = {
   pr_reaches_power_of_10: {
     kind: 'pr',
     rule: /(?:[1]0+)/,
