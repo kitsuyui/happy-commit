@@ -14,7 +14,7 @@ jobs:
             [
               {
                 "kind": "commit",
-                "rule": ".*?1.*?",
-                "message": "custom message!"
+                "rule": "(?:1)",
+                "message": "custom message! `{{commitId}}` is lucky! It contains **{{matched}}"
               }
             ]
