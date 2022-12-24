@@ -26,3 +26,22 @@ c.f. https://github.com/kitsuyui/happy-commit/blob/main/src/rules.ts
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+## Additional patterns
+
+custom patterns can be added by `additional_rules`.
+For example, you can celebrate when commit id contains `1`.
+
+```yaml
+      - uses: kitsuyui/happy-commit
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          additional_rules: |
+            [
+              {
+                "kind": "commit",
+                "rule": "(?:1)",
+                "message": "custom message! `{{commitId}}` is lucky! It contains **{{matched}}"
+              }
+            ]
+```
