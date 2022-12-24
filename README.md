@@ -45,3 +45,7 @@ For example, you can celebrate when commit id contains `1`.
               }
             ]
 ```
+
+## License
+
+MIT
