@@ -15,8 +15,8 @@ async function run() {
     const prNum = context.issue.number;
     const commitIds = await getCommitIds(octokit);
     let additionalRules: MessageForRule[] = [];
-    if (process.env.INPUT_additional_rules) {
-      additionalRules = parseRules(process.env.INPUT_additional_rules);
+    if (process.env.INPUT_ADDITIONAL_RULES) {
+      additionalRules = parseRules(process.env.INPUT_ADDITIONAL_RULES);
     }
     const mb = new CustomMessageBuilder(
       `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`,

@@ -21765,8 +21765,8 @@ function run() {
             const prNum = context.issue.number;
             const commitIds = yield (0, github_1.getCommitIds)(octokit);
             let additionalRules = [];
-            if (process.env.INPUT_additional_rules) {
-                additionalRules = (0, rules_1.parseRules)(process.env.INPUT_additional_rules);
+            if (process.env.INPUT_ADDITIONAL_RULES) {
+                additionalRules = (0, rules_1.parseRules)(process.env.INPUT_ADDITIONAL_RULES);
             }
             const mb = new message_builder_1.CustomMessageBuilder(`# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`, {}, additionalRules);
             const message = mb.build({ commitIds, prNum });
