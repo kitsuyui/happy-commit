@@ -66,7 +66,7 @@ const defaultRules = {
   commit_hits_123: true,
   commit_hits_hexspeak: true,
   commit_hits_666: true,
-};
+} as { [key in RulesKey]: boolean };
 
 export class CustomMessageBuilder {
   builder: MessageBuilder;

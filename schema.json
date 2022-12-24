@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "items": {
+        "additionalProperties": false,
+        "properties": {
+            "kind": {
+                "enum": [
+                    "commit",
+                    "pr"
+                ],
+                "type": "string"
+            },
+            "message": {
+                "type": "string"
+            },
+            "rule": {
+                "type": "string"
+            }
+        },
+        "type": "object"
+    },
+    "type": "array"
+}
+
