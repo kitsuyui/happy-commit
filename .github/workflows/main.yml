@@ -10,3 +10,11 @@ jobs:
       - uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          additional_rules: |
+            [
+              {
+                "kind": "commit",
+                "rule": ".*?1.*?",
+                "message": "custom message!"
+              }
+            ]
