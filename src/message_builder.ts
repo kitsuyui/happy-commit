@@ -58,7 +58,7 @@ class MessageBuilder {
 }
 
 const defaultRules = {
-  pr_reaches_power_of_10: true,
+  pr_reaches_contain_only_one_nonzero_digit: true,
   pr_reaches_power_of_2: true,
   pr_reaches_777: true,
   commit_hits_777: true,

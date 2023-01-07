@@ -21837,7 +21837,7 @@ class MessageBuilder {
     }
 }
 const defaultRules = {
-    pr_reaches_power_of_10: true,
+    pr_reaches_contain_only_one_nonzero_digit: true,
     pr_reaches_power_of_2: true,
     pr_reaches_777: true,
     commit_hits_777: true,
@@ -21908,19 +21908,19 @@ function parseRules(json) {
 }
 exports.parseRules = parseRules;
 exports.Rules = {
-    pr_reaches_power_of_10: {
+    pr_reaches_contain_only_one_nonzero_digit: {
         kind: 'pr',
-        rule: /(?:[1]0+)/,
+        rule: /(?:^[1-9]0+$)/,
         message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
     },
     pr_reaches_power_of_2: {
         kind: 'pr',
-        rule: /(?:(512|1024|2048|4096|8192|16384|32768|65536))/,
+        rule: /(?:^(512|1024|2048|4096|8192|16384|32768|65536)$)/,
         message: `Now pull request issue number reaches **{{prNum}}** (power of 2). It's time to celebrate!`,
     },
     pr_reaches_777: {
         kind: 'pr',
-        rule: /(?:7{3,})/,
+        rule: /(?:^7{3,}$)/,
         message: `Now pull request issue number reaches **{{prNum}}** (777). It's time to celebrate!`,
     },
     commit_hits_777: {
