@@ -84,4 +84,28 @@ describe('MessageBuilder', () => {
       body: '# :tada: Happy commit!\n',
     });
   });
+
+  it('test_', () => {
+    const context = {
+      commitIds: [
+        'ffd063a5a43ec1239587a76966348dde07ac6fc3',
+        'ffd063a5a43ec1234587a76966348dde07ac6fc3',
+      ],
+      prNum: 5432,
+    };
+    const mb = new CustomMessageBuilder(
+      `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`,
+      {}
+    );
+    const message = mb.build(context);
+    expect(message).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `ffd063a5a43ec1239587a76966348dde07ac6fc3` is lucky! It contains **123**!.',
+        '- Commit `ffd063a5a43ec1234587a76966348dde07ac6fc3` is lucky! It contains **12345**!.',
+        '',
+      ].join('\n'),
+    });
+  });
 });
