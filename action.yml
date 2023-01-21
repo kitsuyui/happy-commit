@@ -1,5 +1,10 @@
 name: 'happy-commit'
 description: 'Celebrate pull-request when it contais a lucky commit'
+
+branding:
+  icon: award
+  color: yellow
+
 inputs:
   GITHUB_TOKEN:
     description: 'GITHUB_TOKEN'
