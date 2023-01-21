@@ -70,7 +70,7 @@ export const Rules: NamedMessageForRuleSet = {
   },
   commit_hits_123: {
     kind: 'commit',
-    rule: /(?:(?:123)4?5?6?7?8?9?)/,
+    rule: /(?:123(?:4(?:5(?:6(?:7(?:8(?:9)?)?)?)?)?)?)/,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
   },
   commit_hits_hexspeak: {
