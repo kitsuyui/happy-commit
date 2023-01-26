@@ -26,7 +26,11 @@ async function run() {
     const message = mb.build({ commitIds, prNum });
     await updateMessage(octokit, prNum, userLogin, message);
   } catch (error) {
-    core.setFailed('Unexpected error');
+    if (error instanceof Error) {
+      core.setFailed(`Unexpected error: ${error.message}`);
+    } else {
+      core.setFailed(`Unexpected error: ${error}`);
+    }
   }
 }
 
