@@ -85,7 +85,8 @@ describe('MessageBuilder', () => {
     });
   });
 
-  it('test_', () => {
+  it('test_regression_1', () => {
+    // https://github.com/kitsuyui/happy-commit/issues/17
     const context = {
       commitIds: [
         'ffd063a5a43ec1239587a76966348dde07ac6fc3',
@@ -104,6 +105,27 @@ describe('MessageBuilder', () => {
         '# :tada: Happy commit!',
         '- Commit `ffd063a5a43ec1239587a76966348dde07ac6fc3` is lucky! It contains **123**!.',
         '- Commit `ffd063a5a43ec1234587a76966348dde07ac6fc3` is lucky! It contains **12345**!.',
+        '',
+      ].join('\n'),
+    });
+  });
+
+  it('test_regression_2', () => {
+    // https://github.com/kitsuyui/happy-commit/issues/21
+    const context = {
+      commitIds: ['04ec9392717ce635b916216a455eed945ccf2a49'],
+      prNum: 10,
+    };
+    const mb = new CustomMessageBuilder(
+      `# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}`,
+      {}
+    );
+    const message = mb.build(context);
+    expect(message).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        "- Now pull request issue number reaches **10**. It's time to celebrate!",
         '',
       ].join('\n'),
     });

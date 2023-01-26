@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
+        continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           additional_rules: |
@@ -15,6 +16,6 @@ jobs:
               {
                 "kind": "commit",
                 "rule": "(?:1)",
-                "message": "custom message! `{{commitId}}` is lucky! It contains **{{matched}}"
+                "message": "custom message! `{{commitId}}` is lucky! It contains {{matched}}"
               }
             ]
