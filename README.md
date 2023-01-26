@@ -22,7 +22,9 @@ c.f. https://github.com/kitsuyui/happy-commit/blob/main/src/rules.ts
 ## Example usage
 
 ```yaml
-      - uses: kitsuyui/happy-commit
+      - name: happy-commit
+        uses: kitsuyui/happy-commit
+        continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -33,7 +35,9 @@ custom patterns can be added by `additional_rules`.
 For example, you can celebrate when commit id contains `1`.
 
 ```yaml
-      - uses: kitsuyui/happy-commit
+      - name: happy-commit
+        uses: kitsuyui/happy-commit
+        continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           additional_rules: |
