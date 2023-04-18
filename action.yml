@@ -1,5 +1,5 @@
 name: 'happy-commit'
-description: 'Celebrate pull-request when it contais a lucky commit'
+description: 'Celebrate pull-request when it contains a lucky commit'
 
 branding:
   icon: award
