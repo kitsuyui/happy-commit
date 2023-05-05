@@ -14,21 +14,21 @@ export interface LuckyCommitResult {
     lucky: boolean;
     match: string;
 }
-export declare type Rule = RegExp;
-export declare type Message = string;
+export type Rule = RegExp;
+export type Message = string;
 export interface MessageForRule {
     kind: 'commit' | 'pr';
     rule: Rule;
     message: string;
 }
-export declare type MessageForRuleSet = MessageForRule[];
-export declare type NamedMessageForRuleSet = {
+export type MessageForRuleSet = MessageForRule[];
+export type NamedMessageForRuleSet = {
     [key: string]: MessageForRule;
 };
-export declare type RuleStringPattern = {
+export type RuleStringPattern = {
     kind: 'pr' | 'commit';
     rule: string;
     message: string;
 };
-export declare type RuleStringPatterns = RuleStringPattern[];
+export type RuleStringPatterns = RuleStringPattern[];
 //# sourceMappingURL=file:///Users/yui/Documents/Develop/repo/github.com/kitsuyui/happy-commit/src/dist
