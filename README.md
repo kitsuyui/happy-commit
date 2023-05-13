@@ -22,9 +22,21 @@ c.f. https://github.com/kitsuyui/happy-commit/blob/main/src/rules.ts
 ## Example usage
 
 ```yaml
-      - name: happy-commit
-        uses: kitsuyui/happy-commit
-        continue-on-error: true
+name: happy-commit
+on:
+  - pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  happy:
+    runs-on: ubuntu-latest
+    name: happy
+    steps:
+      - uses: kitsuyui/happy-commit
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
