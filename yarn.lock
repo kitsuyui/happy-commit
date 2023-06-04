@@ -679,14 +679,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@octokit/action@^5.0.0":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-5.0.6.tgz#ff8de161ae6da37a5cba75ede11c8904d903d3b4"
-  integrity sha512-jVZctvHzD9Cp1YZ5izcmcu2L9Y08Pe3ldjDu7vC2hyWQwz0fBhGrfKT5s4eNZ19K92UzO40cFzAFf1U4IOf13A==
+"@octokit/action@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-6.0.0.tgz#bf9aec38b726efd6d98447e18be824d511f1b877"
+  integrity sha512-CP+cbmaJBC3RkU4gzGuKqUjAM/bJ6jvU7EIZQpNwss+RIpsLVd4FLYAZ43coH9x0GDqAC75eC7NUX4I7f4zd4g==
   dependencies:
     "@octokit/auth-action" "^2.0.0"
     "@octokit/core" "^4.0.0"
-    "@octokit/plugin-paginate-rest" "^6.0.0"
+    "@octokit/plugin-paginate-rest" "^7.0.0"
     "@octokit/plugin-rest-endpoint-methods" "^7.0.0"
     "@octokit/types" "^9.0.0"
     https-proxy-agent "^7.0.0"
@@ -792,10 +792,10 @@
   dependencies:
     "@octokit/types" "^6.40.0"
 
-"@octokit/plugin-paginate-rest@^6.0.0":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-6.1.2.tgz#f86456a7a1fe9e58fec6385a85cf1b34072341f8"
-  integrity sha512-qhrmtQeHU/IivxucOV1bbI/xZyC/iOBhclokv7Sut5vnejAIAEXVcGQeRpQlU39E0WwK9lNvJHphHri/DB6lbQ==
+"@octokit/plugin-paginate-rest@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-7.0.0.tgz#c3bf44cb7ef5b495137b4f0adab28637696d7029"
+  integrity sha512-NNm6DlYBEyKs9OZvy2Ax9YKn7e0/G7js+/I80icBTHUf6kB/nfaZkdXOF1Z32OaB+LDH6GIYpdYC3Bm3vwX5Ow==
   dependencies:
     "@octokit/tsconfig" "^1.0.2"
     "@octokit/types" "^9.2.3"
