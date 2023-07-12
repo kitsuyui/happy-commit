@@ -11,6 +11,14 @@ export type RuleStringPattern = {
   message: string;
 };
 
+/**
+ * Parse the rule pattern from JSON string
+ * this function does not validate the RegExp pattern
+ * @param json {string} the JSON string
+ * @returns {RuleStringPatterns} the rule pattern
+ * @throws {Error} if the JSON is invalid
+ * @throws {Error} if the rule pattern is invalid
+ */
 function parseRulePatternFromJson(json: string): RuleStringPatterns {
   let parsed;
   try {
@@ -25,6 +33,14 @@ function parseRulePatternFromJson(json: string): RuleStringPatterns {
   throw new Error('Invalid rules' + JSON.stringify(validateRules.errors));
 }
 
+/**
+ * Parse the rule pattern from JSON string and convert it to rule set
+ * @param json {string} the JSON string
+ * @returns {MessageForRuleSet} the rule set
+ * @throws {Error} if the rule is invalid
+ * @throws {Error} if the JSON is invalid
+ * @throws {Error} if the rule set is invalid
+ */
 export function parseRules(json: string): MessageForRuleSet {
   const parsed = parseRulePatternFromJson(json);
   const rules: MessageForRuleSet = [];
