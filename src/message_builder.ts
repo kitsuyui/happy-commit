@@ -7,6 +7,11 @@ import {
 } from './interfaces';
 import { Rules, RulesKey } from './rules';
 
+/**
+ * MessageBuilder is a class to build a message for a pull request
+ *
+ * It has two kinds of rules, one is for pull request, the other is for commit.
+ */
 class MessageBuilder {
   rules: MessageForRule[];
   baseTemplate: string;
@@ -68,6 +73,9 @@ const defaultRules = {
   commit_hits_666: true,
 } as { [key in RulesKey]: boolean };
 
+/**
+ * CustomMessageBuilder is a class to build a message for a pull request with custom rules
+ */
 export class CustomMessageBuilder {
   builder: MessageBuilder;
 
