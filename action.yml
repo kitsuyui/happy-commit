@@ -14,9 +14,7 @@ inputs:
     required: false
 
 runs:
-  # We should use node18, but it seems that it is not supported yet
-  # tsconfig.json has target es2016, so it should work properly with node16
   # https://json.schemastore.org/github-action.json
   # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
