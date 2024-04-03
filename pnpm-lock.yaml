@@ -13,7 +13,7 @@ dependencies:
     version: 6.0.0
   '@octokit/action':
     specifier: ^6.0.0
-    version: 6.0.7
+    version: 6.1.0
   ajv:
     specifier: ^8.11.2
     version: 8.12.0
@@ -104,7 +104,7 @@ packages:
     resolution: {integrity: sha512-KhC/cZsq7f8I4LfZSJKgCvEwfkE8o1538VoBeoGzokVLLnbFDEAdFD3UhoMklxo2un9NJVBdANOresx7vTHlHw==}
     dependencies:
       tunnel: 0.0.6
-      undici: 5.28.3
+      undici: 5.28.4
     dev: false
 
   /@ampproject/remapping@2.3.0:
@@ -809,8 +809,8 @@ packages:
       fastq: 1.17.1
     dev: true
 
-  /@octokit/action@6.0.7:
-    resolution: {integrity: sha512-0Q1L96F8JsNb+M2NzN7r4artGyX02Pa9tzg+JaxXncvdHEXVIJFnkA8CstC52EB4DAZ0b8wpqDOG05v/DcyS3g==}
+  /@octokit/action@6.1.0:
+    resolution: {integrity: sha512-lo+nHx8kAV86bxvOVOI3vFjX3gXPd/L7guAUbvs3pUvnR2KC+R7yjBkA1uACt4gYhs4LcWP3AXSGQzsbeN2XXw==}
     engines: {node: '>= 18'}
     dependencies:
       '@octokit/auth-action': 4.0.1
@@ -818,7 +818,7 @@ packages:
       '@octokit/plugin-paginate-rest': 9.2.1(@octokit/core@5.1.0)
       '@octokit/plugin-rest-endpoint-methods': 10.4.1(@octokit/core@5.1.0)
       '@octokit/types': 12.6.0
-      undici: 6.10.2
+      undici: 6.11.1
     dev: false
 
   /@octokit/auth-action@4.0.1:
@@ -4185,15 +4185,15 @@ packages:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
 
-  /undici@5.28.3:
-    resolution: {integrity: sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==}
+  /undici@5.28.4:
+    resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
     engines: {node: '>=14.0'}
     dependencies:
       '@fastify/busboy': 2.1.1
     dev: false
 
-  /undici@6.10.2:
-    resolution: {integrity: sha512-HcVuBy7ACaDejIMdwCzAvO22OsiE6ir6ziTIr9kAE0vB+PheVe29ZvRN8p7FXCO2uZHTjEoUs5bPiFpuc/hwwQ==}
+  /undici@6.11.1:
+    resolution: {integrity: sha512-KyhzaLJnV1qa3BSHdj4AZ2ndqI0QWPxYzaIOio0WzcEJB9gvuysprJSLtpvc2D9mhR9jPDUk7xlJlZbH2KR5iw==}
     engines: {node: '>=18.0'}
     dev: false
 
