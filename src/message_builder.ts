@@ -1,11 +1,11 @@
-import Mustache from 'mustache';
+import Mustache from 'mustache'
 
-import {
+import type {
   LuckyJudgeContext,
   MessageContext,
   MessageForRule,
-} from './interfaces';
-import { Rules, RulesKey } from './rules';
+} from './interfaces'
+import { Rules, type RulesKey } from './rules'
 
 /**
  * MessageBuilder is a class to build a message for a pull request
@@ -13,52 +13,52 @@ import { Rules, RulesKey } from './rules';
  * It has two kinds of rules, one is for pull request, the other is for commit.
  */
 class MessageBuilder {
-  rules: MessageForRule[];
-  baseTemplate: string;
+  rules: MessageForRule[]
+  baseTemplate: string
 
   constructor(rules: MessageForRule[], baseTemplate: string) {
-    this.rules = rules;
-    this.baseTemplate = baseTemplate;
+    this.rules = rules
+    this.baseTemplate = baseTemplate
   }
 
   prRules(): MessageForRule[] {
-    return this.rules.filter((rule) => rule.kind === 'pr');
+    return this.rules.filter((rule) => rule.kind === 'pr')
   }
 
   commitRules(): MessageForRule[] {
-    return this.rules.filter((rule) => rule.kind === 'commit');
+    return this.rules.filter((rule) => rule.kind === 'commit')
   }
 
   build(context: LuckyJudgeContext): MessageContext {
-    const { commitIds, prNum } = context;
-    const messages = [];
-    let lucky = false;
+    const { commitIds, prNum } = context
+    const messages = []
+    let lucky = false
 
     for (const { rule, message } of this.prRules()) {
-      const matched = prNum.toString().match(rule);
+      const matched = prNum.toString().match(rule)
       if (matched) {
-        const builtMessage = Mustache.render(message, { matched, prNum });
-        messages.push(builtMessage);
-        lucky = true;
+        const builtMessage = Mustache.render(message, { matched, prNum })
+        messages.push(builtMessage)
+        lucky = true
       }
     }
 
     for (const { rule, message } of this.commitRules()) {
       for (const commitId of commitIds) {
-        const matched = commitId.match(rule);
+        const matched = commitId.match(rule)
         if (matched) {
-          const builtMessage = Mustache.render(message, { matched, commitId });
-          messages.push(builtMessage);
-          lucky = true;
+          const builtMessage = Mustache.render(message, { matched, commitId })
+          messages.push(builtMessage)
+          lucky = true
         }
       }
     }
 
-    const body = Mustache.render(this.baseTemplate, { messages });
+    const body = Mustache.render(this.baseTemplate, { messages })
     return {
       lucky,
       body,
-    };
+    }
   }
 }
 
@@ -71,13 +71,13 @@ const defaultRules = {
   commit_hits_123: true,
   commit_hits_hexspeak: true,
   commit_hits_666: true,
-} as { [key in RulesKey]: boolean };
+} as { [key in RulesKey]: boolean }
 
 /**
  * CustomMessageBuilder is a class to build a message for a pull request with custom rules
  */
 export class CustomMessageBuilder {
-  builder: MessageBuilder;
+  builder: MessageBuilder
 
   constructor(
     message: string,
@@ -88,16 +88,16 @@ export class CustomMessageBuilder {
       Object.entries(Rules)
         .filter(([key]) => {
           if (key in overrides) {
-            return overrides[key as RulesKey];
+            return overrides[key as RulesKey]
           }
-          return defaultRules[key as RulesKey];
+          return defaultRules[key as RulesKey]
         })
         .map(([, value]) => value)
-    );
-    this.builder = new MessageBuilder(rules, message);
+    )
+    this.builder = new MessageBuilder(rules, message)
   }
 
   build(context: LuckyJudgeContext): MessageContext {
-    return this.builder.build(context);
+    return this.builder.build(context)
   }
 }

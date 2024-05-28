@@ -1,5 +1,5 @@
-import { Octokit } from '@octokit/action';
-import { MessageContext } from './interfaces';
+import type { Octokit } from '@octokit/action';
+import type { MessageContext } from './interfaces';
 /**
  * Update the comment of the current PR
  * if lucky and past comment does not exist, create it.

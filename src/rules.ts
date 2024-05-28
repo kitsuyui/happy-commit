@@ -1,15 +1,15 @@
-import {
+import type {
   MessageForRuleSet,
   NamedMessageForRuleSet,
   RuleStringPatterns,
-} from './interfaces';
-import { validateRules } from './validate';
+} from './interfaces'
+import { validateRules } from './validate'
 
 export type RuleStringPattern = {
-  kind: 'pr' | 'commit';
-  rule: string;
-  message: string;
-};
+  kind: 'pr' | 'commit'
+  rule: string
+  message: string
+}
 
 /**
  * Parse the rule pattern from JSON string
@@ -20,17 +20,17 @@ export type RuleStringPattern = {
  * @throws {Error} if the rule pattern is invalid
  */
 function parseRulePatternFromJson(json: string): RuleStringPatterns {
-  let parsed;
+  let parsed: unknown
   try {
-    parsed = JSON.parse(json);
+    parsed = JSON.parse(json)
   } catch (e: unknown) {
-    throw new Error('Invalid JSON');
+    throw new Error('Invalid JSON')
   }
-  const validated = validateRules(parsed);
+  const validated = validateRules(parsed)
   if (validated) {
-    return parsed as RuleStringPatterns;
+    return parsed as RuleStringPatterns
   }
-  throw new Error('Invalid rules' + JSON.stringify(validateRules.errors));
+  throw new Error(`Invalid rules: ${JSON.stringify(validateRules.errors)}`)
 }
 
 /**
@@ -42,20 +42,20 @@ function parseRulePatternFromJson(json: string): RuleStringPatterns {
  * @throws {Error} if the rule set is invalid
  */
 export function parseRules(json: string): MessageForRuleSet {
-  const parsed = parseRulePatternFromJson(json);
-  const rules: MessageForRuleSet = [];
+  const parsed = parseRulePatternFromJson(json)
+  const rules: MessageForRuleSet = []
   for (const rule of parsed) {
     try {
       rules.push({
         kind: rule.kind,
         rule: new RegExp(rule.rule),
         message: rule.message,
-      });
+      })
     } catch (e: unknown) {
-      throw new Error(`Invalid rule: ${rule.rule}`);
+      throw new Error(`Invalid rule: ${rule.rule}`)
     }
   }
-  return rules;
+  return rules
 }
 
 export const Rules: NamedMessageForRuleSet = {
@@ -100,6 +100,6 @@ export const Rules: NamedMessageForRuleSet = {
     message:
       'Commit `{{commitId}}` is unlucky... It contains **{{matched}}**!.',
   },
-} as const;
+} as const
 
-export type RulesKey = keyof typeof Rules;
+export type RulesKey = keyof typeof Rules

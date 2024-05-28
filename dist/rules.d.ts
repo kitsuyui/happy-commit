@@ -1,4 +1,4 @@
-import { MessageForRuleSet, NamedMessageForRuleSet } from './interfaces';
+import type { MessageForRuleSet, NamedMessageForRuleSet } from './interfaces';
 export type RuleStringPattern = {
     kind: 'pr' | 'commit';
     rule: string;

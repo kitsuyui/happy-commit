@@ -1,6 +1,6 @@
-import Ajv from 'ajv';
+import Ajv from 'ajv'
 
-const ajv = new Ajv();
+const ajv = new Ajv()
 const schema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   items: {
@@ -20,6 +20,6 @@ const schema = {
     type: 'object',
   },
   type: 'array',
-};
+}
 
-export const validateRules = ajv.compile(schema);
+export const validateRules = ajv.compile(schema)
