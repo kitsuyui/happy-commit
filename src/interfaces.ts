@@ -1,40 +1,40 @@
 export interface MessageContext {
-  lucky: boolean;
-  body: string;
+  lucky: boolean
+  body: string
 }
 
 export interface Comment {
-  id: number;
-  body: string;
+  id: number
+  body: string
 }
 
 export interface LuckyJudgeContext {
-  commitIds: string[];
-  prNum: number;
+  commitIds: string[]
+  prNum: number
 }
 
 export interface LuckyCommitResult {
-  lucky: boolean;
-  match: string;
+  lucky: boolean
+  match: string
 }
 
-export type Rule = RegExp;
+export type Rule = RegExp
 
-export type Message = string;
+export type Message = string
 
 export interface MessageForRule {
-  kind: 'commit' | 'pr';
-  rule: Rule;
-  message: string;
+  kind: 'commit' | 'pr'
+  rule: Rule
+  message: string
 }
-export type MessageForRuleSet = MessageForRule[];
+export type MessageForRuleSet = MessageForRule[]
 export type NamedMessageForRuleSet = {
-  [key: string]: MessageForRule;
-};
+  [key: string]: MessageForRule
+}
 
 export type RuleStringPattern = {
-  kind: 'pr' | 'commit';
-  rule: string;
-  message: string;
-};
-export type RuleStringPatterns = RuleStringPattern[];
+  kind: 'pr' | 'commit'
+  rule: string
+  message: string
+}
+export type RuleStringPatterns = RuleStringPattern[]

@@ -1,7 +1,7 @@
-import * as github from '@actions/github';
-import { Octokit } from '@octokit/action';
+import * as github from '@actions/github'
+import type { Octokit } from '@octokit/action'
 
-import { Comment, MessageContext } from './interfaces';
+import type { Comment, MessageContext } from './interfaces'
 
 /**
  * Update the comment of the current PR
@@ -20,10 +20,10 @@ export async function updateMessage(
   userLogin: string,
   message: MessageContext
 ): Promise<void> {
-  const context = github.context;
-  const pastComment = await getFirstComment(octokit, prNum, userLogin);
+  const context = github.context
+  const pastComment = await getFirstComment(octokit, prNum, userLogin)
 
-  const { lucky, body } = message;
+  const { lucky, body } = message
   if (lucky) {
     // if there is a comment from the current user and the message is different, update it
     if (pastComment && pastComment.body !== body) {
@@ -31,14 +31,14 @@ export async function updateMessage(
         ...context.repo,
         comment_id: pastComment.id,
         body,
-      });
+      })
     } else {
       // if there is no comment from the current user, create it
       await octokit.issues.createComment({
         ...context.repo,
         issue_number: prNum,
         body,
-      });
+      })
     }
   } else {
     // if there is a comment from the current user, delete it
@@ -46,7 +46,7 @@ export async function updateMessage(
       await octokit.issues.deleteComment({
         ...context.repo,
         comment_id: pastComment.id,
-      });
+      })
     }
   }
 }
@@ -63,22 +63,22 @@ async function getFirstComment(
   prNum: number,
   userLogin: string
 ): Promise<Comment | null> {
-  const context = github.context;
+  const context = github.context
   // get comments on the PR
   const comments = await octokit.issues.listComments({
     ...context.repo,
     issue_number: prNum,
-  });
+  })
   // find the comment by the current user if it exists
   for (const comment of comments.data) {
     if (comment.user?.login === userLogin) {
       return {
         id: comment.id,
         body: comment.body_text || '',
-      };
+      }
     }
   }
-  return null;
+  return null
 }
 
 /**
@@ -87,12 +87,12 @@ async function getFirstComment(
  * @returns commit ids {string[]}
  */
 export async function getCommitIds(octokit: Octokit): Promise<string[]> {
-  const context = github.context;
+  const context = github.context
   const commits = await octokit.pulls.listCommits({
     ...context.repo,
     pull_number: context.issue.number,
-  });
-  return commits.data.map((commit) => commit.sha);
+  })
+  return commits.data.map((commit) => commit.sha)
 }
 
 /**
@@ -104,14 +104,14 @@ export async function getCommitIds(octokit: Octokit): Promise<string[]> {
 export async function getUserLogin(octokit: Octokit) {
   interface Result {
     viewer: {
-      login: string;
-    };
+      login: string
+    }
   }
   const resp: Result = await octokit.graphql(`
 query {
   viewer {
     login
   }
-}`);
-  return resp.viewer.login;
+}`)
+  return resp.viewer.login
 }

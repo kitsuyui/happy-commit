@@ -1,5 +1,5 @@
-import { LuckyJudgeContext, MessageContext, MessageForRule } from './interfaces';
-import { RulesKey } from './rules';
+import type { LuckyJudgeContext, MessageContext, MessageForRule } from './interfaces';
+import { type RulesKey } from './rules';
 /**
  * MessageBuilder is a class to build a message for a pull request
  *
