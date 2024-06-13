@@ -55,8 +55,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
       typescript-json-schema:
-        specifier: ^0.63.0
-        version: 0.63.0(@swc/core@1.5.29)
+        specifier: ^0.64.0
+        version: 0.64.0(@swc/core@1.5.29)
 
 packages:
 
@@ -1474,8 +1474,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  typescript-json-schema@0.63.0:
-    resolution: {integrity: sha512-vBfMBq4U/rZ5FIRi7u4o/YAdeRHsSabdGHogUlCPi0cYU0CGvS4Bdu8bSzyUsF+Kf5PTQUGh2TictJuQTDK6eQ==}
+  typescript-json-schema@0.64.0:
+    resolution: {integrity: sha512-Sew8llkYSzpxaMoGjpjD6NMFCr6DoWFHLs7Bz1LU48pzzi8ok8W+GZs9cG87IMBpC0UI7qwBMUI2um0LGxxLOg==}
     hasBin: true
 
   typescript@5.1.6:
@@ -3231,7 +3231,7 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  typescript-json-schema@0.63.0(@swc/core@1.5.29):
+  typescript-json-schema@0.64.0(@swc/core@1.5.29):
     dependencies:
       '@types/json-schema': 7.0.15
       '@types/node': 16.18.98
