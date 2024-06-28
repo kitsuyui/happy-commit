@@ -92,7 +92,7 @@ export async function getCommitIds(octokit: Octokit): Promise<string[]> {
     ...context.repo,
     pull_number: context.issue.number,
   })
-  return commits.data.map((commit) => commit.sha)
+  return commits.data.map((commit: { sha: string }) => commit.sha)
 }
 
 /**
