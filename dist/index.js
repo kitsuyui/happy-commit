@@ -1144,7 +1144,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getApiBaseUrl = exports.getProxyFetch = exports.getProxyAgentDispatcher = exports.getProxyAgent = exports.getAuthString = void 0;
 const httpClient = __importStar(__nccwpck_require__(6372));
-const undici_1 = __nccwpck_require__(1094);
+const undici_1 = __nccwpck_require__(8167);
 function getAuthString(token, options) {
     if (!token && !options.auth) {
         throw new Error('Parameter token or opts.auth is required');
@@ -1216,7 +1216,7 @@ const Utils = __importStar(__nccwpck_require__(1181));
 // octokit + plugins
 const core_1 = __nccwpck_require__(9437);
 const plugin_rest_endpoint_methods_1 = __nccwpck_require__(3418);
-const plugin_paginate_rest_1 = __nccwpck_require__(8927);
+const plugin_paginate_rest_1 = __nccwpck_require__(2713);
 exports.context = new Context.Context();
 const baseUrl = Utils.getApiBaseUrl();
 exports.defaults = {
@@ -2083,151 +2083,6 @@ function isLoopbackAddress(host) {
 
 /***/ }),
 
-/***/ 6872:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  Octokit: () => Octokit,
-  customFetch: () => customFetch,
-  getProxyAgent: () => getProxyAgent
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_core = __nccwpck_require__(9437);
-var import_auth_action = __nccwpck_require__(6914);
-var import_plugin_paginate_rest = __nccwpck_require__(8927);
-var import_plugin_rest_endpoint_methods = __nccwpck_require__(3418);
-
-// pkg/dist-src/version.js
-var VERSION = "6.1.0";
-
-// pkg/dist-src/index.js
-var import_undici = __nccwpck_require__(1094);
-var DEFAULTS = {
-  authStrategy: import_auth_action.createActionAuth,
-  baseUrl: getApiBaseUrl(),
-  userAgent: `octokit-action.js/${VERSION}`
-};
-function getProxyAgent() {
-  const httpProxy = process.env["HTTP_PROXY"] || process.env["http_proxy"];
-  if (httpProxy) {
-    return new import_undici.ProxyAgent(httpProxy);
-  }
-  const httpsProxy = process.env["HTTPS_PROXY"] || process.env["https_proxy"];
-  if (httpsProxy) {
-    return new import_undici.ProxyAgent(httpsProxy);
-  }
-  return void 0;
-}
-var customFetch = async function(url, opts) {
-  return await (0, import_undici.fetch)(url, {
-    dispatcher: getProxyAgent(),
-    ...opts
-  });
-};
-var Octokit = import_core.Octokit.plugin(
-  import_plugin_paginate_rest.paginateRest,
-  import_plugin_rest_endpoint_methods.legacyRestEndpointMethods
-).defaults(function buildDefaults(options) {
-  return {
-    ...DEFAULTS,
-    ...options,
-    request: {
-      fetch: customFetch,
-      ...options.request
-    }
-  };
-});
-function getApiBaseUrl() {
-  return process.env["GITHUB_API_URL"] || "https://api.github.com";
-}
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
-
-
-/***/ }),
-
-/***/ 6914:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  createActionAuth: () => createActionAuth
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_auth_token = __nccwpck_require__(1410);
-var createActionAuth = function createActionAuth2() {
-  if (!process.env.GITHUB_ACTION) {
-    throw new Error(
-      "[@octokit/auth-action] `GITHUB_ACTION` environment variable is not set. @octokit/auth-action is meant to be used in GitHub Actions only."
-    );
-  }
-  const definitions = [
-    process.env.GITHUB_TOKEN,
-    process.env.INPUT_GITHUB_TOKEN,
-    process.env.INPUT_TOKEN
-  ].filter(Boolean);
-  if (definitions.length === 0) {
-    throw new Error(
-      "[@octokit/auth-action] `GITHUB_TOKEN` variable is not set. It must be set on either `env:` or `with:`. See https://github.com/octokit/auth-action.js#createactionauth"
-    );
-  }
-  if (definitions.length > 1) {
-    throw new Error(
-      "[@octokit/auth-action] The token variable is specified more than once. Use either `with.token`, `with.GITHUB_TOKEN`, or `env.GITHUB_TOKEN`. See https://github.com/octokit/auth-action.js#createactionauth"
-    );
-  }
-  const token = definitions.pop();
-  return (0, import_auth_token.createTokenAuth)(token);
-};
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
-
-
-/***/ }),
-
 /***/ 1410:
 /***/ ((module) => {
 
@@ -3024,7 +2879,7 @@ function withCustomRequest(customRequest) {
 
 /***/ }),
 
-/***/ 8927:
+/***/ 2713:
 /***/ ((module) => {
 
 "use strict";
@@ -5923,17 +5778,17 @@ var request = withDefaults(import_endpoint.endpoint, {
 
 /***/ }),
 
-/***/ 870:
+/***/ 8614:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv = void 0;
-const core_1 = __nccwpck_require__(2840);
-const draft7_1 = __nccwpck_require__(2394);
-const discriminator_1 = __nccwpck_require__(6004);
-const draft7MetaSchema = __nccwpck_require__(2468);
+const core_1 = __nccwpck_require__(4129);
+const draft7_1 = __nccwpck_require__(4662);
+const discriminator_1 = __nccwpck_require__(8945);
+const draft7MetaSchema = __nccwpck_require__(2026);
 const META_SUPPORT_DATA = ["/properties"];
 const META_SCHEMA_ID = "http://json-schema.org/draft-07/schema";
 class Ajv extends core_1.default {
@@ -5963,24 +5818,24 @@ module.exports = exports = Ajv;
 module.exports.Ajv = Ajv;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports["default"] = Ajv;
-var validate_1 = __nccwpck_require__(7959);
+var validate_1 = __nccwpck_require__(5286);
 Object.defineProperty(exports, "KeywordCxt", ({ enumerable: true, get: function () { return validate_1.KeywordCxt; } }));
-var codegen_1 = __nccwpck_require__(3106);
+var codegen_1 = __nccwpck_require__(5157);
 Object.defineProperty(exports, "_", ({ enumerable: true, get: function () { return codegen_1._; } }));
 Object.defineProperty(exports, "str", ({ enumerable: true, get: function () { return codegen_1.str; } }));
 Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return codegen_1.stringify; } }));
 Object.defineProperty(exports, "nil", ({ enumerable: true, get: function () { return codegen_1.nil; } }));
 Object.defineProperty(exports, "Name", ({ enumerable: true, get: function () { return codegen_1.Name; } }));
 Object.defineProperty(exports, "CodeGen", ({ enumerable: true, get: function () { return codegen_1.CodeGen; } }));
-var validation_error_1 = __nccwpck_require__(1430);
+var validation_error_1 = __nccwpck_require__(6616);
 Object.defineProperty(exports, "ValidationError", ({ enumerable: true, get: function () { return validation_error_1.default; } }));
-var ref_error_1 = __nccwpck_require__(6972);
+var ref_error_1 = __nccwpck_require__(6858);
 Object.defineProperty(exports, "MissingRefError", ({ enumerable: true, get: function () { return ref_error_1.default; } }));
 //# sourceMappingURL=ajv.js.map
 
 /***/ }),
 
-/***/ 1097:
+/***/ 1964:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -6142,16 +5997,16 @@ exports.regexpCode = regexpCode;
 
 /***/ }),
 
-/***/ 3106:
+/***/ 5157:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = void 0;
-const code_1 = __nccwpck_require__(1097);
-const scope_1 = __nccwpck_require__(3004);
-var code_2 = __nccwpck_require__(1097);
+const code_1 = __nccwpck_require__(1964);
+const scope_1 = __nccwpck_require__(9642);
+var code_2 = __nccwpck_require__(1964);
 Object.defineProperty(exports, "_", ({ enumerable: true, get: function () { return code_2._; } }));
 Object.defineProperty(exports, "str", ({ enumerable: true, get: function () { return code_2.str; } }));
 Object.defineProperty(exports, "strConcat", ({ enumerable: true, get: function () { return code_2.strConcat; } }));
@@ -6160,7 +6015,7 @@ Object.defineProperty(exports, "getProperty", ({ enumerable: true, get: function
 Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return code_2.stringify; } }));
 Object.defineProperty(exports, "regexpCode", ({ enumerable: true, get: function () { return code_2.regexpCode; } }));
 Object.defineProperty(exports, "Name", ({ enumerable: true, get: function () { return code_2.Name; } }));
-var scope_2 = __nccwpck_require__(3004);
+var scope_2 = __nccwpck_require__(9642);
 Object.defineProperty(exports, "Scope", ({ enumerable: true, get: function () { return scope_2.Scope; } }));
 Object.defineProperty(exports, "ValueScope", ({ enumerable: true, get: function () { return scope_2.ValueScope; } }));
 Object.defineProperty(exports, "ValueScopeName", ({ enumerable: true, get: function () { return scope_2.ValueScopeName; } }));
@@ -6846,14 +6701,14 @@ function par(x) {
 
 /***/ }),
 
-/***/ 3004:
+/***/ 9642:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = void 0;
-const code_1 = __nccwpck_require__(1097);
+const code_1 = __nccwpck_require__(1964);
 class ValueError extends Error {
     constructor(name) {
         super(`CodeGen: "code" for ${name} not defined`);
@@ -6996,16 +6851,16 @@ exports.ValueScope = ValueScope;
 
 /***/ }),
 
-/***/ 4922:
+/***/ 6229:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const names_1 = __nccwpck_require__(7139);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const names_1 = __nccwpck_require__(810);
 exports.keywordError = {
     message: ({ keyword }) => (0, codegen_1.str) `must pass "${keyword}" keyword validation`,
 };
@@ -7126,19 +6981,19 @@ function extraErrorProps(cxt, { params, message }, keyValues) {
 
 /***/ }),
 
-/***/ 1114:
+/***/ 2503:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const validation_error_1 = __nccwpck_require__(1430);
-const names_1 = __nccwpck_require__(7139);
-const resolve_1 = __nccwpck_require__(3312);
-const util_1 = __nccwpck_require__(8945);
-const validate_1 = __nccwpck_require__(7959);
+const codegen_1 = __nccwpck_require__(5157);
+const validation_error_1 = __nccwpck_require__(6616);
+const names_1 = __nccwpck_require__(810);
+const resolve_1 = __nccwpck_require__(1361);
+const util_1 = __nccwpck_require__(7475);
+const validate_1 = __nccwpck_require__(5286);
 class SchemaEnv {
     constructor(env) {
         var _a;
@@ -7375,13 +7230,13 @@ function getJsonPointer(parsedRef, { baseId, schema, root }) {
 
 /***/ }),
 
-/***/ 7139:
+/***/ 810:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const names = {
     // validation function arguments
     data: new codegen_1.Name("data"), // data passed to validation function
@@ -7410,13 +7265,13 @@ exports["default"] = names;
 
 /***/ }),
 
-/***/ 6972:
+/***/ 6858:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const resolve_1 = __nccwpck_require__(3312);
+const resolve_1 = __nccwpck_require__(1361);
 class MissingRefError extends Error {
     constructor(resolver, baseId, ref, msg) {
         super(msg || `can't resolve reference ${ref} from id ${baseId}`);
@@ -7429,14 +7284,14 @@ exports["default"] = MissingRefError;
 
 /***/ }),
 
-/***/ 3312:
+/***/ 1361:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = void 0;
-const util_1 = __nccwpck_require__(8945);
+const util_1 = __nccwpck_require__(7475);
 const equal = __nccwpck_require__(7826);
 const traverse = __nccwpck_require__(1578);
 // TODO refactor to use keyword definitions
@@ -7591,7 +7446,7 @@ exports.getSchemaRefs = getSchemaRefs;
 
 /***/ }),
 
-/***/ 4006:
+/***/ 4926:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -7624,15 +7479,15 @@ exports.getRules = getRules;
 
 /***/ }),
 
-/***/ 8945:
+/***/ 7475:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const code_1 = __nccwpck_require__(1097);
+const codegen_1 = __nccwpck_require__(5157);
+const code_1 = __nccwpck_require__(1964);
 // TODO refactor to use Set
 function toHash(arr) {
     const hash = {};
@@ -7809,7 +7664,7 @@ exports.checkStrictMode = checkStrictMode;
 
 /***/ }),
 
-/***/ 3696:
+/***/ 671:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -7835,16 +7690,16 @@ exports.shouldUseRule = shouldUseRule;
 
 /***/ }),
 
-/***/ 283:
+/***/ 1807:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = void 0;
-const errors_1 = __nccwpck_require__(4922);
-const codegen_1 = __nccwpck_require__(3106);
-const names_1 = __nccwpck_require__(7139);
+const errors_1 = __nccwpck_require__(6229);
+const codegen_1 = __nccwpck_require__(5157);
+const names_1 = __nccwpck_require__(810);
 const boolError = {
     message: "boolean schema is false",
 };
@@ -7892,18 +7747,18 @@ function falseSchemaError(it, overrideAllErrors) {
 
 /***/ }),
 
-/***/ 2922:
+/***/ 6888:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = void 0;
-const rules_1 = __nccwpck_require__(4006);
-const applicability_1 = __nccwpck_require__(3696);
-const errors_1 = __nccwpck_require__(4922);
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const rules_1 = __nccwpck_require__(4926);
+const applicability_1 = __nccwpck_require__(671);
+const errors_1 = __nccwpck_require__(6229);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 var DataType;
 (function (DataType) {
     DataType[DataType["Correct"] = 0] = "Correct";
@@ -8102,15 +7957,15 @@ function getTypeErrorContext(it) {
 
 /***/ }),
 
-/***/ 9014:
+/***/ 5439:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.assignDefaults = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 function assignDefaults(it, ty) {
     const { properties, items } = it.schema;
     if (ty === "object" && properties) {
@@ -8144,25 +7999,25 @@ function assignDefault(it, prop, defaultValue) {
 
 /***/ }),
 
-/***/ 7959:
+/***/ 5286:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getData = exports.KeywordCxt = exports.validateFunctionCode = void 0;
-const boolSchema_1 = __nccwpck_require__(283);
-const dataType_1 = __nccwpck_require__(2922);
-const applicability_1 = __nccwpck_require__(3696);
-const dataType_2 = __nccwpck_require__(2922);
-const defaults_1 = __nccwpck_require__(9014);
-const keyword_1 = __nccwpck_require__(2266);
-const subschema_1 = __nccwpck_require__(4672);
-const codegen_1 = __nccwpck_require__(3106);
-const names_1 = __nccwpck_require__(7139);
-const resolve_1 = __nccwpck_require__(3312);
-const util_1 = __nccwpck_require__(8945);
-const errors_1 = __nccwpck_require__(4922);
+const boolSchema_1 = __nccwpck_require__(1807);
+const dataType_1 = __nccwpck_require__(6888);
+const applicability_1 = __nccwpck_require__(671);
+const dataType_2 = __nccwpck_require__(6888);
+const defaults_1 = __nccwpck_require__(5439);
+const keyword_1 = __nccwpck_require__(7615);
+const subschema_1 = __nccwpck_require__(1880);
+const codegen_1 = __nccwpck_require__(5157);
+const names_1 = __nccwpck_require__(810);
+const resolve_1 = __nccwpck_require__(1361);
+const util_1 = __nccwpck_require__(7475);
+const errors_1 = __nccwpck_require__(6229);
 // schema compilation - generates validation function, subschemaCode (below) is used for subschemas
 function validateFunctionCode(it) {
     if (isSchemaObj(it)) {
@@ -8671,17 +8526,17 @@ exports.getData = getData;
 
 /***/ }),
 
-/***/ 2266:
+/***/ 7615:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const names_1 = __nccwpck_require__(7139);
-const code_1 = __nccwpck_require__(4640);
-const errors_1 = __nccwpck_require__(4922);
+const codegen_1 = __nccwpck_require__(5157);
+const names_1 = __nccwpck_require__(810);
+const code_1 = __nccwpck_require__(8592);
+const errors_1 = __nccwpck_require__(6229);
 function macroKeywordCode(cxt, def) {
     const { gen, keyword, schema, parentSchema, it } = cxt;
     const macroSchema = def.macro.call(it.self, schema, parentSchema, it);
@@ -8802,15 +8657,15 @@ exports.validateKeywordUsage = validateKeywordUsage;
 
 /***/ }),
 
-/***/ 4672:
+/***/ 1880:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 function getSubschema(it, { keyword, schemaProp, schema, schemaPath, errSchemaPath, topSchemaRef }) {
     if (keyword !== undefined && schema !== undefined) {
         throw new Error('both "keyword" and "schema" passed, only one allowed');
@@ -8890,32 +8745,32 @@ exports.extendSubschemaMode = extendSubschemaMode;
 
 /***/ }),
 
-/***/ 2840:
+/***/ 4129:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = void 0;
-var validate_1 = __nccwpck_require__(7959);
+var validate_1 = __nccwpck_require__(5286);
 Object.defineProperty(exports, "KeywordCxt", ({ enumerable: true, get: function () { return validate_1.KeywordCxt; } }));
-var codegen_1 = __nccwpck_require__(3106);
+var codegen_1 = __nccwpck_require__(5157);
 Object.defineProperty(exports, "_", ({ enumerable: true, get: function () { return codegen_1._; } }));
 Object.defineProperty(exports, "str", ({ enumerable: true, get: function () { return codegen_1.str; } }));
 Object.defineProperty(exports, "stringify", ({ enumerable: true, get: function () { return codegen_1.stringify; } }));
 Object.defineProperty(exports, "nil", ({ enumerable: true, get: function () { return codegen_1.nil; } }));
 Object.defineProperty(exports, "Name", ({ enumerable: true, get: function () { return codegen_1.Name; } }));
 Object.defineProperty(exports, "CodeGen", ({ enumerable: true, get: function () { return codegen_1.CodeGen; } }));
-const validation_error_1 = __nccwpck_require__(1430);
-const ref_error_1 = __nccwpck_require__(6972);
-const rules_1 = __nccwpck_require__(4006);
-const compile_1 = __nccwpck_require__(1114);
-const codegen_2 = __nccwpck_require__(3106);
-const resolve_1 = __nccwpck_require__(3312);
-const dataType_1 = __nccwpck_require__(2922);
-const util_1 = __nccwpck_require__(8945);
-const $dataRefSchema = __nccwpck_require__(9138);
-const uri_1 = __nccwpck_require__(2741);
+const validation_error_1 = __nccwpck_require__(6616);
+const ref_error_1 = __nccwpck_require__(6858);
+const rules_1 = __nccwpck_require__(4926);
+const compile_1 = __nccwpck_require__(2503);
+const codegen_2 = __nccwpck_require__(5157);
+const resolve_1 = __nccwpck_require__(1361);
+const dataType_1 = __nccwpck_require__(6888);
+const util_1 = __nccwpck_require__(7475);
+const $dataRefSchema = __nccwpck_require__(6354);
+const uri_1 = __nccwpck_require__(3771);
 const defaultRegExp = (str, flags) => new RegExp(str, flags);
 defaultRegExp.code = "new RegExp";
 const META_IGNORE_OPTIONS = ["removeAdditional", "useDefaults", "coerceTypes"];
@@ -9515,7 +9370,7 @@ function schemaOrData(schema) {
 
 /***/ }),
 
-/***/ 7418:
+/***/ 8969:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -9529,7 +9384,7 @@ exports["default"] = equal;
 
 /***/ }),
 
-/***/ 313:
+/***/ 209:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -9560,7 +9415,7 @@ ucs2length.code = 'require("ajv/dist/runtime/ucs2length").default';
 
 /***/ }),
 
-/***/ 2741:
+/***/ 3771:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -9573,7 +9428,7 @@ exports["default"] = uri;
 
 /***/ }),
 
-/***/ 1430:
+/***/ 6616:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -9591,15 +9446,15 @@ exports["default"] = ValidationError;
 
 /***/ }),
 
-/***/ 2582:
+/***/ 613:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateAdditionalItems = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: ({ params: { len } }) => (0, codegen_1.str) `must NOT have more than ${len} items`,
     params: ({ params: { len } }) => (0, codegen_1._) `{limit: ${len}}`,
@@ -9647,16 +9502,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 7264:
+/***/ 2043:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __nccwpck_require__(4640);
-const codegen_1 = __nccwpck_require__(3106);
-const names_1 = __nccwpck_require__(7139);
-const util_1 = __nccwpck_require__(8945);
+const code_1 = __nccwpck_require__(8592);
+const codegen_1 = __nccwpck_require__(5157);
+const names_1 = __nccwpck_require__(810);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: "must NOT have additional properties",
     params: ({ params }) => (0, codegen_1._) `{additionalProperty: ${params.additionalProperty}}`,
@@ -9760,13 +9615,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 5442:
+/***/ 3103:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const util_1 = __nccwpck_require__(8945);
+const util_1 = __nccwpck_require__(7475);
 const def = {
     keyword: "allOf",
     schemaType: "array",
@@ -9790,13 +9645,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 7093:
+/***/ 7768:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __nccwpck_require__(4640);
+const code_1 = __nccwpck_require__(8592);
 const def = {
     keyword: "anyOf",
     schemaType: "array",
@@ -9809,14 +9664,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4421:
+/***/ 9889:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: ({ params: { min, max } }) => max === undefined
         ? (0, codegen_1.str) `must contain at least ${min} valid item(s)`
@@ -9911,16 +9766,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 1965:
+/***/ 3777:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const code_1 = __nccwpck_require__(4640);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const code_1 = __nccwpck_require__(8592);
 exports.error = {
     message: ({ params: { property, depsCount, deps } }) => {
         const property_ies = depsCount === 1 ? "property" : "properties";
@@ -10003,14 +9858,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 9727:
+/***/ 3831:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: ({ params }) => (0, codegen_1.str) `must match "${params.ifClause}" schema`,
     params: ({ params }) => (0, codegen_1._) `{failingKeyword: ${params.ifClause}}`,
@@ -10076,28 +9931,28 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 8866:
+/***/ 390:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const additionalItems_1 = __nccwpck_require__(2582);
-const prefixItems_1 = __nccwpck_require__(4064);
-const items_1 = __nccwpck_require__(3060);
-const items2020_1 = __nccwpck_require__(4272);
-const contains_1 = __nccwpck_require__(4421);
-const dependencies_1 = __nccwpck_require__(1965);
-const propertyNames_1 = __nccwpck_require__(6148);
-const additionalProperties_1 = __nccwpck_require__(7264);
-const properties_1 = __nccwpck_require__(4456);
-const patternProperties_1 = __nccwpck_require__(1042);
-const not_1 = __nccwpck_require__(814);
-const anyOf_1 = __nccwpck_require__(7093);
-const oneOf_1 = __nccwpck_require__(1400);
-const allOf_1 = __nccwpck_require__(5442);
-const if_1 = __nccwpck_require__(9727);
-const thenElse_1 = __nccwpck_require__(4311);
+const additionalItems_1 = __nccwpck_require__(613);
+const prefixItems_1 = __nccwpck_require__(7259);
+const items_1 = __nccwpck_require__(5145);
+const items2020_1 = __nccwpck_require__(4647);
+const contains_1 = __nccwpck_require__(9889);
+const dependencies_1 = __nccwpck_require__(3777);
+const propertyNames_1 = __nccwpck_require__(9136);
+const additionalProperties_1 = __nccwpck_require__(2043);
+const properties_1 = __nccwpck_require__(4269);
+const patternProperties_1 = __nccwpck_require__(946);
+const not_1 = __nccwpck_require__(9987);
+const anyOf_1 = __nccwpck_require__(7768);
+const oneOf_1 = __nccwpck_require__(4891);
+const allOf_1 = __nccwpck_require__(3103);
+const if_1 = __nccwpck_require__(3831);
+const thenElse_1 = __nccwpck_require__(1892);
 function getApplicator(draft2020 = false) {
     const applicator = [
         // any
@@ -10127,16 +9982,16 @@ exports["default"] = getApplicator;
 
 /***/ }),
 
-/***/ 3060:
+/***/ 5145:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateTuple = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const code_1 = __nccwpck_require__(4640);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const code_1 = __nccwpck_require__(8592);
 const def = {
     keyword: "items",
     type: "array",
@@ -10186,16 +10041,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4272:
+/***/ 4647:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const code_1 = __nccwpck_require__(4640);
-const additionalItems_1 = __nccwpck_require__(2582);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const code_1 = __nccwpck_require__(8592);
+const additionalItems_1 = __nccwpck_require__(613);
 const error = {
     message: ({ params: { len } }) => (0, codegen_1.str) `must NOT have more than ${len} items`,
     params: ({ params: { len } }) => (0, codegen_1._) `{limit: ${len}}`,
@@ -10223,13 +10078,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 814:
+/***/ 9987:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const util_1 = __nccwpck_require__(8945);
+const util_1 = __nccwpck_require__(7475);
 const def = {
     keyword: "not",
     schemaType: ["object", "boolean"],
@@ -10256,14 +10111,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 1400:
+/***/ 4891:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: "must match exactly one schema in oneOf",
     params: ({ params }) => (0, codegen_1._) `{passingSchemas: ${params.passing}}`,
@@ -10323,16 +10178,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 1042:
+/***/ 946:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __nccwpck_require__(4640);
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const util_2 = __nccwpck_require__(8945);
+const code_1 = __nccwpck_require__(8592);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const util_2 = __nccwpck_require__(7475);
 const def = {
     keyword: "patternProperties",
     type: "object",
@@ -10405,13 +10260,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4064:
+/***/ 7259:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const items_1 = __nccwpck_require__(3060);
+const items_1 = __nccwpck_require__(5145);
 const def = {
     keyword: "prefixItems",
     type: "array",
@@ -10424,16 +10279,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4456:
+/***/ 4269:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const validate_1 = __nccwpck_require__(7959);
-const code_1 = __nccwpck_require__(4640);
-const util_1 = __nccwpck_require__(8945);
-const additionalProperties_1 = __nccwpck_require__(7264);
+const validate_1 = __nccwpck_require__(5286);
+const code_1 = __nccwpck_require__(8592);
+const util_1 = __nccwpck_require__(7475);
+const additionalProperties_1 = __nccwpck_require__(2043);
 const def = {
     keyword: "properties",
     type: "object",
@@ -10485,14 +10340,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 6148:
+/***/ 9136:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: "property name must be valid",
     params: ({ params }) => (0, codegen_1._) `{propertyName: ${params.propertyName}}`,
@@ -10530,13 +10385,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4311:
+/***/ 1892:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const util_1 = __nccwpck_require__(8945);
+const util_1 = __nccwpck_require__(7475);
 const def = {
     keyword: ["then", "else"],
     schemaType: ["object", "boolean"],
@@ -10550,17 +10405,17 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 4640:
+/***/ 8592:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = void 0;
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const names_1 = __nccwpck_require__(7139);
-const util_2 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const names_1 = __nccwpck_require__(810);
+const util_2 = __nccwpck_require__(7475);
 function checkReportMissingProp(cxt, prop) {
     const { gen, data, it } = cxt;
     gen.if(noPropertyInData(gen, data, prop, it.opts.ownProperties), () => {
@@ -10688,7 +10543,7 @@ exports.validateUnion = validateUnion;
 
 /***/ }),
 
-/***/ 1082:
+/***/ 3519:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -10705,14 +10560,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 3101:
+/***/ 1657:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const id_1 = __nccwpck_require__(1082);
-const ref_1 = __nccwpck_require__(1297);
+const id_1 = __nccwpck_require__(3519);
+const ref_1 = __nccwpck_require__(7450);
 const core = [
     "$schema",
     "$id",
@@ -10728,19 +10583,19 @@ exports["default"] = core;
 
 /***/ }),
 
-/***/ 1297:
+/***/ 7450:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.callRef = exports.getValidate = void 0;
-const ref_error_1 = __nccwpck_require__(6972);
-const code_1 = __nccwpck_require__(4640);
-const codegen_1 = __nccwpck_require__(3106);
-const names_1 = __nccwpck_require__(7139);
-const compile_1 = __nccwpck_require__(1114);
-const util_1 = __nccwpck_require__(8945);
+const ref_error_1 = __nccwpck_require__(6858);
+const code_1 = __nccwpck_require__(8592);
+const codegen_1 = __nccwpck_require__(5157);
+const names_1 = __nccwpck_require__(810);
+const compile_1 = __nccwpck_require__(2503);
+const util_1 = __nccwpck_require__(7475);
 const def = {
     keyword: "$ref",
     schemaType: "string",
@@ -10857,17 +10712,17 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 6004:
+/***/ 8945:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const types_1 = __nccwpck_require__(8997);
-const compile_1 = __nccwpck_require__(1114);
-const ref_error_1 = __nccwpck_require__(6972);
-const util_1 = __nccwpck_require__(8945);
+const codegen_1 = __nccwpck_require__(5157);
+const types_1 = __nccwpck_require__(5362);
+const compile_1 = __nccwpck_require__(2503);
+const ref_error_1 = __nccwpck_require__(6858);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: ({ params: { discrError, tagName } }) => discrError === types_1.DiscrError.Tag
         ? `tag "${tagName}" must be string`
@@ -10968,7 +10823,7 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 8997:
+/***/ 5362:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -10984,17 +10839,17 @@ var DiscrError;
 
 /***/ }),
 
-/***/ 2394:
+/***/ 4662:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __nccwpck_require__(3101);
-const validation_1 = __nccwpck_require__(6396);
-const applicator_1 = __nccwpck_require__(8866);
-const format_1 = __nccwpck_require__(2839);
-const metadata_1 = __nccwpck_require__(9903);
+const core_1 = __nccwpck_require__(1657);
+const validation_1 = __nccwpck_require__(3694);
+const applicator_1 = __nccwpck_require__(390);
+const format_1 = __nccwpck_require__(6614);
+const metadata_1 = __nccwpck_require__(8193);
 const draft7Vocabularies = [
     core_1.default,
     validation_1.default,
@@ -11008,13 +10863,13 @@ exports["default"] = draft7Vocabularies;
 
 /***/ }),
 
-/***/ 1255:
+/***/ 7908:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const error = {
     message: ({ schemaCode }) => (0, codegen_1.str) `must match format "${schemaCode}"`,
     params: ({ schemaCode }) => (0, codegen_1._) `{format: ${schemaCode}}`,
@@ -11107,20 +10962,20 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 2839:
+/***/ 6614:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const format_1 = __nccwpck_require__(1255);
+const format_1 = __nccwpck_require__(7908);
 const format = [format_1.default];
 exports["default"] = format;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 9903:
+/***/ 8193:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -11145,15 +11000,15 @@ exports.contentVocabulary = [
 
 /***/ }),
 
-/***/ 6043:
+/***/ 1185:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const equal_1 = __nccwpck_require__(7418);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const equal_1 = __nccwpck_require__(8969);
 const error = {
     message: "must be equal to constant",
     params: ({ schemaCode }) => (0, codegen_1._) `{allowedValue: ${schemaCode}}`,
@@ -11177,15 +11032,15 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 3610:
+/***/ 7647:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const equal_1 = __nccwpck_require__(7418);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const equal_1 = __nccwpck_require__(8969);
 const error = {
     message: "must be equal to one of the allowed values",
     params: ({ schemaCode }) => (0, codegen_1._) `{allowedValues: ${schemaCode}}`,
@@ -11232,22 +11087,22 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 6396:
+/***/ 3694:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const limitNumber_1 = __nccwpck_require__(3478);
-const multipleOf_1 = __nccwpck_require__(8925);
-const limitLength_1 = __nccwpck_require__(1912);
-const pattern_1 = __nccwpck_require__(5325);
-const limitProperties_1 = __nccwpck_require__(1837);
-const required_1 = __nccwpck_require__(3645);
-const limitItems_1 = __nccwpck_require__(311);
-const uniqueItems_1 = __nccwpck_require__(8797);
-const const_1 = __nccwpck_require__(6043);
-const enum_1 = __nccwpck_require__(3610);
+const limitNumber_1 = __nccwpck_require__(2842);
+const multipleOf_1 = __nccwpck_require__(4941);
+const limitLength_1 = __nccwpck_require__(6102);
+const pattern_1 = __nccwpck_require__(8461);
+const limitProperties_1 = __nccwpck_require__(2636);
+const required_1 = __nccwpck_require__(7071);
+const limitItems_1 = __nccwpck_require__(851);
+const uniqueItems_1 = __nccwpck_require__(9214);
+const const_1 = __nccwpck_require__(1185);
+const enum_1 = __nccwpck_require__(7647);
 const validation = [
     // number
     limitNumber_1.default,
@@ -11272,13 +11127,13 @@ exports["default"] = validation;
 
 /***/ }),
 
-/***/ 311:
+/***/ 851:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const error = {
     message({ keyword, schemaCode }) {
         const comp = keyword === "maxItems" ? "more" : "fewer";
@@ -11303,15 +11158,15 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 1912:
+/***/ 6102:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const ucs2length_1 = __nccwpck_require__(313);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const ucs2length_1 = __nccwpck_require__(209);
 const error = {
     message({ keyword, schemaCode }) {
         const comp = keyword === "maxLength" ? "more" : "fewer";
@@ -11337,13 +11192,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 3478:
+/***/ 2842:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const ops = codegen_1.operators;
 const KWDs = {
     maximum: { okStr: "<=", ok: ops.LTE, fail: ops.GT },
@@ -11371,13 +11226,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 1837:
+/***/ 2636:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const error = {
     message({ keyword, schemaCode }) {
         const comp = keyword === "maxProperties" ? "more" : "fewer";
@@ -11402,13 +11257,13 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 8925:
+/***/ 4941:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const codegen_1 = __nccwpck_require__(3106);
+const codegen_1 = __nccwpck_require__(5157);
 const error = {
     message: ({ schemaCode }) => (0, codegen_1.str) `must be multiple of ${schemaCode}`,
     params: ({ schemaCode }) => (0, codegen_1._) `{multipleOf: ${schemaCode}}`,
@@ -11435,14 +11290,14 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 5325:
+/***/ 8461:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __nccwpck_require__(4640);
-const codegen_1 = __nccwpck_require__(3106);
+const code_1 = __nccwpck_require__(8592);
+const codegen_1 = __nccwpck_require__(5157);
 const error = {
     message: ({ schemaCode }) => (0, codegen_1.str) `must match pattern "${schemaCode}"`,
     params: ({ schemaCode }) => (0, codegen_1._) `{pattern: ${schemaCode}}`,
@@ -11466,15 +11321,15 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 3645:
+/***/ 7071:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const code_1 = __nccwpck_require__(4640);
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
+const code_1 = __nccwpck_require__(8592);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
 const error = {
     message: ({ params: { missingProperty } }) => (0, codegen_1.str) `must have required property '${missingProperty}'`,
     params: ({ params: { missingProperty } }) => (0, codegen_1._) `{missingProperty: ${missingProperty}}`,
@@ -11552,16 +11407,16 @@ exports["default"] = def;
 
 /***/ }),
 
-/***/ 8797:
+/***/ 9214:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const dataType_1 = __nccwpck_require__(2922);
-const codegen_1 = __nccwpck_require__(3106);
-const util_1 = __nccwpck_require__(8945);
-const equal_1 = __nccwpck_require__(7418);
+const dataType_1 = __nccwpck_require__(6888);
+const codegen_1 = __nccwpck_require__(5157);
+const util_1 = __nccwpck_require__(7475);
+const equal_1 = __nccwpck_require__(8969);
 const error = {
     message: ({ params: { i, j } }) => (0, codegen_1.str) `must NOT have duplicate items (items ## ${j} and ${i} are identical)`,
     params: ({ params: { i, j } }) => (0, codegen_1._) `{i: ${i}, j: ${j}}`,
@@ -35254,34 +35109,34 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1094:
+/***/ 8167:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const Client = __nccwpck_require__(8730)
-const Dispatcher = __nccwpck_require__(3218)
-const Pool = __nccwpck_require__(1883)
-const BalancedPool = __nccwpck_require__(5967)
-const Agent = __nccwpck_require__(7333)
-const ProxyAgent = __nccwpck_require__(6034)
-const EnvHttpProxyAgent = __nccwpck_require__(2853)
-const RetryAgent = __nccwpck_require__(9051)
-const errors = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
+const Client = __nccwpck_require__(6874)
+const Dispatcher = __nccwpck_require__(2537)
+const Pool = __nccwpck_require__(5521)
+const BalancedPool = __nccwpck_require__(9727)
+const Agent = __nccwpck_require__(4111)
+const ProxyAgent = __nccwpck_require__(88)
+const EnvHttpProxyAgent = __nccwpck_require__(7106)
+const RetryAgent = __nccwpck_require__(3419)
+const errors = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
 const { InvalidArgumentError } = errors
-const api = __nccwpck_require__(8085)
-const buildConnector = __nccwpck_require__(9232)
-const MockClient = __nccwpck_require__(7072)
-const MockAgent = __nccwpck_require__(795)
-const MockPool = __nccwpck_require__(4218)
-const mockErrors = __nccwpck_require__(9819)
-const RetryHandler = __nccwpck_require__(3426)
-const { getGlobalDispatcher, setGlobalDispatcher } = __nccwpck_require__(3827)
-const DecoratorHandler = __nccwpck_require__(282)
-const RedirectHandler = __nccwpck_require__(1610)
-const createRedirectInterceptor = __nccwpck_require__(6615)
+const api = __nccwpck_require__(2336)
+const buildConnector = __nccwpck_require__(4481)
+const MockClient = __nccwpck_require__(8925)
+const MockAgent = __nccwpck_require__(6171)
+const MockPool = __nccwpck_require__(8639)
+const mockErrors = __nccwpck_require__(6300)
+const RetryHandler = __nccwpck_require__(5097)
+const { getGlobalDispatcher, setGlobalDispatcher } = __nccwpck_require__(2332)
+const DecoratorHandler = __nccwpck_require__(4291)
+const RedirectHandler = __nccwpck_require__(7971)
+const createRedirectInterceptor = __nccwpck_require__(8924)
 
 Object.assign(Dispatcher.prototype, api)
 
@@ -35299,9 +35154,9 @@ module.exports.DecoratorHandler = DecoratorHandler
 module.exports.RedirectHandler = RedirectHandler
 module.exports.createRedirectInterceptor = createRedirectInterceptor
 module.exports.interceptors = {
-  redirect: __nccwpck_require__(2333),
-  retry: __nccwpck_require__(8623),
-  dump: __nccwpck_require__(9817)
+  redirect: __nccwpck_require__(2849),
+  retry: __nccwpck_require__(5119),
+  dump: __nccwpck_require__(9841)
 }
 
 module.exports.buildConnector = buildConnector
@@ -35363,7 +35218,7 @@ function makeDispatcher (fn) {
 module.exports.setGlobalDispatcher = setGlobalDispatcher
 module.exports.getGlobalDispatcher = getGlobalDispatcher
 
-const fetchImpl = (__nccwpck_require__(784).fetch)
+const fetchImpl = (__nccwpck_require__(8687).fetch)
 module.exports.fetch = async function fetch (init, options = undefined) {
   try {
     return await fetchImpl(init, options)
@@ -35375,39 +35230,39 @@ module.exports.fetch = async function fetch (init, options = undefined) {
     throw err
   }
 }
-module.exports.Headers = __nccwpck_require__(9950).Headers
-module.exports.Response = __nccwpck_require__(2286).Response
-module.exports.Request = __nccwpck_require__(9845).Request
-module.exports.FormData = __nccwpck_require__(1477).FormData
+module.exports.Headers = __nccwpck_require__(355).Headers
+module.exports.Response = __nccwpck_require__(4935).Response
+module.exports.Request = __nccwpck_require__(7892).Request
+module.exports.FormData = __nccwpck_require__(5151).FormData
 module.exports.File = globalThis.File ?? (__nccwpck_require__(2254).File)
-module.exports.FileReader = __nccwpck_require__(5482).FileReader
+module.exports.FileReader = __nccwpck_require__(2488).FileReader
 
-const { setGlobalOrigin, getGlobalOrigin } = __nccwpck_require__(7241)
+const { setGlobalOrigin, getGlobalOrigin } = __nccwpck_require__(3545)
 
 module.exports.setGlobalOrigin = setGlobalOrigin
 module.exports.getGlobalOrigin = getGlobalOrigin
 
-const { CacheStorage } = __nccwpck_require__(3948)
-const { kConstruct } = __nccwpck_require__(5834)
+const { CacheStorage } = __nccwpck_require__(848)
+const { kConstruct } = __nccwpck_require__(9289)
 
 // Cache & CacheStorage are tightly coupled with fetch. Even if it may run
 // in an older version of Node, it doesn't have any use without fetch.
 module.exports.caches = new CacheStorage(kConstruct)
 
-const { deleteCookie, getCookies, getSetCookies, setCookie } = __nccwpck_require__(4642)
+const { deleteCookie, getCookies, getSetCookies, setCookie } = __nccwpck_require__(4001)
 
 module.exports.deleteCookie = deleteCookie
 module.exports.getCookies = getCookies
 module.exports.getSetCookies = getSetCookies
 module.exports.setCookie = setCookie
 
-const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(1821)
+const { parseMIMEType, serializeAMimeType } = __nccwpck_require__(3939)
 
 module.exports.parseMIMEType = parseMIMEType
 module.exports.serializeAMimeType = serializeAMimeType
 
-const { CloseEvent, ErrorEvent, MessageEvent } = __nccwpck_require__(986)
-module.exports.WebSocket = __nccwpck_require__(8741).WebSocket
+const { CloseEvent, ErrorEvent, MessageEvent } = __nccwpck_require__(6773)
+module.exports.WebSocket = __nccwpck_require__(4113).WebSocket
 module.exports.CloseEvent = CloseEvent
 module.exports.ErrorEvent = ErrorEvent
 module.exports.MessageEvent = MessageEvent
@@ -35423,18 +35278,18 @@ module.exports.MockPool = MockPool
 module.exports.MockAgent = MockAgent
 module.exports.mockErrors = mockErrors
 
-const { EventSource } = __nccwpck_require__(3466)
+const { EventSource } = __nccwpck_require__(7137)
 
 module.exports.EventSource = EventSource
 
 
 /***/ }),
 
-/***/ 787:
+/***/ 5932:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { addAbortListener } = __nccwpck_require__(729)
-const { RequestAbortedError } = __nccwpck_require__(8999)
+const { addAbortListener } = __nccwpck_require__(5695)
+const { RequestAbortedError } = __nccwpck_require__(3915)
 
 const kListener = Symbol('kListener')
 const kSignal = Symbol('kSignal')
@@ -35494,7 +35349,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7064:
+/***/ 370:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35502,9 +35357,9 @@ module.exports = {
 
 const assert = __nccwpck_require__(8061)
 const { AsyncResource } = __nccwpck_require__(2761)
-const { InvalidArgumentError, SocketError } = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
-const { addSignal, removeSignal } = __nccwpck_require__(787)
+const { InvalidArgumentError, SocketError } = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
+const { addSignal, removeSignal } = __nccwpck_require__(5932)
 
 class ConnectHandler extends AsyncResource {
   constructor (opts, callback) {
@@ -35610,7 +35465,7 @@ module.exports = connect
 
 /***/ }),
 
-/***/ 2100:
+/***/ 1475:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -35625,10 +35480,10 @@ const {
   InvalidArgumentError,
   InvalidReturnValueError,
   RequestAbortedError
-} = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
+} = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
 const { AsyncResource } = __nccwpck_require__(2761)
-const { addSignal, removeSignal } = __nccwpck_require__(787)
+const { addSignal, removeSignal } = __nccwpck_require__(5932)
 const assert = __nccwpck_require__(8061)
 
 const kResume = Symbol('resume')
@@ -35869,17 +35724,17 @@ module.exports = pipeline
 
 /***/ }),
 
-/***/ 2105:
+/***/ 2378:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const assert = __nccwpck_require__(8061)
-const { Readable } = __nccwpck_require__(8193)
-const { InvalidArgumentError, RequestAbortedError } = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
-const { getResolveErrorBodyCallback } = __nccwpck_require__(9656)
+const { Readable } = __nccwpck_require__(3313)
+const { InvalidArgumentError, RequestAbortedError } = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
+const { getResolveErrorBodyCallback } = __nccwpck_require__(4837)
 const { AsyncResource } = __nccwpck_require__(2761)
 
 class RequestHandler extends AsyncResource {
@@ -36091,7 +35946,7 @@ module.exports.RequestHandler = RequestHandler
 
 /***/ }),
 
-/***/ 7106:
+/***/ 896:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -36099,11 +35954,11 @@ module.exports.RequestHandler = RequestHandler
 
 const assert = __nccwpck_require__(8061)
 const { finished, PassThrough } = __nccwpck_require__(4492)
-const { InvalidArgumentError, InvalidReturnValueError } = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
-const { getResolveErrorBodyCallback } = __nccwpck_require__(9656)
+const { InvalidArgumentError, InvalidReturnValueError } = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
+const { getResolveErrorBodyCallback } = __nccwpck_require__(4837)
 const { AsyncResource } = __nccwpck_require__(2761)
-const { addSignal, removeSignal } = __nccwpck_require__(787)
+const { addSignal, removeSignal } = __nccwpck_require__(5932)
 
 class StreamHandler extends AsyncResource {
   constructor (opts, factory, callback) {
@@ -36319,16 +36174,16 @@ module.exports = stream
 
 /***/ }),
 
-/***/ 7700:
+/***/ 3722:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { InvalidArgumentError, SocketError } = __nccwpck_require__(8999)
+const { InvalidArgumentError, SocketError } = __nccwpck_require__(3915)
 const { AsyncResource } = __nccwpck_require__(2761)
-const util = __nccwpck_require__(729)
-const { addSignal, removeSignal } = __nccwpck_require__(787)
+const util = __nccwpck_require__(5695)
+const { addSignal, removeSignal } = __nccwpck_require__(5932)
 const assert = __nccwpck_require__(8061)
 
 class UpgradeHandler extends AsyncResource {
@@ -36435,22 +36290,22 @@ module.exports = upgrade
 
 /***/ }),
 
-/***/ 8085:
+/***/ 2336:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-module.exports.request = __nccwpck_require__(2105)
-module.exports.stream = __nccwpck_require__(7106)
-module.exports.pipeline = __nccwpck_require__(2100)
-module.exports.upgrade = __nccwpck_require__(7700)
-module.exports.connect = __nccwpck_require__(7064)
+module.exports.request = __nccwpck_require__(2378)
+module.exports.stream = __nccwpck_require__(896)
+module.exports.pipeline = __nccwpck_require__(1475)
+module.exports.upgrade = __nccwpck_require__(3722)
+module.exports.connect = __nccwpck_require__(370)
 
 
 /***/ }),
 
-/***/ 8193:
+/***/ 3313:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -36460,9 +36315,9 @@ module.exports.connect = __nccwpck_require__(7064)
 
 const assert = __nccwpck_require__(8061)
 const { Readable } = __nccwpck_require__(4492)
-const { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
-const { ReadableStreamFrom } = __nccwpck_require__(729)
+const { RequestAbortedError, NotSupportedError, InvalidArgumentError, AbortError } = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
+const { ReadableStreamFrom } = __nccwpck_require__(5695)
 
 const kConsume = Symbol('kConsume')
 const kReading = Symbol('kReading')
@@ -36819,15 +36674,15 @@ module.exports = { Readable: BodyReadable, chunksDecode }
 
 /***/ }),
 
-/***/ 9656:
+/***/ 4837:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const assert = __nccwpck_require__(8061)
 const {
   ResponseStatusCodeError
-} = __nccwpck_require__(8999)
+} = __nccwpck_require__(3915)
 
-const { chunksDecode } = __nccwpck_require__(8193)
+const { chunksDecode } = __nccwpck_require__(3313)
 const CHUNK_LIMIT = 128 * 1024
 
 async function getResolveErrorBodyCallback ({ callback, body, contentType, statusCode, statusMessage, headers }) {
@@ -36919,7 +36774,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9232:
+/***/ 4481:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -36927,8 +36782,8 @@ module.exports = {
 
 const net = __nccwpck_require__(7503)
 const assert = __nccwpck_require__(8061)
-const util = __nccwpck_require__(729)
-const { InvalidArgumentError, ConnectTimeoutError } = __nccwpck_require__(8999)
+const util = __nccwpck_require__(5695)
+const { InvalidArgumentError, ConnectTimeoutError } = __nccwpck_require__(3915)
 
 let tls // include tls conditionally since it is not always available
 
@@ -36998,7 +36853,7 @@ if (global.FinalizationRegistry && !(process.env.NODE_V8_COVERAGE || process.env
   }
 }
 
-function buildConnector ({ allowH2, maxCachedSessions, socketPath, timeout, ...opts }) {
+function buildConnector ({ allowH2, maxCachedSessions, socketPath, timeout, session: customSession, ...opts }) {
   if (maxCachedSessions != null && (!Number.isInteger(maxCachedSessions) || maxCachedSessions < 0)) {
     throw new InvalidArgumentError('maxCachedSessions must be a positive integer or zero')
   }
@@ -37016,7 +36871,7 @@ function buildConnector ({ allowH2, maxCachedSessions, socketPath, timeout, ...o
       servername = servername || options.servername || util.getServerName(host) || null
 
       const sessionKey = servername || hostname
-      const session = sessionCache.get(sessionKey) || null
+      const session = customSession || sessionCache.get(sessionKey) || null
 
       assert(sessionKey)
 
@@ -37120,7 +36975,7 @@ module.exports = buildConnector
 
 /***/ }),
 
-/***/ 2695:
+/***/ 7030:
 /***/ ((module) => {
 
 "use strict";
@@ -37246,7 +37101,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1737:
+/***/ 8915:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -37456,7 +37311,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8999:
+/***/ 3915:
 /***/ ((module) => {
 
 "use strict";
@@ -37695,7 +37550,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7105:
+/***/ 9832:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -37704,7 +37559,7 @@ module.exports = {
 const {
   InvalidArgumentError,
   NotSupportedError
-} = __nccwpck_require__(8999)
+} = __nccwpck_require__(3915)
 const assert = __nccwpck_require__(8061)
 const {
   isValidHTTPToken,
@@ -37717,10 +37572,11 @@ const {
   isBlobLike,
   buildURL,
   validateHandler,
-  getServerName
-} = __nccwpck_require__(729)
-const { channels } = __nccwpck_require__(1737)
-const { headerNameLowerCasedRecord } = __nccwpck_require__(2695)
+  getServerName,
+  normalizedMethodRecords
+} = __nccwpck_require__(5695)
+const { channels } = __nccwpck_require__(8915)
+const { headerNameLowerCasedRecord } = __nccwpck_require__(7030)
 
 // Verifies that a given path is valid does not contain control chars \x00 to \x20
 const invalidPathRegex = /[^\u0021-\u00ff]/
@@ -37752,13 +37608,13 @@ class Request {
       method !== 'CONNECT'
     ) {
       throw new InvalidArgumentError('path must be an absolute URL or start with a slash')
-    } else if (invalidPathRegex.exec(path) !== null) {
+    } else if (invalidPathRegex.test(path)) {
       throw new InvalidArgumentError('invalid request path')
     }
 
     if (typeof method !== 'string') {
       throw new InvalidArgumentError('method must be a string')
-    } else if (!isValidHTTPToken(method)) {
+    } else if (normalizedMethodRecords[method] === undefined && !isValidHTTPToken(method)) {
       throw new InvalidArgumentError('invalid request method')
     }
 
@@ -38097,7 +37953,7 @@ module.exports = Request
 
 /***/ }),
 
-/***/ 6955:
+/***/ 2099:
 /***/ ((module) => {
 
 module.exports = {
@@ -38122,6 +37978,7 @@ module.exports = {
   kHost: Symbol('host'),
   kNoRef: Symbol('no ref'),
   kBodyUsed: Symbol('used'),
+  kBody: Symbol('abstracted request body'),
   kRunning: Symbol('running'),
   kBlocking: Symbol('blocking'),
   kPending: Symbol('pending'),
@@ -38170,7 +38027,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8529:
+/***/ 1546:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -38179,7 +38036,7 @@ module.exports = {
 const {
   wellknownHeaderNames,
   headerNameLowerCasedRecord
-} = __nccwpck_require__(2695)
+} = __nccwpck_require__(7030)
 
 class TstNode {
   /** @type {any} */
@@ -38330,25 +38187,78 @@ module.exports = {
 
 /***/ }),
 
-/***/ 729:
+/***/ 5695:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const assert = __nccwpck_require__(8061)
-const { kDestroyed, kBodyUsed, kListeners } = __nccwpck_require__(6955)
+const { kDestroyed, kBodyUsed, kListeners, kBody } = __nccwpck_require__(2099)
 const { IncomingMessage } = __nccwpck_require__(8849)
 const stream = __nccwpck_require__(4492)
 const net = __nccwpck_require__(7503)
-const { InvalidArgumentError } = __nccwpck_require__(8999)
 const { Blob } = __nccwpck_require__(2254)
 const nodeUtil = __nccwpck_require__(7261)
 const { stringify } = __nccwpck_require__(9630)
-const { headerNameLowerCasedRecord } = __nccwpck_require__(2695)
-const { tree } = __nccwpck_require__(8529)
+const { EventEmitter: EE } = __nccwpck_require__(5673)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
+const { headerNameLowerCasedRecord } = __nccwpck_require__(7030)
+const { tree } = __nccwpck_require__(1546)
 
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(v => Number(v))
+
+class BodyAsyncIterable {
+  constructor (body) {
+    this[kBody] = body
+    this[kBodyUsed] = false
+  }
+
+  async * [Symbol.asyncIterator] () {
+    assert(!this[kBodyUsed], 'disturbed')
+    this[kBodyUsed] = true
+    yield * this[kBody]
+  }
+}
+
+function wrapRequestBody (body) {
+  if (isStream(body)) {
+    // TODO (fix): Provide some way for the user to cache the file to e.g. /tmp
+    // so that it can be dispatched again?
+    // TODO (fix): Do we need 100-expect support to provide a way to do this properly?
+    if (bodyLength(body) === 0) {
+      body
+        .on('data', function () {
+          assert(false)
+        })
+    }
+
+    if (typeof body.readableDidRead !== 'boolean') {
+      body[kBodyUsed] = false
+      EE.prototype.on.call(body, 'data', function () {
+        this[kBodyUsed] = true
+      })
+    }
+
+    return body
+  } else if (body && typeof body.pipeTo === 'function') {
+    // TODO (fix): We can't access ReadableStream internal state
+    // to determine whether or not it has been disturbed. This is just
+    // a workaround.
+    return new BodyAsyncIterable(body)
+  } else if (
+    body &&
+    typeof body !== 'string' &&
+    !ArrayBuffer.isView(body) &&
+    isIterable(body)
+  ) {
+    // TODO: Should we allow re-using iterable if !this.opts.idempotent
+    // or through some other flag?
+    return new BodyAsyncIterable(body)
+  } else {
+    return body
+  }
+}
 
 function nop () {}
 
@@ -38928,6 +38838,31 @@ function errorRequest (client, request, err) {
 const kEnumerableProperty = Object.create(null)
 kEnumerableProperty.enumerable = true
 
+const normalizedMethodRecordsBase = {
+  delete: 'DELETE',
+  DELETE: 'DELETE',
+  get: 'GET',
+  GET: 'GET',
+  head: 'HEAD',
+  HEAD: 'HEAD',
+  options: 'OPTIONS',
+  OPTIONS: 'OPTIONS',
+  post: 'POST',
+  POST: 'POST',
+  put: 'PUT',
+  PUT: 'PUT'
+}
+
+const normalizedMethodRecords = {
+  ...normalizedMethodRecordsBase,
+  patch: 'patch',
+  PATCH: 'PATCH'
+}
+
+// Note: object prototypes should not be able to be referenced. e.g. `Object#hasOwnProperty`.
+Object.setPrototypeOf(normalizedMethodRecordsBase, null)
+Object.setPrototypeOf(normalizedMethodRecords, null)
+
 module.exports = {
   kEnumerableProperty,
   nop,
@@ -38966,29 +38901,32 @@ module.exports = {
   isValidHeaderValue,
   isTokenCharCode,
   parseRangeHeader,
+  normalizedMethodRecordsBase,
+  normalizedMethodRecords,
   isValidPort,
   isHttpOrHttpsPrefixed,
   nodeMajor,
   nodeMinor,
-  safeHTTPMethods: ['GET', 'HEAD', 'OPTIONS', 'TRACE']
+  safeHTTPMethods: ['GET', 'HEAD', 'OPTIONS', 'TRACE'],
+  wrapRequestBody
 }
 
 
 /***/ }),
 
-/***/ 7333:
+/***/ 4111:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { InvalidArgumentError } = __nccwpck_require__(8999)
-const { kClients, kRunning, kClose, kDestroy, kDispatch, kInterceptors } = __nccwpck_require__(6955)
-const DispatcherBase = __nccwpck_require__(1544)
-const Pool = __nccwpck_require__(1883)
-const Client = __nccwpck_require__(8730)
-const util = __nccwpck_require__(729)
-const createRedirectInterceptor = __nccwpck_require__(6615)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
+const { kClients, kRunning, kClose, kDestroy, kDispatch, kInterceptors } = __nccwpck_require__(2099)
+const DispatcherBase = __nccwpck_require__(5784)
+const Pool = __nccwpck_require__(5521)
+const Client = __nccwpck_require__(6874)
+const util = __nccwpck_require__(5695)
+const createRedirectInterceptor = __nccwpck_require__(8924)
 
 const kOnConnect = Symbol('onConnect')
 const kOnDisconnect = Symbol('onDisconnect')
@@ -39113,7 +39051,7 @@ module.exports = Agent
 
 /***/ }),
 
-/***/ 5967:
+/***/ 9727:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -39122,7 +39060,7 @@ module.exports = Agent
 const {
   BalancedPoolMissingUpstreamError,
   InvalidArgumentError
-} = __nccwpck_require__(8999)
+} = __nccwpck_require__(3915)
 const {
   PoolBase,
   kClients,
@@ -39130,10 +39068,10 @@ const {
   kAddClient,
   kRemoveClient,
   kGetDispatcher
-} = __nccwpck_require__(5455)
-const Pool = __nccwpck_require__(1883)
-const { kUrl, kInterceptors } = __nccwpck_require__(6955)
-const { parseOrigin } = __nccwpck_require__(729)
+} = __nccwpck_require__(986)
+const Pool = __nccwpck_require__(5521)
+const { kUrl, kInterceptors } = __nccwpck_require__(2099)
+const { parseOrigin } = __nccwpck_require__(5695)
 const kFactory = Symbol('factory')
 
 const kOptions = Symbol('options')
@@ -39311,7 +39249,7 @@ module.exports = BalancedPool
 
 /***/ }),
 
-/***/ 1646:
+/***/ 4221:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -39320,9 +39258,9 @@ module.exports = BalancedPool
 /* global WebAssembly */
 
 const assert = __nccwpck_require__(8061)
-const util = __nccwpck_require__(729)
-const { channels } = __nccwpck_require__(1737)
-const timers = __nccwpck_require__(2887)
+const util = __nccwpck_require__(5695)
+const { channels } = __nccwpck_require__(8915)
+const timers = __nccwpck_require__(5744)
 const {
   RequestContentLengthMismatchError,
   ResponseContentLengthMismatchError,
@@ -39334,7 +39272,7 @@ const {
   BodyTimeoutError,
   HTTPParserError,
   ResponseExceededMaxSizeError
-} = __nccwpck_require__(8999)
+} = __nccwpck_require__(3915)
 const {
   kUrl,
   kReset,
@@ -39367,9 +39305,9 @@ const {
   kOnError,
   kResume,
   kHTTPContext
-} = __nccwpck_require__(6955)
+} = __nccwpck_require__(2099)
 
-const constants = __nccwpck_require__(1840)
+const constants = __nccwpck_require__(2204)
 const EMPTY_BUF = Buffer.alloc(0)
 const FastBuffer = Buffer[Symbol.species]
 const addListener = util.addListener
@@ -39378,11 +39316,11 @@ const removeAllListeners = util.removeAllListeners
 let extractBody
 
 async function lazyllhttp () {
-  const llhttpWasmData = process.env.JEST_WORKER_ID ? __nccwpck_require__(1796) : undefined
+  const llhttpWasmData = process.env.JEST_WORKER_ID ? __nccwpck_require__(5285) : undefined
 
   let mod
   try {
-    mod = await WebAssembly.compile(__nccwpck_require__(725))
+    mod = await WebAssembly.compile(__nccwpck_require__(3170))
   } catch (e) {
     /* istanbul ignore next */
 
@@ -39390,7 +39328,7 @@ async function lazyllhttp () {
     // being enabled, but the occurring of this other error
     // * https://github.com/emscripten-core/emscripten/issues/11495
     // got me to remove that check to avoid breaking Node 12.
-    mod = await WebAssembly.compile(llhttpWasmData || __nccwpck_require__(1796))
+    mod = await WebAssembly.compile(llhttpWasmData || __nccwpck_require__(5285))
   }
 
   return await WebAssembly.instantiate(mod, {
@@ -40162,7 +40100,7 @@ function writeH1 (client, request) {
 
   if (util.isFormDataLike(body)) {
     if (!extractBody) {
-      extractBody = (__nccwpck_require__(4017).extractBody)
+      extractBody = (__nccwpck_require__(7018).extractBody)
     }
 
     const [bodyStream, contentType] = extractBody(body)
@@ -40295,19 +40233,19 @@ function writeH1 (client, request) {
 
   /* istanbul ignore else: assertion */
   if (!body || bodyLength === 0) {
-    writeBuffer({ abort, body: null, client, request, socket, contentLength, header, expectsPayload })
+    writeBuffer(abort, null, client, request, socket, contentLength, header, expectsPayload)
   } else if (util.isBuffer(body)) {
-    writeBuffer({ abort, body, client, request, socket, contentLength, header, expectsPayload })
+    writeBuffer(abort, body, client, request, socket, contentLength, header, expectsPayload)
   } else if (util.isBlobLike(body)) {
     if (typeof body.stream === 'function') {
-      writeIterable({ abort, body: body.stream(), client, request, socket, contentLength, header, expectsPayload })
+      writeIterable(abort, body.stream(), client, request, socket, contentLength, header, expectsPayload)
     } else {
-      writeBlob({ abort, body, client, request, socket, contentLength, header, expectsPayload })
+      writeBlob(abort, body, client, request, socket, contentLength, header, expectsPayload)
     }
   } else if (util.isStream(body)) {
-    writeStream({ abort, body, client, request, socket, contentLength, header, expectsPayload })
+    writeStream(abort, body, client, request, socket, contentLength, header, expectsPayload)
   } else if (util.isIterable(body)) {
-    writeIterable({ abort, body, client, request, socket, contentLength, header, expectsPayload })
+    writeIterable(abort, body, client, request, socket, contentLength, header, expectsPayload)
   } else {
     assert(false)
   }
@@ -40315,7 +40253,7 @@ function writeH1 (client, request) {
   return true
 }
 
-function writeStream ({ abort, body, client, request, socket, contentLength, header, expectsPayload }) {
+function writeStream (abort, body, client, request, socket, contentLength, header, expectsPayload) {
   assert(contentLength !== 0 || client[kRunning] === 0, 'stream body cannot be pipelined')
 
   let finished = false
@@ -40418,7 +40356,7 @@ function writeStream ({ abort, body, client, request, socket, contentLength, hea
   }
 }
 
-function writeBuffer ({ abort, body, client, request, socket, contentLength, header, expectsPayload }) {
+function writeBuffer (abort, body, client, request, socket, contentLength, header, expectsPayload) {
   try {
     if (!body) {
       if (contentLength === 0) {
@@ -40448,7 +40386,7 @@ function writeBuffer ({ abort, body, client, request, socket, contentLength, hea
   }
 }
 
-async function writeBlob ({ abort, body, client, request, socket, contentLength, header, expectsPayload }) {
+async function writeBlob (abort, body, client, request, socket, contentLength, header, expectsPayload) {
   assert(contentLength === body.size, 'blob body must have content length')
 
   try {
@@ -40476,7 +40414,7 @@ async function writeBlob ({ abort, body, client, request, socket, contentLength,
   }
 }
 
-async function writeIterable ({ abort, body, client, request, socket, contentLength, header, expectsPayload }) {
+async function writeIterable (abort, body, client, request, socket, contentLength, header, expectsPayload) {
   assert(contentLength !== 0 || client[kRunning] === 0, 'iterator body cannot be pipelined')
 
   let callback = null
@@ -40666,7 +40604,7 @@ module.exports = connectH1
 
 /***/ }),
 
-/***/ 7215:
+/***/ 3522:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -40674,13 +40612,13 @@ module.exports = connectH1
 
 const assert = __nccwpck_require__(8061)
 const { pipeline } = __nccwpck_require__(4492)
-const util = __nccwpck_require__(729)
+const util = __nccwpck_require__(5695)
 const {
   RequestContentLengthMismatchError,
   RequestAbortedError,
   SocketError,
   InformationalError
-} = __nccwpck_require__(8999)
+} = __nccwpck_require__(3915)
 const {
   kUrl,
   kReset,
@@ -40697,7 +40635,7 @@ const {
   kMaxConcurrentStreams,
   kHTTP2Session,
   kResume
-} = __nccwpck_require__(6955)
+} = __nccwpck_require__(2099)
 
 const kOpenStreams = Symbol('open streams')
 
@@ -41149,82 +41087,80 @@ function writeH2 (client, request) {
   function writeBodyH2 () {
     /* istanbul ignore else: assertion */
     if (!body || contentLength === 0) {
-      writeBuffer({
+      writeBuffer(
         abort,
+        stream,
+        null,
         client,
         request,
+        client[kSocket],
         contentLength,
-        expectsPayload,
-        h2stream: stream,
-        body: null,
-        socket: client[kSocket]
-      })
+        expectsPayload
+      )
     } else if (util.isBuffer(body)) {
-      writeBuffer({
+      writeBuffer(
         abort,
+        stream,
+        body,
         client,
         request,
+        client[kSocket],
         contentLength,
-        body,
-        expectsPayload,
-        h2stream: stream,
-        socket: client[kSocket]
-      })
+        expectsPayload
+      )
     } else if (util.isBlobLike(body)) {
       if (typeof body.stream === 'function') {
-        writeIterable({
+        writeIterable(
           abort,
+          stream,
+          body.stream(),
           client,
           request,
+          client[kSocket],
           contentLength,
-          expectsPayload,
-          h2stream: stream,
-          body: body.stream(),
-          socket: client[kSocket]
-        })
+          expectsPayload
+        )
       } else {
-        writeBlob({
+        writeBlob(
           abort,
+          stream,
           body,
           client,
           request,
+          client[kSocket],
           contentLength,
-          expectsPayload,
-          h2stream: stream,
-          socket: client[kSocket]
-        })
+          expectsPayload
+        )
       }
     } else if (util.isStream(body)) {
-      writeStream({
+      writeStream(
         abort,
+        client[kSocket],
+        expectsPayload,
+        stream,
         body,
         client,
         request,
-        contentLength,
-        expectsPayload,
-        socket: client[kSocket],
-        h2stream: stream,
-        header: ''
-      })
+        contentLength
+      )
     } else if (util.isIterable(body)) {
-      writeIterable({
+      writeIterable(
         abort,
+        stream,
         body,
         client,
         request,
+        client[kSocket],
         contentLength,
-        expectsPayload,
-        header: '',
-        h2stream: stream,
-        socket: client[kSocket]
-      })
+        expectsPayload
+      )
     } else {
       assert(false)
     }
   }
 }
 
-function writeBuffer ({ abort, h2stream, body, client, request, socket, contentLength, expectsPayload }) {
+function writeBuffer (abort, h2stream, body, client, request, socket, contentLength, expectsPayload) {
   try {
     if (body != null && util.isBuffer(body)) {
       assert(contentLength === body.byteLength, 'buffer body must have content length')
@@ -41247,7 +41183,7 @@ function writeBuffer ({ abort, h2stream, body, client, request, socket, contentL
   }
 }
 
-function writeStream ({ abort, socket, expectsPayload, h2stream, body, client, request, contentLength }) {
+function writeStream (abort, socket, expectsPayload, h2stream, body, client, request, contentLength) {
   assert(contentLength !== 0 || client[kRunning] === 0, 'stream body cannot be pipelined')
 
   // For HTTP/2, is enough to pipe the stream
@@ -41278,7 +41214,7 @@ function writeStream ({ abort, socket, expectsPayload, h2stream, body, client, r
   }
 }
 
-async function writeBlob ({ abort, h2stream, body, client, request, socket, contentLength, expectsPayload }) {
+async function writeBlob (abort, h2stream, body, client, request, socket, contentLength, expectsPayload) {
   assert(contentLength === body.size, 'blob body must have content length')
 
   try {
@@ -41306,7 +41242,7 @@ async function writeBlob ({ abort, h2stream, body, client, request, socket, cont
   }
 }
 
-async function writeIterable ({ abort, h2stream, body, client, request, socket, contentLength, expectsPayload }) {
+async function writeIterable (abort, h2stream, body, client, request, socket, contentLength, expectsPayload) {
   assert(contentLength !== 0 || client[kRunning] === 0, 'iterator body cannot be pipelined')
 
   let callback = null
@@ -41369,7 +41305,7 @@ module.exports = connectH2
 
 /***/ }),
 
-/***/ 8730:
+/***/ 6874:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -41380,16 +41316,16 @@ module.exports = connectH2
 const assert = __nccwpck_require__(8061)
 const net = __nccwpck_require__(7503)
 const http = __nccwpck_require__(8849)
-const util = __nccwpck_require__(729)
-const { channels } = __nccwpck_require__(1737)
-const Request = __nccwpck_require__(7105)
-const DispatcherBase = __nccwpck_require__(1544)
+const util = __nccwpck_require__(5695)
+const { channels } = __nccwpck_require__(8915)
+const Request = __nccwpck_require__(9832)
+const DispatcherBase = __nccwpck_require__(5784)
 const {
   InvalidArgumentError,
   InformationalError,
   ClientDestroyedError
-} = __nccwpck_require__(8999)
-const buildConnector = __nccwpck_require__(9232)
+} = __nccwpck_require__(3915)
+const buildConnector = __nccwpck_require__(4481)
 const {
   kUrl,
   kServerName,
@@ -41431,9 +41367,9 @@ const {
   kHTTPContext,
   kMaxConcurrentStreams,
   kResume
-} = __nccwpck_require__(6955)
-const connectH1 = __nccwpck_require__(1646)
-const connectH2 = __nccwpck_require__(7215)
+} = __nccwpck_require__(2099)
+const connectH1 = __nccwpck_require__(4221)
+const connectH2 = __nccwpck_require__(3522)
 let deprecatedInterceptorWarned = false
 
 const kClosedResolve = Symbol('kClosedResolve')
@@ -41737,7 +41673,7 @@ class Client extends DispatcherBase {
   }
 }
 
-const createRedirectInterceptor = __nccwpck_require__(6615)
+const createRedirectInterceptor = __nccwpck_require__(8924)
 
 function onError (client, err) {
   if (
@@ -41993,19 +41929,19 @@ module.exports = Client
 
 /***/ }),
 
-/***/ 1544:
+/***/ 5784:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const Dispatcher = __nccwpck_require__(3218)
+const Dispatcher = __nccwpck_require__(2537)
 const {
   ClientDestroyedError,
   ClientClosedError,
   InvalidArgumentError
-} = __nccwpck_require__(8999)
-const { kDestroy, kClose, kClosed, kDestroyed, kDispatch, kInterceptors } = __nccwpck_require__(6955)
+} = __nccwpck_require__(3915)
+const { kDestroy, kClose, kClosed, kDestroyed, kDispatch, kInterceptors } = __nccwpck_require__(2099)
 
 const kOnDestroyed = Symbol('onDestroyed')
 const kOnClosed = Symbol('onClosed')
@@ -42191,7 +42127,7 @@ module.exports = DispatcherBase
 
 /***/ }),
 
-/***/ 3218:
+/***/ 2537:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -42264,16 +42200,16 @@ module.exports = Dispatcher
 
 /***/ }),
 
-/***/ 2853:
+/***/ 7106:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const DispatcherBase = __nccwpck_require__(1544)
-const { kClose, kDestroy, kClosed, kDestroyed, kDispatch, kNoProxyAgent, kHttpProxyAgent, kHttpsProxyAgent } = __nccwpck_require__(6955)
-const ProxyAgent = __nccwpck_require__(6034)
-const Agent = __nccwpck_require__(7333)
+const DispatcherBase = __nccwpck_require__(5784)
+const { kClose, kDestroy, kClosed, kDestroyed, kDispatch, kNoProxyAgent, kHttpProxyAgent, kHttpsProxyAgent } = __nccwpck_require__(2099)
+const ProxyAgent = __nccwpck_require__(88)
+const Agent = __nccwpck_require__(4111)
 
 const DEFAULT_PORTS = {
   'http:': 80,
@@ -42432,7 +42368,7 @@ module.exports = EnvHttpProxyAgent
 
 /***/ }),
 
-/***/ 428:
+/***/ 4723:
 /***/ ((module) => {
 
 "use strict";
@@ -42557,16 +42493,16 @@ module.exports = class FixedQueue {
 
 /***/ }),
 
-/***/ 5455:
+/***/ 986:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const DispatcherBase = __nccwpck_require__(1544)
-const FixedQueue = __nccwpck_require__(428)
-const { kConnected, kSize, kRunning, kPending, kQueued, kBusy, kFree, kUrl, kClose, kDestroy, kDispatch } = __nccwpck_require__(6955)
-const PoolStats = __nccwpck_require__(5804)
+const DispatcherBase = __nccwpck_require__(5784)
+const FixedQueue = __nccwpck_require__(4723)
+const { kConnected, kSize, kRunning, kPending, kQueued, kBusy, kFree, kUrl, kClose, kDestroy, kDispatch } = __nccwpck_require__(2099)
+const PoolStats = __nccwpck_require__(4369)
 
 const kClients = Symbol('clients')
 const kNeedDrain = Symbol('needDrain')
@@ -42759,10 +42695,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5804:
+/***/ 4369:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { kFree, kConnected, kPending, kQueued, kRunning, kSize } = __nccwpck_require__(6955)
+const { kFree, kConnected, kPending, kQueued, kRunning, kSize } = __nccwpck_require__(2099)
 const kPool = Symbol('pool')
 
 class PoolStats {
@@ -42800,7 +42736,7 @@ module.exports = PoolStats
 
 /***/ }),
 
-/***/ 1883:
+/***/ 5521:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -42812,14 +42748,14 @@ const {
   kNeedDrain,
   kAddClient,
   kGetDispatcher
-} = __nccwpck_require__(5455)
-const Client = __nccwpck_require__(8730)
+} = __nccwpck_require__(986)
+const Client = __nccwpck_require__(6874)
 const {
   InvalidArgumentError
-} = __nccwpck_require__(8999)
-const util = __nccwpck_require__(729)
-const { kUrl, kInterceptors } = __nccwpck_require__(6955)
-const buildConnector = __nccwpck_require__(9232)
+} = __nccwpck_require__(3915)
+const util = __nccwpck_require__(5695)
+const { kUrl, kInterceptors } = __nccwpck_require__(2099)
+const buildConnector = __nccwpck_require__(4481)
 
 const kOptions = Symbol('options')
 const kConnections = Symbol('connections')
@@ -42901,19 +42837,19 @@ module.exports = Pool
 
 /***/ }),
 
-/***/ 6034:
+/***/ 88:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kProxy, kClose, kDestroy, kInterceptors } = __nccwpck_require__(6955)
+const { kProxy, kClose, kDestroy, kInterceptors } = __nccwpck_require__(2099)
 const { URL } = __nccwpck_require__(1041)
-const Agent = __nccwpck_require__(7333)
-const Pool = __nccwpck_require__(1883)
-const DispatcherBase = __nccwpck_require__(1544)
-const { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = __nccwpck_require__(8999)
-const buildConnector = __nccwpck_require__(9232)
+const Agent = __nccwpck_require__(4111)
+const Pool = __nccwpck_require__(5521)
+const DispatcherBase = __nccwpck_require__(5784)
+const { InvalidArgumentError, RequestAbortedError, SecureProxyConnectionError } = __nccwpck_require__(3915)
+const buildConnector = __nccwpck_require__(4481)
 
 const kAgent = Symbol('proxy agent')
 const kClient = Symbol('proxy client')
@@ -43099,14 +43035,14 @@ module.exports = ProxyAgent
 
 /***/ }),
 
-/***/ 9051:
+/***/ 3419:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const Dispatcher = __nccwpck_require__(3218)
-const RetryHandler = __nccwpck_require__(3426)
+const Dispatcher = __nccwpck_require__(2537)
+const RetryHandler = __nccwpck_require__(5097)
 
 class RetryAgent extends Dispatcher {
   #agent = null
@@ -43142,7 +43078,7 @@ module.exports = RetryAgent
 
 /***/ }),
 
-/***/ 3827:
+/***/ 2332:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -43151,8 +43087,8 @@ module.exports = RetryAgent
 // We include a version number for the Dispatcher API. In case of breaking changes,
 // this version number must be increased to avoid conflicts.
 const globalDispatcher = Symbol.for('undici.globalDispatcher.1')
-const { InvalidArgumentError } = __nccwpck_require__(8999)
-const Agent = __nccwpck_require__(7333)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
+const Agent = __nccwpck_require__(4111)
 
 if (getGlobalDispatcher() === undefined) {
   setGlobalDispatcher(new Agent())
@@ -43182,7 +43118,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 282:
+/***/ 4291:
 /***/ ((module) => {
 
 "use strict";
@@ -43234,16 +43170,16 @@ module.exports = class DecoratorHandler {
 
 /***/ }),
 
-/***/ 1610:
+/***/ 7971:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const util = __nccwpck_require__(729)
-const { kBodyUsed } = __nccwpck_require__(6955)
+const util = __nccwpck_require__(5695)
+const { kBodyUsed } = __nccwpck_require__(2099)
 const assert = __nccwpck_require__(8061)
-const { InvalidArgumentError } = __nccwpck_require__(8999)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
 const EE = __nccwpck_require__(5673)
 
 const redirectableStatusCodes = [300, 301, 302, 303, 307, 308]
@@ -43474,16 +43410,21 @@ module.exports = RedirectHandler
 
 /***/ }),
 
-/***/ 3426:
+/***/ 5097:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 const assert = __nccwpck_require__(8061)
 
-const { kRetryHandlerDefaultRetry } = __nccwpck_require__(6955)
-const { RequestRetryError } = __nccwpck_require__(8999)
-const { isDisturbed, parseHeaders, parseRangeHeader } = __nccwpck_require__(729)
+const { kRetryHandlerDefaultRetry } = __nccwpck_require__(2099)
+const { RequestRetryError } = __nccwpck_require__(3915)
+const {
+  isDisturbed,
+  parseHeaders,
+  parseRangeHeader,
+  wrapRequestBody
+} = __nccwpck_require__(5695)
 
 function calculateRetryAfterHeader (retryAfter) {
   const current = Date.now()
@@ -43509,7 +43450,7 @@ class RetryHandler {
 
     this.dispatch = handlers.dispatch
     this.handler = handlers.handler
-    this.opts = dispatchOpts
+    this.opts = { ...dispatchOpts, body: wrapRequestBody(opts.body) }
     this.abort = null
     this.aborted = false
     this.retryOpts = {
@@ -43654,7 +43595,9 @@ class RetryHandler {
         this.abort(
           new RequestRetryError('Request failed', statusCode, {
             headers,
-            count: this.retryCount
+            data: {
+              count: this.retryCount
+            }
           })
         )
         return false
@@ -43675,7 +43618,7 @@ class RetryHandler {
         this.abort(
           new RequestRetryError('Content-Range mismatch', statusCode, {
             headers,
-            count: this.retryCount
+            data: { count: this.retryCount }
           })
         )
         return false
@@ -43686,7 +43629,7 @@ class RetryHandler {
         this.abort(
           new RequestRetryError('ETag mismatch', statusCode, {
             headers,
-            count: this.retryCount
+            data: { count: this.retryCount }
           })
         )
         return false
@@ -43758,7 +43701,7 @@ class RetryHandler {
 
     const err = new RequestRetryError('Request failed', statusCode, {
       headers,
-      count: this.retryCount
+      data: { count: this.retryCount }
     })
 
     this.abort(err)
@@ -43839,15 +43782,15 @@ module.exports = RetryHandler
 
 /***/ }),
 
-/***/ 9817:
+/***/ 9841:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const util = __nccwpck_require__(729)
-const { InvalidArgumentError, RequestAbortedError } = __nccwpck_require__(8999)
-const DecoratorHandler = __nccwpck_require__(282)
+const util = __nccwpck_require__(5695)
+const { InvalidArgumentError, RequestAbortedError } = __nccwpck_require__(3915)
+const DecoratorHandler = __nccwpck_require__(4291)
 
 class DumpHandler extends DecoratorHandler {
   #maxSize = 1024 * 1024
@@ -43970,13 +43913,13 @@ module.exports = createDumpInterceptor
 
 /***/ }),
 
-/***/ 6615:
+/***/ 8924:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const RedirectHandler = __nccwpck_require__(1610)
+const RedirectHandler = __nccwpck_require__(7971)
 
 function createRedirectInterceptor ({ maxRedirections: defaultMaxRedirections }) {
   return (dispatch) => {
@@ -43999,12 +43942,12 @@ module.exports = createRedirectInterceptor
 
 /***/ }),
 
-/***/ 2333:
+/***/ 2849:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const RedirectHandler = __nccwpck_require__(1610)
+const RedirectHandler = __nccwpck_require__(7971)
 
 module.exports = opts => {
   const globalMaxRedirections = opts?.maxRedirections
@@ -44031,12 +43974,12 @@ module.exports = opts => {
 
 /***/ }),
 
-/***/ 8623:
+/***/ 5119:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const RetryHandler = __nccwpck_require__(3426)
+const RetryHandler = __nccwpck_require__(5097)
 
 module.exports = globalOpts => {
   return dispatch => {
@@ -44058,14 +44001,14 @@ module.exports = globalOpts => {
 
 /***/ }),
 
-/***/ 1840:
+/***/ 2204:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SPECIAL_HEADERS = exports.HEADER_STATE = exports.MINOR = exports.MAJOR = exports.CONNECTION_TOKEN_CHARS = exports.HEADER_CHARS = exports.TOKEN = exports.STRICT_TOKEN = exports.HEX = exports.URL_CHAR = exports.STRICT_URL_CHAR = exports.USERINFO_CHARS = exports.MARK = exports.ALPHANUM = exports.NUM = exports.HEX_MAP = exports.NUM_MAP = exports.ALPHA = exports.FINISH = exports.H_METHOD_MAP = exports.METHOD_MAP = exports.METHODS_RTSP = exports.METHODS_ICE = exports.METHODS_HTTP = exports.METHODS = exports.LENIENT_FLAGS = exports.FLAGS = exports.TYPE = exports.ERROR = void 0;
-const utils_1 = __nccwpck_require__(5490);
+const utils_1 = __nccwpck_require__(3096);
 // C headers
 var ERROR;
 (function (ERROR) {
@@ -44343,7 +44286,7 @@ exports.SPECIAL_HEADERS = {
 
 /***/ }),
 
-/***/ 1796:
+/***/ 5285:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44356,7 +44299,7 @@ module.exports = Buffer.from('AGFzbQEAAAABJwdgAX8Bf2ADf39/AX9gAX8AYAJ/fwBgBH9/f3
 
 /***/ }),
 
-/***/ 725:
+/***/ 3170:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -44369,7 +44312,7 @@ module.exports = Buffer.from('AGFzbQEAAAABJwdgAX8Bf2ADf39/AX9gAX8AYAJ/fwBgBH9/f3
 
 /***/ }),
 
-/***/ 5490:
+/***/ 3096:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -44391,14 +44334,14 @@ exports.enumToMap = enumToMap;
 
 /***/ }),
 
-/***/ 795:
+/***/ 6171:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kClients } = __nccwpck_require__(6955)
-const Agent = __nccwpck_require__(7333)
+const { kClients } = __nccwpck_require__(2099)
+const Agent = __nccwpck_require__(4111)
 const {
   kAgent,
   kMockAgentSet,
@@ -44409,14 +44352,14 @@ const {
   kGetNetConnect,
   kOptions,
   kFactory
-} = __nccwpck_require__(4327)
-const MockClient = __nccwpck_require__(7072)
-const MockPool = __nccwpck_require__(4218)
-const { matchValue, buildMockOptions } = __nccwpck_require__(3566)
-const { InvalidArgumentError, UndiciError } = __nccwpck_require__(8999)
-const Dispatcher = __nccwpck_require__(3218)
-const Pluralizer = __nccwpck_require__(3534)
-const PendingInterceptorsFormatter = __nccwpck_require__(7138)
+} = __nccwpck_require__(940)
+const MockClient = __nccwpck_require__(8925)
+const MockPool = __nccwpck_require__(8639)
+const { matchValue, buildMockOptions } = __nccwpck_require__(2841)
+const { InvalidArgumentError, UndiciError } = __nccwpck_require__(3915)
+const Dispatcher = __nccwpck_require__(2537)
+const Pluralizer = __nccwpck_require__(8825)
+const PendingInterceptorsFormatter = __nccwpck_require__(1498)
 
 class MockAgent extends Dispatcher {
   constructor (opts) {
@@ -44559,15 +44502,15 @@ module.exports = MockAgent
 
 /***/ }),
 
-/***/ 7072:
+/***/ 8925:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { promisify } = __nccwpck_require__(7261)
-const Client = __nccwpck_require__(8730)
-const { buildMockDispatch } = __nccwpck_require__(3566)
+const Client = __nccwpck_require__(6874)
+const { buildMockDispatch } = __nccwpck_require__(2841)
 const {
   kDispatches,
   kMockAgent,
@@ -44576,10 +44519,10 @@ const {
   kOrigin,
   kOriginalDispatch,
   kConnected
-} = __nccwpck_require__(4327)
-const { MockInterceptor } = __nccwpck_require__(3549)
-const Symbols = __nccwpck_require__(6955)
-const { InvalidArgumentError } = __nccwpck_require__(8999)
+} = __nccwpck_require__(940)
+const { MockInterceptor } = __nccwpck_require__(4999)
+const Symbols = __nccwpck_require__(2099)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
 
 /**
  * MockClient provides an API that extends the Client to influence the mockDispatches.
@@ -44626,13 +44569,13 @@ module.exports = MockClient
 
 /***/ }),
 
-/***/ 9819:
+/***/ 6300:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { UndiciError } = __nccwpck_require__(8999)
+const { UndiciError } = __nccwpck_require__(3915)
 
 class MockNotMatchedError extends UndiciError {
   constructor (message) {
@@ -44651,13 +44594,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3549:
+/***/ 4999:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { getResponseData, buildKey, addMockDispatch } = __nccwpck_require__(3566)
+const { getResponseData, buildKey, addMockDispatch } = __nccwpck_require__(2841)
 const {
   kDispatches,
   kDispatchKey,
@@ -44665,9 +44608,9 @@ const {
   kDefaultTrailers,
   kContentLength,
   kMockDispatch
-} = __nccwpck_require__(4327)
-const { InvalidArgumentError } = __nccwpck_require__(8999)
-const { buildURL } = __nccwpck_require__(729)
+} = __nccwpck_require__(940)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
+const { buildURL } = __nccwpck_require__(5695)
 
 /**
  * Defines the scope API for an interceptor reply
@@ -44866,15 +44809,15 @@ module.exports.MockScope = MockScope
 
 /***/ }),
 
-/***/ 4218:
+/***/ 8639:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { promisify } = __nccwpck_require__(7261)
-const Pool = __nccwpck_require__(1883)
-const { buildMockDispatch } = __nccwpck_require__(3566)
+const Pool = __nccwpck_require__(5521)
+const { buildMockDispatch } = __nccwpck_require__(2841)
 const {
   kDispatches,
   kMockAgent,
@@ -44883,10 +44826,10 @@ const {
   kOrigin,
   kOriginalDispatch,
   kConnected
-} = __nccwpck_require__(4327)
-const { MockInterceptor } = __nccwpck_require__(3549)
-const Symbols = __nccwpck_require__(6955)
-const { InvalidArgumentError } = __nccwpck_require__(8999)
+} = __nccwpck_require__(940)
+const { MockInterceptor } = __nccwpck_require__(4999)
+const Symbols = __nccwpck_require__(2099)
+const { InvalidArgumentError } = __nccwpck_require__(3915)
 
 /**
  * MockPool provides an API that extends the Pool to influence the mockDispatches.
@@ -44933,7 +44876,7 @@ module.exports = MockPool
 
 /***/ }),
 
-/***/ 4327:
+/***/ 940:
 /***/ ((module) => {
 
 "use strict";
@@ -44964,21 +44907,21 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3566:
+/***/ 2841:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { MockNotMatchedError } = __nccwpck_require__(9819)
+const { MockNotMatchedError } = __nccwpck_require__(6300)
 const {
   kDispatches,
   kMockAgent,
   kOriginalDispatch,
   kOrigin,
   kGetNetConnect
-} = __nccwpck_require__(4327)
-const { buildURL } = __nccwpck_require__(729)
+} = __nccwpck_require__(940)
+const { buildURL } = __nccwpck_require__(5695)
 const { STATUS_CODES } = __nccwpck_require__(8849)
 const {
   types: {
@@ -45335,7 +45278,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7138:
+/***/ 1498:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -45386,7 +45329,7 @@ module.exports = class PendingInterceptorsFormatter {
 
 /***/ }),
 
-/***/ 3534:
+/***/ 8825:
 /***/ ((module) => {
 
 "use strict";
@@ -45423,7 +45366,7 @@ module.exports = class Pluralizer {
 
 /***/ }),
 
-/***/ 2887:
+/***/ 5744:
 /***/ ((module) => {
 
 "use strict";
@@ -45530,21 +45473,21 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9325:
+/***/ 3425:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kConstruct } = __nccwpck_require__(5834)
-const { urlEquals, getFieldValues } = __nccwpck_require__(2723)
-const { kEnumerableProperty, isDisturbed } = __nccwpck_require__(729)
-const { webidl } = __nccwpck_require__(2701)
-const { Response, cloneResponse, fromInnerResponse } = __nccwpck_require__(2286)
-const { Request, fromInnerRequest } = __nccwpck_require__(9845)
-const { kState } = __nccwpck_require__(7079)
-const { fetching } = __nccwpck_require__(784)
-const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = __nccwpck_require__(3539)
+const { kConstruct } = __nccwpck_require__(9289)
+const { urlEquals, getFieldValues } = __nccwpck_require__(8857)
+const { kEnumerableProperty, isDisturbed } = __nccwpck_require__(5695)
+const { webidl } = __nccwpck_require__(4834)
+const { Response, cloneResponse, fromInnerResponse } = __nccwpck_require__(4935)
+const { Request, fromInnerRequest } = __nccwpck_require__(7892)
+const { kState } = __nccwpck_require__(4695)
+const { fetching } = __nccwpck_require__(8687)
+const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = __nccwpck_require__(3385)
 const assert = __nccwpck_require__(8061)
 
 /**
@@ -46396,16 +46339,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3948:
+/***/ 848:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kConstruct } = __nccwpck_require__(5834)
-const { Cache } = __nccwpck_require__(9325)
-const { webidl } = __nccwpck_require__(2701)
-const { kEnumerableProperty } = __nccwpck_require__(729)
+const { kConstruct } = __nccwpck_require__(9289)
+const { Cache } = __nccwpck_require__(3425)
+const { webidl } = __nccwpck_require__(4834)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
 
 class CacheStorage {
   /**
@@ -46554,28 +46497,28 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5834:
+/***/ 9289:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 module.exports = {
-  kConstruct: (__nccwpck_require__(6955).kConstruct)
+  kConstruct: (__nccwpck_require__(2099).kConstruct)
 }
 
 
 /***/ }),
 
-/***/ 2723:
+/***/ 8857:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const assert = __nccwpck_require__(8061)
-const { URLSerializer } = __nccwpck_require__(1821)
-const { isValidHeaderName } = __nccwpck_require__(3539)
+const { URLSerializer } = __nccwpck_require__(3939)
+const { isValidHeaderName } = __nccwpck_require__(3385)
 
 /**
  * @see https://url.spec.whatwg.org/#concept-url-equals
@@ -46620,7 +46563,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3223:
+/***/ 8927:
 /***/ ((module) => {
 
 "use strict";
@@ -46640,16 +46583,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4642:
+/***/ 4001:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { parseSetCookie } = __nccwpck_require__(1438)
-const { stringify, getHeadersList } = __nccwpck_require__(3729)
-const { webidl } = __nccwpck_require__(2701)
-const { Headers } = __nccwpck_require__(9950)
+const { parseSetCookie } = __nccwpck_require__(1760)
+const { stringify } = __nccwpck_require__(9347)
+const { webidl } = __nccwpck_require__(4834)
+const { Headers } = __nccwpck_require__(355)
 
 /**
  * @typedef {Object} Cookie
@@ -46724,14 +46667,13 @@ function getSetCookies (headers) {
 
   webidl.brandCheck(headers, Headers, { strict: false })
 
-  const cookies = getHeadersList(headers).cookies
+  const cookies = headers.getSetCookie()
 
   if (!cookies) {
     return []
   }
 
-  // In older versions of undici, cookies is a list of name:value.
-  return cookies.map((pair) => parseSetCookie(Array.isArray(pair) ? pair[1] : pair))
+  return cookies.map((pair) => parseSetCookie(pair))
 }
 
 /**
@@ -46833,15 +46775,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1438:
+/***/ 1760:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { maxNameValuePairSize, maxAttributeValueSize } = __nccwpck_require__(3223)
-const { isCTLExcludingHtab } = __nccwpck_require__(3729)
-const { collectASequenceOfCodePointsFast } = __nccwpck_require__(1821)
+const { maxNameValuePairSize, maxAttributeValueSize } = __nccwpck_require__(8927)
+const { isCTLExcludingHtab } = __nccwpck_require__(9347)
+const { collectASequenceOfCodePointsFast } = __nccwpck_require__(3939)
 const assert = __nccwpck_require__(8061)
 
 /**
@@ -47158,14 +47100,11 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3729:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ 9347:
+/***/ ((module) => {
 
 "use strict";
 
-
-const assert = __nccwpck_require__(8061)
-const { getHeadersList: internalGetHeadersList } = __nccwpck_require__(9950)
 
 /**
  * @param {string} value
@@ -47439,49 +47378,25 @@ function stringify (cookie) {
   return out.join('; ')
 }
 
-let kHeadersListNode
-
-function getHeadersList (headers) {
-  try {
-    return internalGetHeadersList(headers)
-  } catch {
-    // fall-through
-  }
-
-  if (!kHeadersListNode) {
-    kHeadersListNode = Object.getOwnPropertySymbols(headers).find(
-      (symbol) => symbol.description === 'headers list'
-    )
-
-    assert(kHeadersListNode, 'Headers cannot be parsed')
-  }
-
-  const headersList = headers[kHeadersListNode]
-  assert(headersList)
-
-  return headersList
-}
-
 module.exports = {
   isCTLExcludingHtab,
   validateCookieName,
   validateCookiePath,
   validateCookieValue,
   toIMFDate,
-  stringify,
-  getHeadersList
+  stringify
 }
 
 
 /***/ }),
 
-/***/ 3263:
+/***/ 5788:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 const { Transform } = __nccwpck_require__(4492)
-const { isASCIINumber, isValidLastEventId } = __nccwpck_require__(6288)
+const { isASCIINumber, isValidLastEventId } = __nccwpck_require__(6686)
 
 /**
  * @type {number[]} BOM
@@ -47881,23 +47796,23 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3466:
+/***/ 7137:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { pipeline } = __nccwpck_require__(4492)
-const { fetching } = __nccwpck_require__(784)
-const { makeRequest } = __nccwpck_require__(9845)
-const { webidl } = __nccwpck_require__(2701)
-const { EventSourceStream } = __nccwpck_require__(3263)
-const { parseMIMEType } = __nccwpck_require__(1821)
-const { createFastMessageEvent } = __nccwpck_require__(986)
-const { isNetworkError } = __nccwpck_require__(2286)
-const { delay } = __nccwpck_require__(6288)
-const { kEnumerableProperty } = __nccwpck_require__(729)
-const { environmentSettingsObject } = __nccwpck_require__(3539)
+const { fetching } = __nccwpck_require__(8687)
+const { makeRequest } = __nccwpck_require__(7892)
+const { webidl } = __nccwpck_require__(4834)
+const { EventSourceStream } = __nccwpck_require__(5788)
+const { parseMIMEType } = __nccwpck_require__(3939)
+const { createFastMessageEvent } = __nccwpck_require__(6773)
+const { isNetworkError } = __nccwpck_require__(4935)
+const { delay } = __nccwpck_require__(6686)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
+const { environmentSettingsObject } = __nccwpck_require__(3385)
 
 let experimentalWarned = false
 
@@ -48367,7 +48282,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6288:
+/***/ 6686:
 /***/ ((module) => {
 
 "use strict";
@@ -48412,13 +48327,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4017:
+/***/ 7018:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const util = __nccwpck_require__(729)
+const util = __nccwpck_require__(5695)
 const {
   ReadableStreamFrom,
   isBlobLike,
@@ -48428,16 +48343,16 @@ const {
   fullyReadBody,
   extractMimeType,
   utf8DecodeBytes
-} = __nccwpck_require__(3539)
-const { FormData } = __nccwpck_require__(1477)
-const { kState } = __nccwpck_require__(7079)
-const { webidl } = __nccwpck_require__(2701)
+} = __nccwpck_require__(3385)
+const { FormData } = __nccwpck_require__(5151)
+const { kState } = __nccwpck_require__(4695)
+const { webidl } = __nccwpck_require__(4834)
 const { Blob } = __nccwpck_require__(2254)
 const assert = __nccwpck_require__(8061)
-const { isErrored } = __nccwpck_require__(729)
+const { isErrored } = __nccwpck_require__(5695)
 const { isArrayBuffer } = __nccwpck_require__(3746)
-const { serializeAMimeType } = __nccwpck_require__(1821)
-const { multipartFormDataParser } = __nccwpck_require__(4946)
+const { serializeAMimeType } = __nccwpck_require__(3939)
+const { multipartFormDataParser } = __nccwpck_require__(1523)
 
 const textEncoder = new TextEncoder()
 
@@ -48727,7 +48642,7 @@ function bodyMixinMethods (instance) {
         // Return a Blob whose contents are bytes and type attribute
         // is mimeType.
         return new Blob([bytes], { type: mimeType })
-      }, instance, false)
+      }, instance)
     },
 
     arrayBuffer () {
@@ -48736,21 +48651,20 @@ function bodyMixinMethods (instance) {
       // given a byte sequence bytes: return a new ArrayBuffer
       // whose contents are bytes.
       return consumeBody(this, (bytes) => {
-        // Note: arrayBuffer already cloned.
-        return bytes.buffer
-      }, instance, true)
+        return new Uint8Array(bytes).buffer
+      }, instance)
     },
 
     text () {
       // The text() method steps are to return the result of running
       // consume body with this and UTF-8 decode.
-      return consumeBody(this, utf8DecodeBytes, instance, false)
+      return consumeBody(this, utf8DecodeBytes, instance)
     },
 
     json () {
       // The json() method steps are to return the result of running
       // consume body with this and parse JSON from bytes.
-      return consumeBody(this, parseJSONFromBytes, instance, false)
+      return consumeBody(this, parseJSONFromBytes, instance)
     },
 
     formData () {
@@ -48802,7 +48716,7 @@ function bodyMixinMethods (instance) {
         throw new TypeError(
           'Content-Type was not one of "multipart/form-data" or "application/x-www-form-urlencoded".'
         )
-      }, instance, false)
+      }, instance)
     },
 
     bytes () {
@@ -48810,8 +48724,8 @@ function bodyMixinMethods (instance) {
       // with this and the following step given a byte sequence bytes: return the
       // result of creating a Uint8Array from bytes in this’s relevant realm.
       return consumeBody(this, (bytes) => {
-        return new Uint8Array(bytes.buffer, 0, bytes.byteLength)
-      }, instance, true)
+        return new Uint8Array(bytes)
+      }, instance)
     }
   }
 
@@ -48827,9 +48741,8 @@ function mixinBody (prototype) {
  * @param {Response|Request} object
  * @param {(value: unknown) => unknown} convertBytesToJSValue
  * @param {Response|Request} instance
- * @param {boolean} [shouldClone]
  */
-async function consumeBody (object, convertBytesToJSValue, instance, shouldClone) {
+async function consumeBody (object, convertBytesToJSValue, instance) {
   webidl.brandCheck(object, instance)
 
   // 1. If object is unusable, then return a promise rejected
@@ -48867,7 +48780,7 @@ async function consumeBody (object, convertBytesToJSValue, instance, shouldClone
 
   // 6. Otherwise, fully read object’s body given successSteps,
   //    errorSteps, and object’s relevant global object.
-  await fullyReadBody(object[kState].body, successSteps, errorSteps, shouldClone)
+  await fullyReadBody(object[kState].body, successSteps, errorSteps)
 
   // 7. Return promise.
   return promise.promise
@@ -48922,7 +48835,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3238:
+/***/ 5118:
 /***/ ((module) => {
 
 "use strict";
@@ -49045,7 +48958,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1821:
+/***/ 3939:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -49797,13 +49710,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4659:
+/***/ 2557:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kConnected, kSize } = __nccwpck_require__(6955)
+const { kConnected, kSize } = __nccwpck_require__(2099)
 
 class CompatWeakRef {
   constructor (value) {
@@ -49851,15 +49764,15 @@ module.exports = function () {
 
 /***/ }),
 
-/***/ 9306:
+/***/ 8200:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { Blob, File } = __nccwpck_require__(2254)
-const { kState } = __nccwpck_require__(7079)
-const { webidl } = __nccwpck_require__(2701)
+const { kState } = __nccwpck_require__(4695)
+const { webidl } = __nccwpck_require__(4834)
 
 // TODO(@KhafraDev): remove
 class FileLike {
@@ -49985,17 +49898,17 @@ module.exports = { FileLike, isFileLike }
 
 /***/ }),
 
-/***/ 4946:
+/***/ 1523:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { isUSVString, bufferToLowerCasedHeaderName } = __nccwpck_require__(729)
-const { utf8DecodeBytes } = __nccwpck_require__(3539)
-const { HTTP_TOKEN_CODEPOINTS, isomorphicDecode } = __nccwpck_require__(1821)
-const { isFileLike } = __nccwpck_require__(9306)
-const { makeEntry } = __nccwpck_require__(1477)
+const { isUSVString, bufferToLowerCasedHeaderName } = __nccwpck_require__(5695)
+const { utf8DecodeBytes } = __nccwpck_require__(3385)
+const { HTTP_TOKEN_CODEPOINTS, isomorphicDecode } = __nccwpck_require__(3939)
+const { isFileLike } = __nccwpck_require__(8200)
+const { makeEntry } = __nccwpck_require__(5151)
 const assert = __nccwpck_require__(8061)
 const { File: NodeFile } = __nccwpck_require__(2254)
 
@@ -50457,17 +50370,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1477:
+/***/ 5151:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { isBlobLike, iteratorMixin } = __nccwpck_require__(3539)
-const { kState } = __nccwpck_require__(7079)
-const { kEnumerableProperty } = __nccwpck_require__(729)
-const { FileLike, isFileLike } = __nccwpck_require__(9306)
-const { webidl } = __nccwpck_require__(2701)
+const { isBlobLike, iteratorMixin } = __nccwpck_require__(3385)
+const { kState } = __nccwpck_require__(4695)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
+const { FileLike, isFileLike } = __nccwpck_require__(8200)
+const { webidl } = __nccwpck_require__(4834)
 const { File: NativeFile } = __nccwpck_require__(2254)
 const nodeUtil = __nccwpck_require__(7261)
 
@@ -50715,7 +50628,7 @@ module.exports = { FormData, makeEntry }
 
 /***/ }),
 
-/***/ 7241:
+/***/ 3545:
 /***/ ((module) => {
 
 "use strict";
@@ -50763,7 +50676,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9950:
+/***/ 355:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -50771,14 +50684,14 @@ module.exports = {
 
 
 
-const { kConstruct } = __nccwpck_require__(6955)
-const { kEnumerableProperty } = __nccwpck_require__(729)
+const { kConstruct } = __nccwpck_require__(2099)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
 const {
   iteratorMixin,
   isValidHeaderName,
   isValidHeaderValue
-} = __nccwpck_require__(3539)
-const { webidl } = __nccwpck_require__(2701)
+} = __nccwpck_require__(3385)
+const { webidl } = __nccwpck_require__(4834)
 const assert = __nccwpck_require__(8061)
 const util = __nccwpck_require__(7261)
 
@@ -51410,14 +51323,6 @@ Object.defineProperties(Headers.prototype, {
   },
   [util.inspect.custom]: {
     enumerable: false
-  },
-  // Compatibility for global headers
-  [Symbol('headers list')]: {
-    configurable: false,
-    enumerable: false,
-    get: function () {
-      return getHeadersList(this)
-    }
   }
 })
 
@@ -51464,7 +51369,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 784:
+/***/ 8687:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -51478,9 +51383,9 @@ const {
   filterResponse,
   makeResponse,
   fromInnerResponse
-} = __nccwpck_require__(2286)
-const { HeadersList } = __nccwpck_require__(9950)
-const { Request, cloneRequest } = __nccwpck_require__(9845)
+} = __nccwpck_require__(4935)
+const { HeadersList } = __nccwpck_require__(355)
+const { Request, cloneRequest } = __nccwpck_require__(7892)
 const zlib = __nccwpck_require__(5628)
 const {
   bytesMatch,
@@ -51516,23 +51421,23 @@ const {
   buildContentRange,
   createInflate,
   extractMimeType
-} = __nccwpck_require__(3539)
-const { kState, kDispatcher } = __nccwpck_require__(7079)
+} = __nccwpck_require__(3385)
+const { kState, kDispatcher } = __nccwpck_require__(4695)
 const assert = __nccwpck_require__(8061)
-const { safelyExtractBody, extractBody } = __nccwpck_require__(4017)
+const { safelyExtractBody, extractBody } = __nccwpck_require__(7018)
 const {
   redirectStatusSet,
   nullBodyStatus,
   safeMethodsSet,
   requestBodyHeader,
   subresourceSet
-} = __nccwpck_require__(3238)
+} = __nccwpck_require__(5118)
 const EE = __nccwpck_require__(5673)
 const { Readable, pipeline, finished } = __nccwpck_require__(4492)
-const { addAbortListener, isErrored, isReadable, bufferToLowerCasedHeaderName } = __nccwpck_require__(729)
-const { dataURLProcessor, serializeAMimeType, minimizeSupportedMimeType } = __nccwpck_require__(1821)
-const { getGlobalDispatcher } = __nccwpck_require__(3827)
-const { webidl } = __nccwpck_require__(2701)
+const { addAbortListener, isErrored, isReadable, bufferToLowerCasedHeaderName } = __nccwpck_require__(5695)
+const { dataURLProcessor, serializeAMimeType, minimizeSupportedMimeType } = __nccwpck_require__(3939)
+const { getGlobalDispatcher } = __nccwpck_require__(2332)
+const { webidl } = __nccwpck_require__(4834)
 const { STATUS_CODES } = __nccwpck_require__(8849)
 const GET_OR_HEAD = ['GET', 'HEAD']
 
@@ -53726,7 +53631,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9845:
+/***/ 7892:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -53734,18 +53639,16 @@ module.exports = {
 
 
 
-const { extractBody, mixinBody, cloneBody } = __nccwpck_require__(4017)
-const { Headers, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = __nccwpck_require__(9950)
-const { FinalizationRegistry } = __nccwpck_require__(4659)()
-const util = __nccwpck_require__(729)
+const { extractBody, mixinBody, cloneBody } = __nccwpck_require__(7018)
+const { Headers, fill: fillHeaders, HeadersList, setHeadersGuard, getHeadersGuard, setHeadersList, getHeadersList } = __nccwpck_require__(355)
+const { FinalizationRegistry } = __nccwpck_require__(2557)()
+const util = __nccwpck_require__(5695)
 const nodeUtil = __nccwpck_require__(7261)
 const {
   isValidHTTPToken,
   sameOrigin,
-  normalizeMethod,
-  environmentSettingsObject,
-  normalizeMethodRecord
-} = __nccwpck_require__(3539)
+  environmentSettingsObject
+} = __nccwpck_require__(3385)
 const {
   forbiddenMethodsSet,
   corsSafeListedMethodsSet,
@@ -53755,12 +53658,12 @@ const {
   requestCredentials,
   requestCache,
   requestDuplex
-} = __nccwpck_require__(3238)
-const { kEnumerableProperty } = util
-const { kHeaders, kSignal, kState, kDispatcher } = __nccwpck_require__(7079)
-const { webidl } = __nccwpck_require__(2701)
-const { URLSerializer } = __nccwpck_require__(1821)
-const { kConstruct } = __nccwpck_require__(6955)
+} = __nccwpck_require__(5118)
+const { kEnumerableProperty, normalizedMethodRecordsBase, normalizedMethodRecords } = util
+const { kHeaders, kSignal, kState, kDispatcher } = __nccwpck_require__(4695)
+const { webidl } = __nccwpck_require__(4834)
+const { URLSerializer } = __nccwpck_require__(3939)
+const { kConstruct } = __nccwpck_require__(2099)
 const assert = __nccwpck_require__(8061)
 const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = __nccwpck_require__(5673)
 
@@ -54081,7 +53984,7 @@ class Request {
       // 1. Let method be init["method"].
       let method = init.method
 
-      const mayBeNormalized = normalizeMethodRecord[method]
+      const mayBeNormalized = normalizedMethodRecords[method]
 
       if (mayBeNormalized !== undefined) {
         // Note: Bypass validation DELETE, GET, HEAD, OPTIONS, POST, PUT, PATCH and these lowercase ones
@@ -54093,12 +53996,16 @@ class Request {
           throw new TypeError(`'${method}' is not a valid HTTP method.`)
         }
 
-        if (forbiddenMethodsSet.has(method.toUpperCase())) {
+        const upperCase = method.toUpperCase()
+
+        if (forbiddenMethodsSet.has(upperCase)) {
           throw new TypeError(`'${method}' HTTP method is unsupported.`)
         }
 
         // 3. Normalize method.
-        method = normalizeMethod(method)
+        // https://fetch.spec.whatwg.org/#concept-method-normalize
+        // Note: must be in uppercase
+        method = normalizedMethodRecordsBase[upperCase] ?? method
 
         // 4. Set request’s method to method.
         request.method = method
@@ -54768,15 +54675,15 @@ module.exports = { Request, makeRequest, fromInnerRequest, cloneRequest }
 
 /***/ }),
 
-/***/ 2286:
+/***/ 4935:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { Headers, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = __nccwpck_require__(9950)
-const { extractBody, cloneBody, mixinBody } = __nccwpck_require__(4017)
-const util = __nccwpck_require__(729)
+const { Headers, HeadersList, fill, getHeadersGuard, setHeadersGuard, setHeadersList } = __nccwpck_require__(355)
+const { extractBody, cloneBody, mixinBody } = __nccwpck_require__(7018)
+const util = __nccwpck_require__(5695)
 const nodeUtil = __nccwpck_require__(7261)
 const { kEnumerableProperty } = util
 const {
@@ -54788,16 +54695,16 @@ const {
   isErrorLike,
   isomorphicEncode,
   environmentSettingsObject: relevantRealm
-} = __nccwpck_require__(3539)
+} = __nccwpck_require__(3385)
 const {
   redirectStatusSet,
   nullBodyStatus
-} = __nccwpck_require__(3238)
-const { kState, kHeaders } = __nccwpck_require__(7079)
-const { webidl } = __nccwpck_require__(2701)
-const { FormData } = __nccwpck_require__(1477)
-const { URLSerializer } = __nccwpck_require__(1821)
-const { kConstruct } = __nccwpck_require__(6955)
+} = __nccwpck_require__(5118)
+const { kState, kHeaders } = __nccwpck_require__(4695)
+const { webidl } = __nccwpck_require__(4834)
+const { FormData } = __nccwpck_require__(5151)
+const { URLSerializer } = __nccwpck_require__(3939)
+const { kConstruct } = __nccwpck_require__(2099)
 const assert = __nccwpck_require__(8061)
 const { types } = __nccwpck_require__(7261)
 const { isDisturbed, isErrored } = __nccwpck_require__(4492)
@@ -55389,7 +55296,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7079:
+/***/ 4695:
 /***/ ((module) => {
 
 "use strict";
@@ -55406,7 +55313,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3539:
+/***/ 3385:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -55414,14 +55321,14 @@ module.exports = {
 
 const { Transform } = __nccwpck_require__(4492)
 const zlib = __nccwpck_require__(5628)
-const { redirectStatusSet, referrerPolicySet: referrerPolicyTokens, badPortsSet } = __nccwpck_require__(3238)
-const { getGlobalOrigin } = __nccwpck_require__(7241)
-const { collectASequenceOfCodePoints, collectAnHTTPQuotedString, removeChars, parseMIMEType } = __nccwpck_require__(1821)
+const { redirectStatusSet, referrerPolicySet: referrerPolicyTokens, badPortsSet } = __nccwpck_require__(5118)
+const { getGlobalOrigin } = __nccwpck_require__(3545)
+const { collectASequenceOfCodePoints, collectAnHTTPQuotedString, removeChars, parseMIMEType } = __nccwpck_require__(3939)
 const { performance } = __nccwpck_require__(8846)
-const { isBlobLike, ReadableStreamFrom, isValidHTTPToken } = __nccwpck_require__(729)
+const { isBlobLike, ReadableStreamFrom, isValidHTTPToken, normalizedMethodRecordsBase } = __nccwpck_require__(5695)
 const assert = __nccwpck_require__(8061)
 const { isUint8Array } = __nccwpck_require__(3746)
-const { webidl } = __nccwpck_require__(2701)
+const { webidl } = __nccwpck_require__(4834)
 
 let supportedHashes = []
 
@@ -55672,10 +55579,13 @@ function appendRequestOriginHeader (request) {
   // TODO: implement "byte-serializing a request origin"
   let serializedOrigin = request.origin
 
-  // "'client' is changed to an origin during fetching."
-  // This doesn't happen in undici (in most cases) because undici, by default,
-  // has no concept of origin.
-  if (serializedOrigin === 'client') {
+  // - "'client' is changed to an origin during fetching."
+  //   This doesn't happen in undici (in most cases) because undici, by default,
+  //   has no concept of origin.
+  // - request.origin can also be set to request.client.origin (client being
+  //   an environment settings object), which is undefined without using
+  //   setGlobalOrigin.
+  if (serializedOrigin === 'client' || serializedOrigin === undefined) {
     return
   }
 
@@ -56203,37 +56113,12 @@ function isCancelled (fetchParams) {
     fetchParams.controller.state === 'terminated'
 }
 
-const normalizeMethodRecordBase = {
-  delete: 'DELETE',
-  DELETE: 'DELETE',
-  get: 'GET',
-  GET: 'GET',
-  head: 'HEAD',
-  HEAD: 'HEAD',
-  options: 'OPTIONS',
-  OPTIONS: 'OPTIONS',
-  post: 'POST',
-  POST: 'POST',
-  put: 'PUT',
-  PUT: 'PUT'
-}
-
-const normalizeMethodRecord = {
-  ...normalizeMethodRecordBase,
-  patch: 'patch',
-  PATCH: 'PATCH'
-}
-
-// Note: object prototypes should not be able to be referenced. e.g. `Object#hasOwnProperty`.
-Object.setPrototypeOf(normalizeMethodRecordBase, null)
-Object.setPrototypeOf(normalizeMethodRecord, null)
-
 /**
  * @see https://fetch.spec.whatwg.org/#concept-method-normalize
  * @param {string} method
  */
 function normalizeMethod (method) {
-  return normalizeMethodRecordBase[method.toLowerCase()] ?? method
+  return normalizedMethodRecordsBase[method.toLowerCase()] ?? method
 }
 
 // https://infra.spec.whatwg.org/#serialize-a-javascript-value-to-a-json-string
@@ -56463,7 +56348,7 @@ function iteratorMixin (name, object, kInternalIterator, keyIndex = 0, valueInde
 /**
  * @see https://fetch.spec.whatwg.org/#body-fully-read
  */
-async function fullyReadBody (body, processBody, processBodyError, shouldClone) {
+async function fullyReadBody (body, processBody, processBodyError) {
   // 1. If taskDestination is null, then set taskDestination to
   //    the result of starting a new parallel queue.
 
@@ -56489,7 +56374,7 @@ async function fullyReadBody (body, processBody, processBodyError, shouldClone) 
 
   // 5. Read all bytes from reader, given successSteps and errorSteps.
   try {
-    successSteps(await readAllBytes(reader, shouldClone))
+    successSteps(await readAllBytes(reader))
   } catch (e) {
     errorSteps(e)
   }
@@ -56537,9 +56422,8 @@ function isomorphicEncode (input) {
  * @see https://streams.spec.whatwg.org/#readablestreamdefaultreader-read-all-bytes
  * @see https://streams.spec.whatwg.org/#read-loop
  * @param {ReadableStreamDefaultReader} reader
- * @param {boolean} [shouldClone]
  */
-async function readAllBytes (reader, shouldClone) {
+async function readAllBytes (reader) {
   const bytes = []
   let byteLength = 0
 
@@ -56548,13 +56432,6 @@ async function readAllBytes (reader, shouldClone) {
 
     if (done) {
       // 1. Call successSteps with bytes.
-      if (bytes.length === 1) {
-        const { buffer, byteOffset, byteLength } = bytes[0]
-        if (shouldClone === false) {
-          return Buffer.from(buffer, byteOffset, byteLength)
-        }
-        return Buffer.from(buffer.slice(byteOffset, byteOffset + byteLength), 0, byteLength)
-      }
       return Buffer.concat(bytes, byteLength)
     }
 
@@ -57051,7 +56928,6 @@ module.exports = {
   urlHasHttpsScheme,
   urlIsHttpHttpsScheme,
   readAllBytes,
-  normalizeMethodRecord,
   simpleRangeHeaderValue,
   buildContentRange,
   parseMetadata,
@@ -57065,14 +56941,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 2701:
+/***/ 4834:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { types, inspect } = __nccwpck_require__(7261)
-const { toUSVString } = __nccwpck_require__(729)
+const { toUSVString } = __nccwpck_require__(5695)
 
 /** @type {import('../../../types/webidl').Webidl} */
 const webidl = {}
@@ -57766,7 +57642,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 602:
+/***/ 3970:
 /***/ ((module) => {
 
 "use strict";
@@ -58064,7 +57940,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5482:
+/***/ 2488:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -58074,16 +57950,16 @@ const {
   staticPropertyDescriptors,
   readOperation,
   fireAProgressEvent
-} = __nccwpck_require__(6321)
+} = __nccwpck_require__(9478)
 const {
   kState,
   kError,
   kResult,
   kEvents,
   kAborted
-} = __nccwpck_require__(8128)
-const { webidl } = __nccwpck_require__(2701)
-const { kEnumerableProperty } = __nccwpck_require__(729)
+} = __nccwpck_require__(9603)
+const { webidl } = __nccwpck_require__(4834)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
 
 class FileReader extends EventTarget {
   constructor () {
@@ -58416,13 +58292,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5852:
+/***/ 5:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { webidl } = __nccwpck_require__(2701)
+const { webidl } = __nccwpck_require__(4834)
 
 const kState = Symbol('ProgressEvent state')
 
@@ -58502,7 +58378,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8128:
+/***/ 9603:
 /***/ ((module) => {
 
 "use strict";
@@ -58520,7 +58396,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6321:
+/***/ 9478:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -58532,10 +58408,10 @@ const {
   kResult,
   kAborted,
   kLastProgressEventFired
-} = __nccwpck_require__(8128)
-const { ProgressEvent } = __nccwpck_require__(5852)
-const { getEncoding } = __nccwpck_require__(602)
-const { serializeAMimeType, parseMIMEType } = __nccwpck_require__(1821)
+} = __nccwpck_require__(9603)
+const { ProgressEvent } = __nccwpck_require__(5)
+const { getEncoding } = __nccwpck_require__(3970)
+const { serializeAMimeType, parseMIMEType } = __nccwpck_require__(3939)
 const { types } = __nccwpck_require__(7261)
 const { StringDecoder } = __nccwpck_require__(1576)
 const { btoa } = __nccwpck_require__(2254)
@@ -58919,28 +58795,28 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9203:
+/***/ 5398:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { uid, states, sentCloseFrameState, emptyBuffer, opcodes } = __nccwpck_require__(9302)
+const { uid, states, sentCloseFrameState, emptyBuffer, opcodes } = __nccwpck_require__(763)
 const {
   kReadyState,
   kSentClose,
   kByteParser,
   kReceivedClose,
   kResponse
-} = __nccwpck_require__(9392)
-const { fireEvent, failWebsocketConnection, isClosing, isClosed, isEstablished, parseExtensions } = __nccwpck_require__(4453)
-const { channels } = __nccwpck_require__(1737)
-const { CloseEvent } = __nccwpck_require__(986)
-const { makeRequest } = __nccwpck_require__(9845)
-const { fetching } = __nccwpck_require__(784)
-const { Headers, getHeadersList } = __nccwpck_require__(9950)
-const { getDecodeSplit } = __nccwpck_require__(3539)
-const { WebsocketFrameSend } = __nccwpck_require__(6665)
+} = __nccwpck_require__(8589)
+const { fireEvent, failWebsocketConnection, isClosing, isClosed, isEstablished, parseExtensions } = __nccwpck_require__(9768)
+const { channels } = __nccwpck_require__(8915)
+const { CloseEvent } = __nccwpck_require__(6773)
+const { makeRequest } = __nccwpck_require__(7892)
+const { fetching } = __nccwpck_require__(8687)
+const { Headers, getHeadersList } = __nccwpck_require__(355)
+const { getDecodeSplit } = __nccwpck_require__(3385)
+const { WebsocketFrameSend } = __nccwpck_require__(475)
 
 /** @type {import('crypto')} */
 let crypto
@@ -59298,7 +59174,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9302:
+/***/ 763:
 /***/ ((module) => {
 
 "use strict";
@@ -59372,15 +59248,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 986:
+/***/ 6773:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { webidl } = __nccwpck_require__(2701)
-const { kEnumerableProperty } = __nccwpck_require__(729)
-const { kConstruct } = __nccwpck_require__(6955)
+const { webidl } = __nccwpck_require__(4834)
+const { kEnumerableProperty } = __nccwpck_require__(5695)
+const { kConstruct } = __nccwpck_require__(2099)
 const { MessagePort } = __nccwpck_require__(4086)
 
 /**
@@ -59705,13 +59581,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6665:
+/***/ 475:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { maxUnsigned16Bit } = __nccwpck_require__(9302)
+const { maxUnsigned16Bit } = __nccwpck_require__(763)
 
 const BUFFER_SIZE = 16386
 
@@ -59809,14 +59685,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5636:
+/***/ 9761:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
 const { createInflateRaw, Z_DEFAULT_WINDOWBITS } = __nccwpck_require__(5628)
-const { isValidClientWindowBits } = __nccwpck_require__(4453)
+const { isValidClientWindowBits } = __nccwpck_require__(9768)
 
 const tail = Buffer.from([0x00, 0x00, 0xff, 0xff])
 const kBuffer = Symbol('kBuffer')
@@ -59887,7 +59763,7 @@ module.exports = { PerMessageDeflate }
 
 /***/ }),
 
-/***/ 9682:
+/***/ 4678:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -59895,9 +59771,9 @@ module.exports = { PerMessageDeflate }
 
 const { Writable } = __nccwpck_require__(4492)
 const assert = __nccwpck_require__(8061)
-const { parserStates, opcodes, states, emptyBuffer, sentCloseFrameState } = __nccwpck_require__(9302)
-const { kReadyState, kSentClose, kResponse, kReceivedClose } = __nccwpck_require__(9392)
-const { channels } = __nccwpck_require__(1737)
+const { parserStates, opcodes, states, emptyBuffer, sentCloseFrameState } = __nccwpck_require__(763)
+const { kReadyState, kSentClose, kResponse, kReceivedClose } = __nccwpck_require__(8589)
+const { channels } = __nccwpck_require__(8915)
 const {
   isValidStatusCode,
   isValidOpcode,
@@ -59907,10 +59783,10 @@ const {
   isControlFrame,
   isTextBinaryFrame,
   isContinuationFrame
-} = __nccwpck_require__(4453)
-const { WebsocketFrameSend } = __nccwpck_require__(6665)
-const { closeWebSocketConnection } = __nccwpck_require__(9203)
-const { PerMessageDeflate } = __nccwpck_require__(5636)
+} = __nccwpck_require__(9768)
+const { WebsocketFrameSend } = __nccwpck_require__(475)
+const { closeWebSocketConnection } = __nccwpck_require__(5398)
+const { PerMessageDeflate } = __nccwpck_require__(9761)
 
 // This code was influenced by ws released under the MIT license.
 // Copyright (c) 2011 Einar Otto Stangvik <einaros@gmail.com>
@@ -60319,15 +60195,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ 5596:
+/***/ 6220:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { WebsocketFrameSend } = __nccwpck_require__(6665)
-const { opcodes, sendHints } = __nccwpck_require__(9302)
-const FixedQueue = __nccwpck_require__(428)
+const { WebsocketFrameSend } = __nccwpck_require__(475)
+const { opcodes, sendHints } = __nccwpck_require__(763)
+const FixedQueue = __nccwpck_require__(4723)
 
 /** @type {typeof Uint8Array} */
 const FastBuffer = Buffer[Symbol.species]
@@ -60431,7 +60307,7 @@ module.exports = { SendQueue }
 
 /***/ }),
 
-/***/ 9392:
+/***/ 8589:
 /***/ ((module) => {
 
 "use strict";
@@ -60451,17 +60327,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4453:
+/***/ 9768:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { kReadyState, kController, kResponse, kBinaryType, kWebSocketURL } = __nccwpck_require__(9392)
-const { states, opcodes } = __nccwpck_require__(9302)
-const { ErrorEvent, createFastMessageEvent } = __nccwpck_require__(986)
+const { kReadyState, kController, kResponse, kBinaryType, kWebSocketURL } = __nccwpck_require__(8589)
+const { states, opcodes } = __nccwpck_require__(763)
+const { ErrorEvent, createFastMessageEvent } = __nccwpck_require__(6773)
 const { isUtf8 } = __nccwpck_require__(2254)
-const { collectASequenceOfCodePointsFast, removeHTTPWhitespace } = __nccwpck_require__(1821)
+const { collectASequenceOfCodePointsFast, removeHTTPWhitespace } = __nccwpck_require__(3939)
 
 /* globals Blob */
 
@@ -60773,16 +60649,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8741:
+/***/ 4113:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const { webidl } = __nccwpck_require__(2701)
-const { URLSerializer } = __nccwpck_require__(1821)
-const { environmentSettingsObject } = __nccwpck_require__(3539)
-const { staticPropertyDescriptors, states, sentCloseFrameState, sendHints } = __nccwpck_require__(9302)
+const { webidl } = __nccwpck_require__(4834)
+const { URLSerializer } = __nccwpck_require__(3939)
+const { environmentSettingsObject } = __nccwpck_require__(3385)
+const { staticPropertyDescriptors, states, sentCloseFrameState, sendHints } = __nccwpck_require__(763)
 const {
   kWebSocketURL,
   kReadyState,
@@ -60791,23 +60667,21 @@ const {
   kResponse,
   kSentClose,
   kByteParser
-} = __nccwpck_require__(9392)
+} = __nccwpck_require__(8589)
 const {
   isConnecting,
   isEstablished,
   isClosing,
   isValidSubprotocol,
   fireEvent
-} = __nccwpck_require__(4453)
-const { establishWebSocketConnection, closeWebSocketConnection } = __nccwpck_require__(9203)
-const { ByteParser } = __nccwpck_require__(9682)
-const { kEnumerableProperty, isBlobLike } = __nccwpck_require__(729)
-const { getGlobalDispatcher } = __nccwpck_require__(3827)
+} = __nccwpck_require__(9768)
+const { establishWebSocketConnection, closeWebSocketConnection } = __nccwpck_require__(5398)
+const { ByteParser } = __nccwpck_require__(4678)
+const { kEnumerableProperty, isBlobLike } = __nccwpck_require__(5695)
+const { getGlobalDispatcher } = __nccwpck_require__(2332)
 const { types } = __nccwpck_require__(7261)
-const { ErrorEvent, CloseEvent } = __nccwpck_require__(986)
-const { SendQueue } = __nccwpck_require__(5596)
-
-let experimentalWarned = false
+const { ErrorEvent, CloseEvent } = __nccwpck_require__(6773)
+const { SendQueue } = __nccwpck_require__(6220)
 
 // https://websockets.spec.whatwg.org/#interface-definition
 class WebSocket extends EventTarget {
@@ -60834,13 +60708,6 @@ class WebSocket extends EventTarget {
 
     const prefix = 'WebSocket constructor'
     webidl.argumentLengthCheck(arguments, 1, prefix)
-
-    if (!experimentalWarned) {
-      experimentalWarned = true
-      process.emitWarning('WebSockets are experimental, expect them to change at any time.', {
-        code: 'UNDICI-WS'
-      })
-    }
 
     const options = webidl.converters['DOMString or sequence<DOMString> or WebSocketInit'](protocols, prefix, 'options')
 
@@ -63575,7 +63442,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getUserLogin = exports.getCommitIds = exports.updateMessage = void 0;
+exports.updateMessage = updateMessage;
+exports.getCommitIds = getCommitIds;
+exports.getUserLogin = getUserLogin;
 const github = __importStar(__nccwpck_require__(5942));
 /**
  * Update the comment of the current PR
@@ -63611,7 +63480,6 @@ function updateMessage(octokit, prNum, userLogin, message) {
         }
     });
 }
-exports.updateMessage = updateMessage;
 /**
  * Get the first comment of the current PR by the current user
  * @param octokit {Octokit} the octokit instance
@@ -63649,7 +63517,6 @@ function getCommitIds(octokit) {
         return commits.data.map((commit) => commit.sha);
     });
 }
-exports.getCommitIds = getCommitIds;
 /**
  * Get login name of the current user
  * By default, this returns `github-actions[bot]`
@@ -63667,7 +63534,6 @@ query {
         return resp.viewer.login;
     });
 }
-exports.getUserLogin = getUserLogin;
 
 
 /***/ }),
@@ -63712,7 +63578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(9093));
 const github = __importStar(__nccwpck_require__(5942));
-const action_1 = __nccwpck_require__(6872);
+const action_1 = __nccwpck_require__(3249);
 const github_1 = __nccwpck_require__(8469);
 const message_builder_1 = __nccwpck_require__(950);
 const rules_1 = __nccwpck_require__(302);
@@ -63846,7 +63712,8 @@ exports.CustomMessageBuilder = CustomMessageBuilder;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Rules = exports.parseRules = void 0;
+exports.Rules = void 0;
+exports.parseRules = parseRules;
 const validate_1 = __nccwpck_require__(4171);
 /**
  * Parse the rule pattern from JSON string
@@ -63895,7 +63762,6 @@ function parseRules(json) {
     }
     return rules;
 }
-exports.parseRules = parseRules;
 exports.Rules = {
     pr_reaches_contain_only_one_nonzero_digit: {
         kind: 'pr',
@@ -63952,7 +63818,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateRules = void 0;
-const ajv_1 = __importDefault(__nccwpck_require__(870));
+const ajv_1 = __importDefault(__nccwpck_require__(8614));
 const ajv = new ajv_1.default();
 const schema = {
     $schema: 'http://json-schema.org/draft-07/schema#',
@@ -65956,7 +65822,3640 @@ module.exports = parseParams
 
 /***/ }),
 
-/***/ 9138:
+/***/ 3249:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "Octokit": () => (/* binding */ dist_bundle_Octokit),
+  "customFetch": () => (/* binding */ customFetch),
+  "getProxyAgent": () => (/* binding */ getProxyAgent)
+});
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/universal-user-agent@7.0.2/node_modules/universal-user-agent/index.js
+function getUserAgent() {
+  if (typeof navigator === "object" && "userAgent" in navigator) {
+    return navigator.userAgent;
+  }
+
+  if (typeof process === "object" && process.version !== undefined) {
+    return `Node.js/${process.version.substr(1)} (${process.platform}; ${
+      process.arch
+    })`;
+  }
+
+  return "<environment undetectable>";
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@3.0.2/node_modules/before-after-hook/lib/register.js
+// @ts-check
+
+function register(state, name, method, options) {
+  if (typeof method !== "function") {
+    throw new Error("method for before hook must be a function");
+  }
+
+  if (!options) {
+    options = {};
+  }
+
+  if (Array.isArray(name)) {
+    return name.reverse().reduce((callback, name) => {
+      return register.bind(null, state, name, callback, options);
+    }, method)();
+  }
+
+  return Promise.resolve().then(() => {
+    if (!state.registry[name]) {
+      return method(options);
+    }
+
+    return state.registry[name].reduce((method, registered) => {
+      return registered.hook.bind(null, method, options);
+    }, method)();
+  });
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@3.0.2/node_modules/before-after-hook/lib/add.js
+// @ts-check
+
+function addHook(state, kind, name, hook) {
+  const orig = hook;
+  if (!state.registry[name]) {
+    state.registry[name] = [];
+  }
+
+  if (kind === "before") {
+    hook = (method, options) => {
+      return Promise.resolve()
+        .then(orig.bind(null, options))
+        .then(method.bind(null, options));
+    };
+  }
+
+  if (kind === "after") {
+    hook = (method, options) => {
+      let result;
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .then((result_) => {
+          result = result_;
+          return orig(result, options);
+        })
+        .then(() => {
+          return result;
+        });
+    };
+  }
+
+  if (kind === "error") {
+    hook = (method, options) => {
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .catch((error) => {
+          return orig(error, options);
+        });
+    };
+  }
+
+  state.registry[name].push({
+    hook: hook,
+    orig: orig,
+  });
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@3.0.2/node_modules/before-after-hook/lib/remove.js
+// @ts-check
+
+function removeHook(state, name, method) {
+  if (!state.registry[name]) {
+    return;
+  }
+
+  const index = state.registry[name]
+    .map((registered) => {
+      return registered.orig;
+    })
+    .indexOf(method);
+
+  if (index === -1) {
+    return;
+  }
+
+  state.registry[name].splice(index, 1);
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@3.0.2/node_modules/before-after-hook/index.js
+// @ts-check
+
+
+
+
+
+// bind with array of arguments: https://stackoverflow.com/a/21792913
+const bind = Function.bind;
+const bindable = bind.bind(bind);
+
+function bindApi(hook, state, name) {
+  const removeHookRef = bindable(removeHook, null).apply(
+    null,
+    name ? [state, name] : [state]
+  );
+  hook.api = { remove: removeHookRef };
+  hook.remove = removeHookRef;
+  ["before", "error", "after", "wrap"].forEach((kind) => {
+    const args = name ? [state, kind, name] : [state, kind];
+    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
+  });
+}
+
+function Singular() {
+  const singularHookName = Symbol("Singular");
+  const singularHookState = {
+    registry: {},
+  };
+  const singularHook = register.bind(null, singularHookState, singularHookName);
+  bindApi(singularHook, singularHookState, singularHookName);
+  return singularHook;
+}
+
+function Collection() {
+  const state = {
+    registry: {},
+  };
+
+  const hook = register.bind(null, state);
+  bindApi(hook, state);
+
+  return hook;
+}
+
+/* harmony default export */ const before_after_hook = ({ Singular, Collection });
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+endpoint@10.1.1/node_modules/@octokit/endpoint/dist-bundle/index.js
+// pkg/dist-src/defaults.js
+
+
+// pkg/dist-src/version.js
+var VERSION = "0.0.0-development";
+
+// pkg/dist-src/defaults.js
+var userAgent = `octokit-endpoint.js/${VERSION} ${getUserAgent()}`;
+var DEFAULTS = {
+  method: "GET",
+  baseUrl: "https://api.github.com",
+  headers: {
+    accept: "application/vnd.github.v3+json",
+    "user-agent": userAgent
+  },
+  mediaType: {
+    format: ""
+  }
+};
+
+// pkg/dist-src/util/lowercase-keys.js
+function lowercaseKeys(object) {
+  if (!object) {
+    return {};
+  }
+  return Object.keys(object).reduce((newObj, key) => {
+    newObj[key.toLowerCase()] = object[key];
+    return newObj;
+  }, {});
+}
+
+// pkg/dist-src/util/is-plain-object.js
+function isPlainObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  if (Object.prototype.toString.call(value) !== "[object Object]")
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto === null)
+    return true;
+  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+}
+
+// pkg/dist-src/util/merge-deep.js
+function mergeDeep(defaults, options) {
+  const result = Object.assign({}, defaults);
+  Object.keys(options).forEach((key) => {
+    if (isPlainObject(options[key])) {
+      if (!(key in defaults))
+        Object.assign(result, { [key]: options[key] });
+      else
+        result[key] = mergeDeep(defaults[key], options[key]);
+    } else {
+      Object.assign(result, { [key]: options[key] });
+    }
+  });
+  return result;
+}
+
+// pkg/dist-src/util/remove-undefined-properties.js
+function removeUndefinedProperties(obj) {
+  for (const key in obj) {
+    if (obj[key] === void 0) {
+      delete obj[key];
+    }
+  }
+  return obj;
+}
+
+// pkg/dist-src/merge.js
+function merge(defaults, route, options) {
+  if (typeof route === "string") {
+    let [method, url] = route.split(" ");
+    options = Object.assign(url ? { method, url } : { url: method }, options);
+  } else {
+    options = Object.assign({}, route);
+  }
+  options.headers = lowercaseKeys(options.headers);
+  removeUndefinedProperties(options);
+  removeUndefinedProperties(options.headers);
+  const mergedOptions = mergeDeep(defaults || {}, options);
+  if (options.url === "/graphql") {
+    if (defaults && defaults.mediaType.previews?.length) {
+      mergedOptions.mediaType.previews = defaults.mediaType.previews.filter(
+        (preview) => !mergedOptions.mediaType.previews.includes(preview)
+      ).concat(mergedOptions.mediaType.previews);
+    }
+    mergedOptions.mediaType.previews = (mergedOptions.mediaType.previews || []).map((preview) => preview.replace(/-preview/, ""));
+  }
+  return mergedOptions;
+}
+
+// pkg/dist-src/util/add-query-parameters.js
+function addQueryParameters(url, parameters) {
+  const separator = /\?/.test(url) ? "&" : "?";
+  const names = Object.keys(parameters);
+  if (names.length === 0) {
+    return url;
+  }
+  return url + separator + names.map((name) => {
+    if (name === "q") {
+      return "q=" + parameters.q.split("+").map(encodeURIComponent).join("+");
+    }
+    return `${name}=${encodeURIComponent(parameters[name])}`;
+  }).join("&");
+}
+
+// pkg/dist-src/util/extract-url-variable-names.js
+var urlVariableRegex = /\{[^}]+\}/g;
+function removeNonChars(variableName) {
+  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+}
+function extractUrlVariableNames(url) {
+  const matches = url.match(urlVariableRegex);
+  if (!matches) {
+    return [];
+  }
+  return matches.map(removeNonChars).reduce((a, b) => a.concat(b), []);
+}
+
+// pkg/dist-src/util/omit.js
+function omit(object, keysToOmit) {
+  const result = { __proto__: null };
+  for (const key of Object.keys(object)) {
+    if (keysToOmit.indexOf(key) === -1) {
+      result[key] = object[key];
+    }
+  }
+  return result;
+}
+
+// pkg/dist-src/util/url-template.js
+function encodeReserved(str) {
+  return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
+    if (!/%[0-9A-Fa-f]/.test(part)) {
+      part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]");
+    }
+    return part;
+  }).join("");
+}
+function encodeUnreserved(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+  });
+}
+function encodeValue(operator, value, key) {
+  value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value);
+  if (key) {
+    return encodeUnreserved(key) + "=" + value;
+  } else {
+    return value;
+  }
+}
+function isDefined(value) {
+  return value !== void 0 && value !== null;
+}
+function isKeyOperator(operator) {
+  return operator === ";" || operator === "&" || operator === "?";
+}
+function getValues(context, operator, key, modifier) {
+  var value = context[key], result = [];
+  if (isDefined(value) && value !== "") {
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      value = value.toString();
+      if (modifier && modifier !== "*") {
+        value = value.substring(0, parseInt(modifier, 10));
+      }
+      result.push(
+        encodeValue(operator, value, isKeyOperator(operator) ? key : "")
+      );
+    } else {
+      if (modifier === "*") {
+        if (Array.isArray(value)) {
+          value.filter(isDefined).forEach(function(value2) {
+            result.push(
+              encodeValue(operator, value2, isKeyOperator(operator) ? key : "")
+            );
+          });
+        } else {
+          Object.keys(value).forEach(function(k) {
+            if (isDefined(value[k])) {
+              result.push(encodeValue(operator, value[k], k));
+            }
+          });
+        }
+      } else {
+        const tmp = [];
+        if (Array.isArray(value)) {
+          value.filter(isDefined).forEach(function(value2) {
+            tmp.push(encodeValue(operator, value2));
+          });
+        } else {
+          Object.keys(value).forEach(function(k) {
+            if (isDefined(value[k])) {
+              tmp.push(encodeUnreserved(k));
+              tmp.push(encodeValue(operator, value[k].toString()));
+            }
+          });
+        }
+        if (isKeyOperator(operator)) {
+          result.push(encodeUnreserved(key) + "=" + tmp.join(","));
+        } else if (tmp.length !== 0) {
+          result.push(tmp.join(","));
+        }
+      }
+    }
+  } else {
+    if (operator === ";") {
+      if (isDefined(value)) {
+        result.push(encodeUnreserved(key));
+      }
+    } else if (value === "" && (operator === "&" || operator === "?")) {
+      result.push(encodeUnreserved(key) + "=");
+    } else if (value === "") {
+      result.push("");
+    }
+  }
+  return result;
+}
+function parseUrl(template) {
+  return {
+    expand: expand.bind(null, template)
+  };
+}
+function expand(template, context) {
+  var operators = ["+", "#", ".", "/", ";", "?", "&"];
+  template = template.replace(
+    /\{([^\{\}]+)\}|([^\{\}]+)/g,
+    function(_, expression, literal) {
+      if (expression) {
+        let operator = "";
+        const values = [];
+        if (operators.indexOf(expression.charAt(0)) !== -1) {
+          operator = expression.charAt(0);
+          expression = expression.substr(1);
+        }
+        expression.split(/,/g).forEach(function(variable) {
+          var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+          values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+        });
+        if (operator && operator !== "+") {
+          var separator = ",";
+          if (operator === "?") {
+            separator = "&";
+          } else if (operator !== "#") {
+            separator = operator;
+          }
+          return (values.length !== 0 ? operator : "") + values.join(separator);
+        } else {
+          return values.join(",");
+        }
+      } else {
+        return encodeReserved(literal);
+      }
+    }
+  );
+  if (template === "/") {
+    return template;
+  } else {
+    return template.replace(/\/$/, "");
+  }
+}
+
+// pkg/dist-src/parse.js
+function parse(options) {
+  let method = options.method.toUpperCase();
+  let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
+  let headers = Object.assign({}, options.headers);
+  let body;
+  let parameters = omit(options, [
+    "method",
+    "baseUrl",
+    "url",
+    "headers",
+    "request",
+    "mediaType"
+  ]);
+  const urlVariableNames = extractUrlVariableNames(url);
+  url = parseUrl(url).expand(parameters);
+  if (!/^http/.test(url)) {
+    url = options.baseUrl + url;
+  }
+  const omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl");
+  const remainingParameters = omit(parameters, omittedParameters);
+  const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
+  if (!isBinaryRequest) {
+    if (options.mediaType.format) {
+      headers.accept = headers.accept.split(/,/).map(
+        (format) => format.replace(
+          /application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,
+          `application/vnd$1$2.${options.mediaType.format}`
+        )
+      ).join(",");
+    }
+    if (url.endsWith("/graphql")) {
+      if (options.mediaType.previews?.length) {
+        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+        headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
+          const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+          return `application/vnd.github.${preview}-preview${format}`;
+        }).join(",");
+      }
+    }
+  }
+  if (["GET", "HEAD"].includes(method)) {
+    url = addQueryParameters(url, remainingParameters);
+  } else {
+    if ("data" in remainingParameters) {
+      body = remainingParameters.data;
+    } else {
+      if (Object.keys(remainingParameters).length) {
+        body = remainingParameters;
+      }
+    }
+  }
+  if (!headers["content-type"] && typeof body !== "undefined") {
+    headers["content-type"] = "application/json; charset=utf-8";
+  }
+  if (["PATCH", "PUT"].includes(method) && typeof body === "undefined") {
+    body = "";
+  }
+  return Object.assign(
+    { method, url, headers },
+    typeof body !== "undefined" ? { body } : null,
+    options.request ? { request: options.request } : null
+  );
+}
+
+// pkg/dist-src/endpoint-with-defaults.js
+function endpointWithDefaults(defaults, route, options) {
+  return parse(merge(defaults, route, options));
+}
+
+// pkg/dist-src/with-defaults.js
+function withDefaults(oldDefaults, newDefaults) {
+  const DEFAULTS2 = merge(oldDefaults, newDefaults);
+  const endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
+  return Object.assign(endpoint2, {
+    DEFAULTS: DEFAULTS2,
+    defaults: withDefaults.bind(null, DEFAULTS2),
+    merge: merge.bind(null, DEFAULTS2),
+    parse
+  });
+}
+
+// pkg/dist-src/index.js
+var endpoint = withDefaults(null, DEFAULTS);
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+request-error@6.1.1/node_modules/@octokit/request-error/dist-src/index.js
+class RequestError extends Error {
+  name;
+  /**
+   * http status code
+   */
+  status;
+  /**
+   * Request options that lead to the error.
+   */
+  request;
+  /**
+   * Response object if a response was received
+   */
+  response;
+  constructor(message, statusCode, options) {
+    super(message);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+    this.name = "HttpError";
+    this.status = statusCode;
+    if ("response" in options) {
+      this.response = options.response;
+    }
+    const requestCopy = Object.assign({}, options.request);
+    if (options.request.headers.authorization) {
+      requestCopy.headers = Object.assign({}, options.request.headers, {
+        authorization: options.request.headers.authorization.replace(
+          / .*$/,
+          " [REDACTED]"
+        )
+      });
+    }
+    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+    this.request = requestCopy;
+  }
+}
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+request@9.1.1/node_modules/@octokit/request/dist-bundle/index.js
+// pkg/dist-src/index.js
+
+
+
+// pkg/dist-src/version.js
+var dist_bundle_VERSION = "0.0.0-development";
+
+// pkg/dist-src/is-plain-object.js
+function dist_bundle_isPlainObject(value) {
+  if (typeof value !== "object" || value === null)
+    return false;
+  if (Object.prototype.toString.call(value) !== "[object Object]")
+    return false;
+  const proto = Object.getPrototypeOf(value);
+  if (proto === null)
+    return true;
+  const Ctor = Object.prototype.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+  return typeof Ctor === "function" && Ctor instanceof Ctor && Function.prototype.call(Ctor) === Function.prototype.call(value);
+}
+
+// pkg/dist-src/fetch-wrapper.js
+
+
+// pkg/dist-src/get-buffer-response.js
+function getBufferResponse(response) {
+  return response.arrayBuffer();
+}
+
+// pkg/dist-src/fetch-wrapper.js
+function fetchWrapper(requestOptions) {
+  const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
+  const parseSuccessResponseBody = requestOptions.request?.parseSuccessResponseBody !== false;
+  if (dist_bundle_isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
+    requestOptions.body = JSON.stringify(requestOptions.body);
+  }
+  let headers = {};
+  let status;
+  let url;
+  let { fetch } = globalThis;
+  if (requestOptions.request?.fetch) {
+    fetch = requestOptions.request.fetch;
+  }
+  if (!fetch) {
+    throw new Error(
+      "fetch is not set. Please pass a fetch implementation as new Octokit({ request: { fetch }}). Learn more at https://github.com/octokit/octokit.js/#fetch-missing"
+    );
+  }
+  return fetch(requestOptions.url, {
+    method: requestOptions.method,
+    body: requestOptions.body,
+    redirect: requestOptions.request?.redirect,
+    // Header values must be `string`
+    headers: Object.fromEntries(
+      Object.entries(requestOptions.headers).map(([name, value]) => [
+        name,
+        String(value)
+      ])
+    ),
+    signal: requestOptions.request?.signal,
+    // duplex must be set if request.body is ReadableStream or Async Iterables.
+    // See https://fetch.spec.whatwg.org/#dom-requestinit-duplex.
+    ...requestOptions.body && { duplex: "half" }
+  }).then(async (response) => {
+    url = response.url;
+    status = response.status;
+    for (const keyAndValue of response.headers) {
+      headers[keyAndValue[0]] = keyAndValue[1];
+    }
+    if ("deprecation" in headers) {
+      const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+      const deprecationLink = matches && matches.pop();
+      log.warn(
+        `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
+      );
+    }
+    if (status === 204 || status === 205) {
+      return;
+    }
+    if (requestOptions.method === "HEAD") {
+      if (status < 400) {
+        return;
+      }
+      throw new RequestError(response.statusText, status, {
+        response: {
+          url,
+          status,
+          headers,
+          data: void 0
+        },
+        request: requestOptions
+      });
+    }
+    if (status === 304) {
+      throw new RequestError("Not modified", status, {
+        response: {
+          url,
+          status,
+          headers,
+          data: await getResponseData(response)
+        },
+        request: requestOptions
+      });
+    }
+    if (status >= 400) {
+      const data = await getResponseData(response);
+      const error = new RequestError(toErrorMessage(data), status, {
+        response: {
+          url,
+          status,
+          headers,
+          data
+        },
+        request: requestOptions
+      });
+      throw error;
+    }
+    return parseSuccessResponseBody ? await getResponseData(response) : response.body;
+  }).then((data) => {
+    return {
+      status,
+      url,
+      headers,
+      data
+    };
+  }).catch((error) => {
+    if (error instanceof RequestError)
+      throw error;
+    else if (error.name === "AbortError")
+      throw error;
+    let message = error.message;
+    if (error.name === "TypeError" && "cause" in error) {
+      if (error.cause instanceof Error) {
+        message = error.cause.message;
+      } else if (typeof error.cause === "string") {
+        message = error.cause;
+      }
+    }
+    throw new RequestError(message, 500, {
+      request: requestOptions
+    });
+  });
+}
+async function getResponseData(response) {
+  const contentType = response.headers.get("content-type");
+  if (/application\/json/.test(contentType)) {
+    return response.json().catch(() => response.text()).catch(() => "");
+  }
+  if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
+    return response.text();
+  }
+  return getBufferResponse(response);
+}
+function toErrorMessage(data) {
+  if (typeof data === "string")
+    return data;
+  let suffix;
+  if ("documentation_url" in data) {
+    suffix = ` - ${data.documentation_url}`;
+  } else {
+    suffix = "";
+  }
+  if ("message" in data) {
+    if (Array.isArray(data.errors)) {
+      return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}${suffix}`;
+    }
+    return `${data.message}${suffix}`;
+  }
+  return `Unknown error: ${JSON.stringify(data)}`;
+}
+
+// pkg/dist-src/with-defaults.js
+function dist_bundle_withDefaults(oldEndpoint, newDefaults) {
+  const endpoint2 = oldEndpoint.defaults(newDefaults);
+  const newApi = function(route, parameters) {
+    const endpointOptions = endpoint2.merge(route, parameters);
+    if (!endpointOptions.request || !endpointOptions.request.hook) {
+      return fetchWrapper(endpoint2.parse(endpointOptions));
+    }
+    const request2 = (route2, parameters2) => {
+      return fetchWrapper(
+        endpoint2.parse(endpoint2.merge(route2, parameters2))
+      );
+    };
+    Object.assign(request2, {
+      endpoint: endpoint2,
+      defaults: dist_bundle_withDefaults.bind(null, endpoint2)
+    });
+    return endpointOptions.request.hook(request2, endpointOptions);
+  };
+  return Object.assign(newApi, {
+    endpoint: endpoint2,
+    defaults: dist_bundle_withDefaults.bind(null, endpoint2)
+  });
+}
+
+// pkg/dist-src/index.js
+var request = dist_bundle_withDefaults(endpoint, {
+  headers: {
+    "user-agent": `octokit-request.js/${dist_bundle_VERSION} ${getUserAgent()}`
+  }
+});
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+graphql@8.1.1/node_modules/@octokit/graphql/dist-bundle/index.js
+// pkg/dist-src/index.js
+
+
+
+// pkg/dist-src/version.js
+var graphql_dist_bundle_VERSION = "0.0.0-development";
+
+// pkg/dist-src/with-defaults.js
+
+
+// pkg/dist-src/graphql.js
+
+
+// pkg/dist-src/error.js
+function _buildMessageForResponseErrors(data) {
+  return `Request failed due to following response errors:
+` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+}
+var GraphqlResponseError = class extends Error {
+  constructor(request2, headers, response) {
+    super(_buildMessageForResponseErrors(response));
+    this.request = request2;
+    this.headers = headers;
+    this.response = response;
+    this.errors = response.errors;
+    this.data = response.data;
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+  name = "GraphqlResponseError";
+  errors;
+  data;
+};
+
+// pkg/dist-src/graphql.js
+var NON_VARIABLE_OPTIONS = [
+  "method",
+  "baseUrl",
+  "url",
+  "headers",
+  "request",
+  "query",
+  "mediaType"
+];
+var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
+var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+function graphql(request2, query, options) {
+  if (options) {
+    if (typeof query === "string" && "query" in options) {
+      return Promise.reject(
+        new Error(`[@octokit/graphql] "query" cannot be used as variable name`)
+      );
+    }
+    for (const key in options) {
+      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key))
+        continue;
+      return Promise.reject(
+        new Error(
+          `[@octokit/graphql] "${key}" cannot be used as variable name`
+        )
+      );
+    }
+  }
+  const parsedOptions = typeof query === "string" ? Object.assign({ query }, options) : query;
+  const requestOptions = Object.keys(
+    parsedOptions
+  ).reduce((result, key) => {
+    if (NON_VARIABLE_OPTIONS.includes(key)) {
+      result[key] = parsedOptions[key];
+      return result;
+    }
+    if (!result.variables) {
+      result.variables = {};
+    }
+    result.variables[key] = parsedOptions[key];
+    return result;
+  }, {});
+  const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
+  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+  }
+  return request2(requestOptions).then((response) => {
+    if (response.data.errors) {
+      const headers = {};
+      for (const key of Object.keys(response.headers)) {
+        headers[key] = response.headers[key];
+      }
+      throw new GraphqlResponseError(
+        requestOptions,
+        headers,
+        response.data
+      );
+    }
+    return response.data.data;
+  });
+}
+
+// pkg/dist-src/with-defaults.js
+function graphql_dist_bundle_withDefaults(request2, newDefaults) {
+  const newRequest = request2.defaults(newDefaults);
+  const newApi = (query, options) => {
+    return graphql(newRequest, query, options);
+  };
+  return Object.assign(newApi, {
+    defaults: graphql_dist_bundle_withDefaults.bind(null, newRequest),
+    endpoint: newRequest.endpoint
+  });
+}
+
+// pkg/dist-src/index.js
+var graphql2 = graphql_dist_bundle_withDefaults(request, {
+  headers: {
+    "user-agent": `octokit-graphql.js/${graphql_dist_bundle_VERSION} ${getUserAgent()}`
+  },
+  method: "POST",
+  url: "/graphql"
+});
+function withCustomRequest(customRequest) {
+  return graphql_dist_bundle_withDefaults(customRequest, {
+    method: "POST",
+    url: "/graphql"
+  });
+}
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+auth-token@5.1.1/node_modules/@octokit/auth-token/dist-bundle/index.js
+// pkg/dist-src/auth.js
+var REGEX_IS_INSTALLATION_LEGACY = /^v1\./;
+var REGEX_IS_INSTALLATION = /^ghs_/;
+var REGEX_IS_USER_TO_SERVER = /^ghu_/;
+async function auth(token) {
+  const isApp = token.split(/\./).length === 3;
+  const isInstallation = REGEX_IS_INSTALLATION_LEGACY.test(token) || REGEX_IS_INSTALLATION.test(token);
+  const isUserToServer = REGEX_IS_USER_TO_SERVER.test(token);
+  const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
+  return {
+    type: "token",
+    token,
+    tokenType
+  };
+}
+
+// pkg/dist-src/with-authorization-prefix.js
+function withAuthorizationPrefix(token) {
+  if (token.split(/\./).length === 3) {
+    return `bearer ${token}`;
+  }
+  return `token ${token}`;
+}
+
+// pkg/dist-src/hook.js
+async function hook(token, request, route, parameters) {
+  const endpoint = request.endpoint.merge(
+    route,
+    parameters
+  );
+  endpoint.headers.authorization = withAuthorizationPrefix(token);
+  return request(endpoint);
+}
+
+// pkg/dist-src/index.js
+var createTokenAuth = function createTokenAuth2(token) {
+  if (!token) {
+    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
+  }
+  if (typeof token !== "string") {
+    throw new Error(
+      "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
+    );
+  }
+  token = token.replace(/^(token|bearer) +/i, "");
+  return Object.assign(auth.bind(null, token), {
+    hook: hook.bind(null, token)
+  });
+};
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@6.1.2/node_modules/@octokit/core/dist-src/version.js
+const version_VERSION = "6.1.2";
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@6.1.2/node_modules/@octokit/core/dist-src/index.js
+
+
+
+
+
+
+const noop = () => {
+};
+const consoleWarn = console.warn.bind(console);
+const consoleError = console.error.bind(console);
+const userAgentTrail = `octokit-core.js/${version_VERSION} ${getUserAgent()}`;
+class Octokit {
+  static VERSION = version_VERSION;
+  static defaults(defaults) {
+    const OctokitWithDefaults = class extends this {
+      constructor(...args) {
+        const options = args[0] || {};
+        if (typeof defaults === "function") {
+          super(defaults(options));
+          return;
+        }
+        super(
+          Object.assign(
+            {},
+            defaults,
+            options,
+            options.userAgent && defaults.userAgent ? {
+              userAgent: `${options.userAgent} ${defaults.userAgent}`
+            } : null
+          )
+        );
+      }
+    };
+    return OctokitWithDefaults;
+  }
+  static plugins = [];
+  /**
+   * Attach a plugin (or many) to your Octokit instance.
+   *
+   * @example
+   * const API = Octokit.plugin(plugin1, plugin2, plugin3, ...)
+   */
+  static plugin(...newPlugins) {
+    const currentPlugins = this.plugins;
+    const NewOctokit = class extends this {
+      static plugins = currentPlugins.concat(
+        newPlugins.filter((plugin) => !currentPlugins.includes(plugin))
+      );
+    };
+    return NewOctokit;
+  }
+  constructor(options = {}) {
+    const hook = new before_after_hook.Collection();
+    const requestDefaults = {
+      baseUrl: request.endpoint.DEFAULTS.baseUrl,
+      headers: {},
+      request: Object.assign({}, options.request, {
+        // @ts-ignore internal usage only, no need to type
+        hook: hook.bind(null, "request")
+      }),
+      mediaType: {
+        previews: [],
+        format: ""
+      }
+    };
+    requestDefaults.headers["user-agent"] = options.userAgent ? `${options.userAgent} ${userAgentTrail}` : userAgentTrail;
+    if (options.baseUrl) {
+      requestDefaults.baseUrl = options.baseUrl;
+    }
+    if (options.previews) {
+      requestDefaults.mediaType.previews = options.previews;
+    }
+    if (options.timeZone) {
+      requestDefaults.headers["time-zone"] = options.timeZone;
+    }
+    this.request = request.defaults(requestDefaults);
+    this.graphql = withCustomRequest(this.request).defaults(requestDefaults);
+    this.log = Object.assign(
+      {
+        debug: noop,
+        info: noop,
+        warn: consoleWarn,
+        error: consoleError
+      },
+      options.log
+    );
+    this.hook = hook;
+    if (!options.authStrategy) {
+      if (!options.auth) {
+        this.auth = async () => ({
+          type: "unauthenticated"
+        });
+      } else {
+        const auth = createTokenAuth(options.auth);
+        hook.wrap("request", auth.hook);
+        this.auth = auth;
+      }
+    } else {
+      const { authStrategy, ...otherOptions } = options;
+      const auth = authStrategy(
+        Object.assign(
+          {
+            request: this.request,
+            log: this.log,
+            // we pass the current octokit instance as well as its constructor options
+            // to allow for authentication strategies that return a new octokit instance
+            // that shares the same internal state as the current one. The original
+            // requirement for this was the "event-octokit" authentication strategy
+            // of https://github.com/probot/octokit-auth-probot.
+            octokit: this,
+            octokitOptions: otherOptions
+          },
+          options.auth
+        )
+      );
+      hook.wrap("request", auth.hook);
+      this.auth = auth;
+    }
+    const classConstructor = this.constructor;
+    for (let i = 0; i < classConstructor.plugins.length; ++i) {
+      Object.assign(this, classConstructor.plugins[i](this, options));
+    }
+  }
+  // assigned during constructor
+  request;
+  graphql;
+  log;
+  hook;
+  // TODO: type `octokit.auth` based on passed options.authStrategy
+  auth;
+}
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+auth-action@5.1.1/node_modules/@octokit/auth-action/dist-src/index.js
+
+const createActionAuth = function createActionAuth2() {
+  if (!process.env.GITHUB_ACTION) {
+    throw new Error(
+      "[@octokit/auth-action] `GITHUB_ACTION` environment variable is not set. @octokit/auth-action is meant to be used in GitHub Actions only."
+    );
+  }
+  const definitions = [
+    process.env.GITHUB_TOKEN,
+    process.env.INPUT_GITHUB_TOKEN,
+    process.env.INPUT_TOKEN
+  ].filter(Boolean);
+  if (definitions.length === 0) {
+    throw new Error(
+      "[@octokit/auth-action] `GITHUB_TOKEN` variable is not set. It must be set on either `env:` or `with:`. See https://github.com/octokit/auth-action.js#createactionauth"
+    );
+  }
+  if (definitions.length > 1) {
+    throw new Error(
+      "[@octokit/auth-action] The token variable is specified more than once. Use either `with.token`, `with.GITHUB_TOKEN`, or `env.GITHUB_TOKEN`. See https://github.com/octokit/auth-action.js#createactionauth"
+    );
+  }
+  const token = definitions.pop();
+  return createTokenAuth(token);
+};
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@11.3.0_@octokit+core@6.1.2/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
+// pkg/dist-src/version.js
+var plugin_paginate_rest_dist_bundle_VERSION = "0.0.0-development";
+
+// pkg/dist-src/normalize-paginated-list-response.js
+function normalizePaginatedListResponse(response) {
+  if (!response.data) {
+    return {
+      ...response,
+      data: []
+    };
+  }
+  const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
+  if (!responseNeedsNormalization)
+    return response;
+  const incompleteResults = response.data.incomplete_results;
+  const repositorySelection = response.data.repository_selection;
+  const totalCount = response.data.total_count;
+  delete response.data.incomplete_results;
+  delete response.data.repository_selection;
+  delete response.data.total_count;
+  const namespaceKey = Object.keys(response.data)[0];
+  const data = response.data[namespaceKey];
+  response.data = data;
+  if (typeof incompleteResults !== "undefined") {
+    response.data.incomplete_results = incompleteResults;
+  }
+  if (typeof repositorySelection !== "undefined") {
+    response.data.repository_selection = repositorySelection;
+  }
+  response.data.total_count = totalCount;
+  return response;
+}
+
+// pkg/dist-src/iterator.js
+function iterator(octokit, route, parameters) {
+  const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
+  const requestMethod = typeof route === "function" ? route : octokit.request;
+  const method = options.method;
+  const headers = options.headers;
+  let url = options.url;
+  return {
+    [Symbol.asyncIterator]: () => ({
+      async next() {
+        if (!url)
+          return { done: true };
+        try {
+          const response = await requestMethod({ method, url, headers });
+          const normalizedResponse = normalizePaginatedListResponse(response);
+          url = ((normalizedResponse.headers.link || "").match(
+            /<([^>]+)>;\s*rel="next"/
+          ) || [])[1];
+          return { value: normalizedResponse };
+        } catch (error) {
+          if (error.status !== 409)
+            throw error;
+          url = "";
+          return {
+            value: {
+              status: 200,
+              headers: {},
+              data: []
+            }
+          };
+        }
+      }
+    })
+  };
+}
+
+// pkg/dist-src/paginate.js
+function paginate(octokit, route, parameters, mapFn) {
+  if (typeof parameters === "function") {
+    mapFn = parameters;
+    parameters = void 0;
+  }
+  return gather(
+    octokit,
+    [],
+    iterator(octokit, route, parameters)[Symbol.asyncIterator](),
+    mapFn
+  );
+}
+function gather(octokit, results, iterator2, mapFn) {
+  return iterator2.next().then((result) => {
+    if (result.done) {
+      return results;
+    }
+    let earlyExit = false;
+    function done() {
+      earlyExit = true;
+    }
+    results = results.concat(
+      mapFn ? mapFn(result.value, done) : result.value.data
+    );
+    if (earlyExit) {
+      return results;
+    }
+    return gather(octokit, results, iterator2, mapFn);
+  });
+}
+
+// pkg/dist-src/compose-paginate.js
+var composePaginateRest = Object.assign(paginate, {
+  iterator
+});
+
+// pkg/dist-src/generated/paginating-endpoints.js
+var paginatingEndpoints = (/* unused pure expression or super */ null && ([
+  "GET /advisories",
+  "GET /app/hook/deliveries",
+  "GET /app/installation-requests",
+  "GET /app/installations",
+  "GET /assignments/{assignment_id}/accepted_assignments",
+  "GET /classrooms",
+  "GET /classrooms/{classroom_id}/assignments",
+  "GET /enterprises/{enterprise}/copilot/usage",
+  "GET /enterprises/{enterprise}/dependabot/alerts",
+  "GET /enterprises/{enterprise}/secret-scanning/alerts",
+  "GET /events",
+  "GET /gists",
+  "GET /gists/public",
+  "GET /gists/starred",
+  "GET /gists/{gist_id}/comments",
+  "GET /gists/{gist_id}/commits",
+  "GET /gists/{gist_id}/forks",
+  "GET /installation/repositories",
+  "GET /issues",
+  "GET /licenses",
+  "GET /marketplace_listing/plans",
+  "GET /marketplace_listing/plans/{plan_id}/accounts",
+  "GET /marketplace_listing/stubbed/plans",
+  "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts",
+  "GET /networks/{owner}/{repo}/events",
+  "GET /notifications",
+  "GET /organizations",
+  "GET /orgs/{org}/actions/cache/usage-by-repository",
+  "GET /orgs/{org}/actions/permissions/repositories",
+  "GET /orgs/{org}/actions/runners",
+  "GET /orgs/{org}/actions/secrets",
+  "GET /orgs/{org}/actions/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/actions/variables",
+  "GET /orgs/{org}/actions/variables/{name}/repositories",
+  "GET /orgs/{org}/blocks",
+  "GET /orgs/{org}/code-scanning/alerts",
+  "GET /orgs/{org}/codespaces",
+  "GET /orgs/{org}/codespaces/secrets",
+  "GET /orgs/{org}/codespaces/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/copilot/billing/seats",
+  "GET /orgs/{org}/copilot/usage",
+  "GET /orgs/{org}/dependabot/alerts",
+  "GET /orgs/{org}/dependabot/secrets",
+  "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/events",
+  "GET /orgs/{org}/failed_invitations",
+  "GET /orgs/{org}/hooks",
+  "GET /orgs/{org}/hooks/{hook_id}/deliveries",
+  "GET /orgs/{org}/installations",
+  "GET /orgs/{org}/invitations",
+  "GET /orgs/{org}/invitations/{invitation_id}/teams",
+  "GET /orgs/{org}/issues",
+  "GET /orgs/{org}/members",
+  "GET /orgs/{org}/members/{username}/codespaces",
+  "GET /orgs/{org}/migrations",
+  "GET /orgs/{org}/migrations/{migration_id}/repositories",
+  "GET /orgs/{org}/organization-roles/{role_id}/teams",
+  "GET /orgs/{org}/organization-roles/{role_id}/users",
+  "GET /orgs/{org}/outside_collaborators",
+  "GET /orgs/{org}/packages",
+  "GET /orgs/{org}/packages/{package_type}/{package_name}/versions",
+  "GET /orgs/{org}/personal-access-token-requests",
+  "GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories",
+  "GET /orgs/{org}/personal-access-tokens",
+  "GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories",
+  "GET /orgs/{org}/projects",
+  "GET /orgs/{org}/properties/values",
+  "GET /orgs/{org}/public_members",
+  "GET /orgs/{org}/repos",
+  "GET /orgs/{org}/rulesets",
+  "GET /orgs/{org}/rulesets/rule-suites",
+  "GET /orgs/{org}/secret-scanning/alerts",
+  "GET /orgs/{org}/security-advisories",
+  "GET /orgs/{org}/team/{team_slug}/copilot/usage",
+  "GET /orgs/{org}/teams",
+  "GET /orgs/{org}/teams/{team_slug}/discussions",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",
+  "GET /orgs/{org}/teams/{team_slug}/invitations",
+  "GET /orgs/{org}/teams/{team_slug}/members",
+  "GET /orgs/{org}/teams/{team_slug}/projects",
+  "GET /orgs/{org}/teams/{team_slug}/repos",
+  "GET /orgs/{org}/teams/{team_slug}/teams",
+  "GET /projects/columns/{column_id}/cards",
+  "GET /projects/{project_id}/collaborators",
+  "GET /projects/{project_id}/columns",
+  "GET /repos/{owner}/{repo}/actions/artifacts",
+  "GET /repos/{owner}/{repo}/actions/caches",
+  "GET /repos/{owner}/{repo}/actions/organization-secrets",
+  "GET /repos/{owner}/{repo}/actions/organization-variables",
+  "GET /repos/{owner}/{repo}/actions/runners",
+  "GET /repos/{owner}/{repo}/actions/runs",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+  "GET /repos/{owner}/{repo}/actions/secrets",
+  "GET /repos/{owner}/{repo}/actions/variables",
+  "GET /repos/{owner}/{repo}/actions/workflows",
+  "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+  "GET /repos/{owner}/{repo}/activity",
+  "GET /repos/{owner}/{repo}/assignees",
+  "GET /repos/{owner}/{repo}/branches",
+  "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+  "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+  "GET /repos/{owner}/{repo}/code-scanning/alerts",
+  "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+  "GET /repos/{owner}/{repo}/code-scanning/analyses",
+  "GET /repos/{owner}/{repo}/codespaces",
+  "GET /repos/{owner}/{repo}/codespaces/devcontainers",
+  "GET /repos/{owner}/{repo}/codespaces/secrets",
+  "GET /repos/{owner}/{repo}/collaborators",
+  "GET /repos/{owner}/{repo}/comments",
+  "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/commits",
+  "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments",
+  "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+  "GET /repos/{owner}/{repo}/commits/{ref}/check-runs",
+  "GET /repos/{owner}/{repo}/commits/{ref}/check-suites",
+  "GET /repos/{owner}/{repo}/commits/{ref}/status",
+  "GET /repos/{owner}/{repo}/commits/{ref}/statuses",
+  "GET /repos/{owner}/{repo}/contributors",
+  "GET /repos/{owner}/{repo}/dependabot/alerts",
+  "GET /repos/{owner}/{repo}/dependabot/secrets",
+  "GET /repos/{owner}/{repo}/deployments",
+  "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+  "GET /repos/{owner}/{repo}/environments",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/variables",
+  "GET /repos/{owner}/{repo}/events",
+  "GET /repos/{owner}/{repo}/forks",
+  "GET /repos/{owner}/{repo}/hooks",
+  "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+  "GET /repos/{owner}/{repo}/invitations",
+  "GET /repos/{owner}/{repo}/issues",
+  "GET /repos/{owner}/{repo}/issues/comments",
+  "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/issues/events",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/events",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline",
+  "GET /repos/{owner}/{repo}/keys",
+  "GET /repos/{owner}/{repo}/labels",
+  "GET /repos/{owner}/{repo}/milestones",
+  "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+  "GET /repos/{owner}/{repo}/notifications",
+  "GET /repos/{owner}/{repo}/pages/builds",
+  "GET /repos/{owner}/{repo}/projects",
+  "GET /repos/{owner}/{repo}/pulls",
+  "GET /repos/{owner}/{repo}/pulls/comments",
+  "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/files",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+  "GET /repos/{owner}/{repo}/releases",
+  "GET /repos/{owner}/{repo}/releases/{release_id}/assets",
+  "GET /repos/{owner}/{repo}/releases/{release_id}/reactions",
+  "GET /repos/{owner}/{repo}/rules/branches/{branch}",
+  "GET /repos/{owner}/{repo}/rulesets",
+  "GET /repos/{owner}/{repo}/rulesets/rule-suites",
+  "GET /repos/{owner}/{repo}/secret-scanning/alerts",
+  "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+  "GET /repos/{owner}/{repo}/security-advisories",
+  "GET /repos/{owner}/{repo}/stargazers",
+  "GET /repos/{owner}/{repo}/subscribers",
+  "GET /repos/{owner}/{repo}/tags",
+  "GET /repos/{owner}/{repo}/teams",
+  "GET /repos/{owner}/{repo}/topics",
+  "GET /repositories",
+  "GET /search/code",
+  "GET /search/commits",
+  "GET /search/issues",
+  "GET /search/labels",
+  "GET /search/repositories",
+  "GET /search/topics",
+  "GET /search/users",
+  "GET /teams/{team_id}/discussions",
+  "GET /teams/{team_id}/discussions/{discussion_number}/comments",
+  "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+  "GET /teams/{team_id}/discussions/{discussion_number}/reactions",
+  "GET /teams/{team_id}/invitations",
+  "GET /teams/{team_id}/members",
+  "GET /teams/{team_id}/projects",
+  "GET /teams/{team_id}/repos",
+  "GET /teams/{team_id}/teams",
+  "GET /user/blocks",
+  "GET /user/codespaces",
+  "GET /user/codespaces/secrets",
+  "GET /user/emails",
+  "GET /user/followers",
+  "GET /user/following",
+  "GET /user/gpg_keys",
+  "GET /user/installations",
+  "GET /user/installations/{installation_id}/repositories",
+  "GET /user/issues",
+  "GET /user/keys",
+  "GET /user/marketplace_purchases",
+  "GET /user/marketplace_purchases/stubbed",
+  "GET /user/memberships/orgs",
+  "GET /user/migrations",
+  "GET /user/migrations/{migration_id}/repositories",
+  "GET /user/orgs",
+  "GET /user/packages",
+  "GET /user/packages/{package_type}/{package_name}/versions",
+  "GET /user/public_emails",
+  "GET /user/repos",
+  "GET /user/repository_invitations",
+  "GET /user/social_accounts",
+  "GET /user/ssh_signing_keys",
+  "GET /user/starred",
+  "GET /user/subscriptions",
+  "GET /user/teams",
+  "GET /users",
+  "GET /users/{username}/events",
+  "GET /users/{username}/events/orgs/{org}",
+  "GET /users/{username}/events/public",
+  "GET /users/{username}/followers",
+  "GET /users/{username}/following",
+  "GET /users/{username}/gists",
+  "GET /users/{username}/gpg_keys",
+  "GET /users/{username}/keys",
+  "GET /users/{username}/orgs",
+  "GET /users/{username}/packages",
+  "GET /users/{username}/projects",
+  "GET /users/{username}/received_events",
+  "GET /users/{username}/received_events/public",
+  "GET /users/{username}/repos",
+  "GET /users/{username}/social_accounts",
+  "GET /users/{username}/ssh_signing_keys",
+  "GET /users/{username}/starred",
+  "GET /users/{username}/subscriptions"
+]));
+
+// pkg/dist-src/paginating-endpoints.js
+function isPaginatingEndpoint(arg) {
+  if (typeof arg === "string") {
+    return paginatingEndpoints.includes(arg);
+  } else {
+    return false;
+  }
+}
+
+// pkg/dist-src/index.js
+function paginateRest(octokit) {
+  return {
+    paginate: Object.assign(paginate.bind(null, octokit), {
+      iterator: iterator.bind(null, octokit)
+    })
+  };
+}
+paginateRest.VERSION = plugin_paginate_rest_dist_bundle_VERSION;
+
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@13.2.1_@octokit+core@6.1.2/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/version.js
+const dist_src_version_VERSION = "13.2.1";
+
+//# sourceMappingURL=version.js.map
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@13.2.1_@octokit+core@6.1.2/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/generated/endpoints.js
+const Endpoints = {
+  actions: {
+    addCustomLabelsToSelfHostedRunnerForOrg: [
+      "POST /orgs/{org}/actions/runners/{runner_id}/labels"
+    ],
+    addCustomLabelsToSelfHostedRunnerForRepo: [
+      "POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+    ],
+    addSelectedRepoToOrgSecret: [
+      "PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    addSelectedRepoToOrgVariable: [
+      "PUT /orgs/{org}/actions/variables/{name}/repositories/{repository_id}"
+    ],
+    approveWorkflowRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve"
+    ],
+    cancelWorkflowRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"
+    ],
+    createEnvironmentVariable: [
+      "POST /repos/{owner}/{repo}/environments/{environment_name}/variables"
+    ],
+    createOrUpdateEnvironmentSecret: [
+      "PUT /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+    ],
+    createOrUpdateOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}"],
+    createOrUpdateRepoSecret: [
+      "PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}"
+    ],
+    createOrgVariable: ["POST /orgs/{org}/actions/variables"],
+    createRegistrationTokenForOrg: [
+      "POST /orgs/{org}/actions/runners/registration-token"
+    ],
+    createRegistrationTokenForRepo: [
+      "POST /repos/{owner}/{repo}/actions/runners/registration-token"
+    ],
+    createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
+    createRemoveTokenForRepo: [
+      "POST /repos/{owner}/{repo}/actions/runners/remove-token"
+    ],
+    createRepoVariable: ["POST /repos/{owner}/{repo}/actions/variables"],
+    createWorkflowDispatch: [
+      "POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"
+    ],
+    deleteActionsCacheById: [
+      "DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}"
+    ],
+    deleteActionsCacheByKey: [
+      "DELETE /repos/{owner}/{repo}/actions/caches{?key,ref}"
+    ],
+    deleteArtifact: [
+      "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
+    ],
+    deleteEnvironmentSecret: [
+      "DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+    ],
+    deleteEnvironmentVariable: [
+      "DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+    ],
+    deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
+    deleteOrgVariable: ["DELETE /orgs/{org}/actions/variables/{name}"],
+    deleteRepoSecret: [
+      "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}"
+    ],
+    deleteRepoVariable: [
+      "DELETE /repos/{owner}/{repo}/actions/variables/{name}"
+    ],
+    deleteSelfHostedRunnerFromOrg: [
+      "DELETE /orgs/{org}/actions/runners/{runner_id}"
+    ],
+    deleteSelfHostedRunnerFromRepo: [
+      "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"
+    ],
+    deleteWorkflowRun: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],
+    deleteWorkflowRunLogs: [
+      "DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+    ],
+    disableSelectedRepositoryGithubActionsOrganization: [
+      "DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"
+    ],
+    disableWorkflow: [
+      "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+    ],
+    downloadArtifact: [
+      "GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"
+    ],
+    downloadJobLogsForWorkflowRun: [
+      "GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
+    ],
+    downloadWorkflowRunAttemptLogs: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs"
+    ],
+    downloadWorkflowRunLogs: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+    ],
+    enableSelectedRepositoryGithubActionsOrganization: [
+      "PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"
+    ],
+    enableWorkflow: [
+      "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+    ],
+    forceCancelWorkflowRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
+    ],
+    generateRunnerJitconfigForOrg: [
+      "POST /orgs/{org}/actions/runners/generate-jitconfig"
+    ],
+    generateRunnerJitconfigForRepo: [
+      "POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig"
+    ],
+    getActionsCacheList: ["GET /repos/{owner}/{repo}/actions/caches"],
+    getActionsCacheUsage: ["GET /repos/{owner}/{repo}/actions/cache/usage"],
+    getActionsCacheUsageByRepoForOrg: [
+      "GET /orgs/{org}/actions/cache/usage-by-repository"
+    ],
+    getActionsCacheUsageForOrg: ["GET /orgs/{org}/actions/cache/usage"],
+    getAllowedActionsOrganization: [
+      "GET /orgs/{org}/actions/permissions/selected-actions"
+    ],
+    getAllowedActionsRepository: [
+      "GET /repos/{owner}/{repo}/actions/permissions/selected-actions"
+    ],
+    getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
+    getCustomOidcSubClaimForRepo: [
+      "GET /repos/{owner}/{repo}/actions/oidc/customization/sub"
+    ],
+    getEnvironmentPublicKey: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
+    ],
+    getEnvironmentSecret: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+    ],
+    getEnvironmentVariable: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+    ],
+    getGithubActionsDefaultWorkflowPermissionsOrganization: [
+      "GET /orgs/{org}/actions/permissions/workflow"
+    ],
+    getGithubActionsDefaultWorkflowPermissionsRepository: [
+      "GET /repos/{owner}/{repo}/actions/permissions/workflow"
+    ],
+    getGithubActionsPermissionsOrganization: [
+      "GET /orgs/{org}/actions/permissions"
+    ],
+    getGithubActionsPermissionsRepository: [
+      "GET /repos/{owner}/{repo}/actions/permissions"
+    ],
+    getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
+    getOrgPublicKey: ["GET /orgs/{org}/actions/secrets/public-key"],
+    getOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}"],
+    getOrgVariable: ["GET /orgs/{org}/actions/variables/{name}"],
+    getPendingDeploymentsForRun: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+    ],
+    getRepoPermissions: [
+      "GET /repos/{owner}/{repo}/actions/permissions",
+      {},
+      { renamed: ["actions", "getGithubActionsPermissionsRepository"] }
+    ],
+    getRepoPublicKey: ["GET /repos/{owner}/{repo}/actions/secrets/public-key"],
+    getRepoSecret: ["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
+    getRepoVariable: ["GET /repos/{owner}/{repo}/actions/variables/{name}"],
+    getReviewsForRun: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
+    ],
+    getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
+    getSelfHostedRunnerForRepo: [
+      "GET /repos/{owner}/{repo}/actions/runners/{runner_id}"
+    ],
+    getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
+    getWorkflowAccessToRepository: [
+      "GET /repos/{owner}/{repo}/actions/permissions/access"
+    ],
+    getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
+    getWorkflowRunAttempt: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
+    ],
+    getWorkflowRunUsage: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"
+    ],
+    getWorkflowUsage: [
+      "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
+    ],
+    listArtifactsForRepo: ["GET /repos/{owner}/{repo}/actions/artifacts"],
+    listEnvironmentSecrets: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets"
+    ],
+    listEnvironmentVariables: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/variables"
+    ],
+    listJobsForWorkflowRun: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
+    ],
+    listJobsForWorkflowRunAttempt: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"
+    ],
+    listLabelsForSelfHostedRunnerForOrg: [
+      "GET /orgs/{org}/actions/runners/{runner_id}/labels"
+    ],
+    listLabelsForSelfHostedRunnerForRepo: [
+      "GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+    ],
+    listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
+    listOrgVariables: ["GET /orgs/{org}/actions/variables"],
+    listRepoOrganizationSecrets: [
+      "GET /repos/{owner}/{repo}/actions/organization-secrets"
+    ],
+    listRepoOrganizationVariables: [
+      "GET /repos/{owner}/{repo}/actions/organization-variables"
+    ],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
+    listRepoVariables: ["GET /repos/{owner}/{repo}/actions/variables"],
+    listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
+    listRunnerApplicationsForOrg: ["GET /orgs/{org}/actions/runners/downloads"],
+    listRunnerApplicationsForRepo: [
+      "GET /repos/{owner}/{repo}/actions/runners/downloads"
+    ],
+    listSelectedReposForOrgSecret: [
+      "GET /orgs/{org}/actions/secrets/{secret_name}/repositories"
+    ],
+    listSelectedReposForOrgVariable: [
+      "GET /orgs/{org}/actions/variables/{name}/repositories"
+    ],
+    listSelectedRepositoriesEnabledGithubActionsOrganization: [
+      "GET /orgs/{org}/actions/permissions/repositories"
+    ],
+    listSelfHostedRunnersForOrg: ["GET /orgs/{org}/actions/runners"],
+    listSelfHostedRunnersForRepo: ["GET /repos/{owner}/{repo}/actions/runners"],
+    listWorkflowRunArtifacts: [
+      "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"
+    ],
+    listWorkflowRuns: [
+      "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"
+    ],
+    listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
+    reRunJobForWorkflowRun: [
+      "POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"
+    ],
+    reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
+    reRunWorkflowFailedJobs: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"
+    ],
+    removeAllCustomLabelsFromSelfHostedRunnerForOrg: [
+      "DELETE /orgs/{org}/actions/runners/{runner_id}/labels"
+    ],
+    removeAllCustomLabelsFromSelfHostedRunnerForRepo: [
+      "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+    ],
+    removeCustomLabelFromSelfHostedRunnerForOrg: [
+      "DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name}"
+    ],
+    removeCustomLabelFromSelfHostedRunnerForRepo: [
+      "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"
+    ],
+    removeSelectedRepoFromOrgSecret: [
+      "DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    removeSelectedRepoFromOrgVariable: [
+      "DELETE /orgs/{org}/actions/variables/{name}/repositories/{repository_id}"
+    ],
+    reviewCustomGatesForRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule"
+    ],
+    reviewPendingDeploymentsForRun: [
+      "POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+    ],
+    setAllowedActionsOrganization: [
+      "PUT /orgs/{org}/actions/permissions/selected-actions"
+    ],
+    setAllowedActionsRepository: [
+      "PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"
+    ],
+    setCustomLabelsForSelfHostedRunnerForOrg: [
+      "PUT /orgs/{org}/actions/runners/{runner_id}/labels"
+    ],
+    setCustomLabelsForSelfHostedRunnerForRepo: [
+      "PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+    ],
+    setCustomOidcSubClaimForRepo: [
+      "PUT /repos/{owner}/{repo}/actions/oidc/customization/sub"
+    ],
+    setGithubActionsDefaultWorkflowPermissionsOrganization: [
+      "PUT /orgs/{org}/actions/permissions/workflow"
+    ],
+    setGithubActionsDefaultWorkflowPermissionsRepository: [
+      "PUT /repos/{owner}/{repo}/actions/permissions/workflow"
+    ],
+    setGithubActionsPermissionsOrganization: [
+      "PUT /orgs/{org}/actions/permissions"
+    ],
+    setGithubActionsPermissionsRepository: [
+      "PUT /repos/{owner}/{repo}/actions/permissions"
+    ],
+    setSelectedReposForOrgSecret: [
+      "PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"
+    ],
+    setSelectedReposForOrgVariable: [
+      "PUT /orgs/{org}/actions/variables/{name}/repositories"
+    ],
+    setSelectedRepositoriesEnabledGithubActionsOrganization: [
+      "PUT /orgs/{org}/actions/permissions/repositories"
+    ],
+    setWorkflowAccessToRepository: [
+      "PUT /repos/{owner}/{repo}/actions/permissions/access"
+    ],
+    updateEnvironmentVariable: [
+      "PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+    ],
+    updateOrgVariable: ["PATCH /orgs/{org}/actions/variables/{name}"],
+    updateRepoVariable: [
+      "PATCH /repos/{owner}/{repo}/actions/variables/{name}"
+    ]
+  },
+  activity: {
+    checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
+    deleteRepoSubscription: ["DELETE /repos/{owner}/{repo}/subscription"],
+    deleteThreadSubscription: [
+      "DELETE /notifications/threads/{thread_id}/subscription"
+    ],
+    getFeeds: ["GET /feeds"],
+    getRepoSubscription: ["GET /repos/{owner}/{repo}/subscription"],
+    getThread: ["GET /notifications/threads/{thread_id}"],
+    getThreadSubscriptionForAuthenticatedUser: [
+      "GET /notifications/threads/{thread_id}/subscription"
+    ],
+    listEventsForAuthenticatedUser: ["GET /users/{username}/events"],
+    listNotificationsForAuthenticatedUser: ["GET /notifications"],
+    listOrgEventsForAuthenticatedUser: [
+      "GET /users/{username}/events/orgs/{org}"
+    ],
+    listPublicEvents: ["GET /events"],
+    listPublicEventsForRepoNetwork: ["GET /networks/{owner}/{repo}/events"],
+    listPublicEventsForUser: ["GET /users/{username}/events/public"],
+    listPublicOrgEvents: ["GET /orgs/{org}/events"],
+    listReceivedEventsForUser: ["GET /users/{username}/received_events"],
+    listReceivedPublicEventsForUser: [
+      "GET /users/{username}/received_events/public"
+    ],
+    listRepoEvents: ["GET /repos/{owner}/{repo}/events"],
+    listRepoNotificationsForAuthenticatedUser: [
+      "GET /repos/{owner}/{repo}/notifications"
+    ],
+    listReposStarredByAuthenticatedUser: ["GET /user/starred"],
+    listReposStarredByUser: ["GET /users/{username}/starred"],
+    listReposWatchedByUser: ["GET /users/{username}/subscriptions"],
+    listStargazersForRepo: ["GET /repos/{owner}/{repo}/stargazers"],
+    listWatchedReposForAuthenticatedUser: ["GET /user/subscriptions"],
+    listWatchersForRepo: ["GET /repos/{owner}/{repo}/subscribers"],
+    markNotificationsAsRead: ["PUT /notifications"],
+    markRepoNotificationsAsRead: ["PUT /repos/{owner}/{repo}/notifications"],
+    markThreadAsDone: ["DELETE /notifications/threads/{thread_id}"],
+    markThreadAsRead: ["PATCH /notifications/threads/{thread_id}"],
+    setRepoSubscription: ["PUT /repos/{owner}/{repo}/subscription"],
+    setThreadSubscription: [
+      "PUT /notifications/threads/{thread_id}/subscription"
+    ],
+    starRepoForAuthenticatedUser: ["PUT /user/starred/{owner}/{repo}"],
+    unstarRepoForAuthenticatedUser: ["DELETE /user/starred/{owner}/{repo}"]
+  },
+  apps: {
+    addRepoToInstallation: [
+      "PUT /user/installations/{installation_id}/repositories/{repository_id}",
+      {},
+      { renamed: ["apps", "addRepoToInstallationForAuthenticatedUser"] }
+    ],
+    addRepoToInstallationForAuthenticatedUser: [
+      "PUT /user/installations/{installation_id}/repositories/{repository_id}"
+    ],
+    checkToken: ["POST /applications/{client_id}/token"],
+    createFromManifest: ["POST /app-manifests/{code}/conversions"],
+    createInstallationAccessToken: [
+      "POST /app/installations/{installation_id}/access_tokens"
+    ],
+    deleteAuthorization: ["DELETE /applications/{client_id}/grant"],
+    deleteInstallation: ["DELETE /app/installations/{installation_id}"],
+    deleteToken: ["DELETE /applications/{client_id}/token"],
+    getAuthenticated: ["GET /app"],
+    getBySlug: ["GET /apps/{app_slug}"],
+    getInstallation: ["GET /app/installations/{installation_id}"],
+    getOrgInstallation: ["GET /orgs/{org}/installation"],
+    getRepoInstallation: ["GET /repos/{owner}/{repo}/installation"],
+    getSubscriptionPlanForAccount: [
+      "GET /marketplace_listing/accounts/{account_id}"
+    ],
+    getSubscriptionPlanForAccountStubbed: [
+      "GET /marketplace_listing/stubbed/accounts/{account_id}"
+    ],
+    getUserInstallation: ["GET /users/{username}/installation"],
+    getWebhookConfigForApp: ["GET /app/hook/config"],
+    getWebhookDelivery: ["GET /app/hook/deliveries/{delivery_id}"],
+    listAccountsForPlan: ["GET /marketplace_listing/plans/{plan_id}/accounts"],
+    listAccountsForPlanStubbed: [
+      "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"
+    ],
+    listInstallationReposForAuthenticatedUser: [
+      "GET /user/installations/{installation_id}/repositories"
+    ],
+    listInstallationRequestsForAuthenticatedApp: [
+      "GET /app/installation-requests"
+    ],
+    listInstallations: ["GET /app/installations"],
+    listInstallationsForAuthenticatedUser: ["GET /user/installations"],
+    listPlans: ["GET /marketplace_listing/plans"],
+    listPlansStubbed: ["GET /marketplace_listing/stubbed/plans"],
+    listReposAccessibleToInstallation: ["GET /installation/repositories"],
+    listSubscriptionsForAuthenticatedUser: ["GET /user/marketplace_purchases"],
+    listSubscriptionsForAuthenticatedUserStubbed: [
+      "GET /user/marketplace_purchases/stubbed"
+    ],
+    listWebhookDeliveries: ["GET /app/hook/deliveries"],
+    redeliverWebhookDelivery: [
+      "POST /app/hook/deliveries/{delivery_id}/attempts"
+    ],
+    removeRepoFromInstallation: [
+      "DELETE /user/installations/{installation_id}/repositories/{repository_id}",
+      {},
+      { renamed: ["apps", "removeRepoFromInstallationForAuthenticatedUser"] }
+    ],
+    removeRepoFromInstallationForAuthenticatedUser: [
+      "DELETE /user/installations/{installation_id}/repositories/{repository_id}"
+    ],
+    resetToken: ["PATCH /applications/{client_id}/token"],
+    revokeInstallationAccessToken: ["DELETE /installation/token"],
+    scopeToken: ["POST /applications/{client_id}/token/scoped"],
+    suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
+    unsuspendInstallation: [
+      "DELETE /app/installations/{installation_id}/suspended"
+    ],
+    updateWebhookConfigForApp: ["PATCH /app/hook/config"]
+  },
+  billing: {
+    getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
+    getGithubActionsBillingUser: [
+      "GET /users/{username}/settings/billing/actions"
+    ],
+    getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
+    getGithubPackagesBillingUser: [
+      "GET /users/{username}/settings/billing/packages"
+    ],
+    getSharedStorageBillingOrg: [
+      "GET /orgs/{org}/settings/billing/shared-storage"
+    ],
+    getSharedStorageBillingUser: [
+      "GET /users/{username}/settings/billing/shared-storage"
+    ]
+  },
+  checks: {
+    create: ["POST /repos/{owner}/{repo}/check-runs"],
+    createSuite: ["POST /repos/{owner}/{repo}/check-suites"],
+    get: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}"],
+    getSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}"],
+    listAnnotations: [
+      "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
+    ],
+    listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs"],
+    listForSuite: [
+      "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
+    ],
+    listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites"],
+    rerequestRun: [
+      "POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest"
+    ],
+    rerequestSuite: [
+      "POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"
+    ],
+    setSuitesPreferences: [
+      "PATCH /repos/{owner}/{repo}/check-suites/preferences"
+    ],
+    update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}"]
+  },
+  codeScanning: {
+    deleteAnalysis: [
+      "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}{?confirm_delete}"
+    ],
+    getAlert: [
+      "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      {},
+      { renamedParameters: { alert_id: "alert_number" } }
+    ],
+    getAnalysis: [
+      "GET /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+    ],
+    getCodeqlDatabase: [
+      "GET /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+    ],
+    getDefaultSetup: ["GET /repos/{owner}/{repo}/code-scanning/default-setup"],
+    getSarif: ["GET /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"],
+    listAlertInstances: [
+      "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
+    ],
+    listAlertsForOrg: ["GET /orgs/{org}/code-scanning/alerts"],
+    listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
+    listAlertsInstances: [
+      "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+      {},
+      { renamed: ["codeScanning", "listAlertInstances"] }
+    ],
+    listCodeqlDatabases: [
+      "GET /repos/{owner}/{repo}/code-scanning/codeql/databases"
+    ],
+    listRecentAnalyses: ["GET /repos/{owner}/{repo}/code-scanning/analyses"],
+    updateAlert: [
+      "PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
+    ],
+    updateDefaultSetup: [
+      "PATCH /repos/{owner}/{repo}/code-scanning/default-setup"
+    ],
+    uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
+  },
+  codesOfConduct: {
+    getAllCodesOfConduct: ["GET /codes_of_conduct"],
+    getConductCode: ["GET /codes_of_conduct/{key}"]
+  },
+  codespaces: {
+    addRepositoryForSecretForAuthenticatedUser: [
+      "PUT /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    addSelectedRepoToOrgSecret: [
+      "PUT /orgs/{org}/codespaces/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    checkPermissionsForDevcontainer: [
+      "GET /repos/{owner}/{repo}/codespaces/permissions_check"
+    ],
+    codespaceMachinesForAuthenticatedUser: [
+      "GET /user/codespaces/{codespace_name}/machines"
+    ],
+    createForAuthenticatedUser: ["POST /user/codespaces"],
+    createOrUpdateOrgSecret: [
+      "PUT /orgs/{org}/codespaces/secrets/{secret_name}"
+    ],
+    createOrUpdateRepoSecret: [
+      "PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+    ],
+    createOrUpdateSecretForAuthenticatedUser: [
+      "PUT /user/codespaces/secrets/{secret_name}"
+    ],
+    createWithPrForAuthenticatedUser: [
+      "POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces"
+    ],
+    createWithRepoForAuthenticatedUser: [
+      "POST /repos/{owner}/{repo}/codespaces"
+    ],
+    deleteForAuthenticatedUser: ["DELETE /user/codespaces/{codespace_name}"],
+    deleteFromOrganization: [
+      "DELETE /orgs/{org}/members/{username}/codespaces/{codespace_name}"
+    ],
+    deleteOrgSecret: ["DELETE /orgs/{org}/codespaces/secrets/{secret_name}"],
+    deleteRepoSecret: [
+      "DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+    ],
+    deleteSecretForAuthenticatedUser: [
+      "DELETE /user/codespaces/secrets/{secret_name}"
+    ],
+    exportForAuthenticatedUser: [
+      "POST /user/codespaces/{codespace_name}/exports"
+    ],
+    getCodespacesForUserInOrg: [
+      "GET /orgs/{org}/members/{username}/codespaces"
+    ],
+    getExportDetailsForAuthenticatedUser: [
+      "GET /user/codespaces/{codespace_name}/exports/{export_id}"
+    ],
+    getForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}"],
+    getOrgPublicKey: ["GET /orgs/{org}/codespaces/secrets/public-key"],
+    getOrgSecret: ["GET /orgs/{org}/codespaces/secrets/{secret_name}"],
+    getPublicKeyForAuthenticatedUser: [
+      "GET /user/codespaces/secrets/public-key"
+    ],
+    getRepoPublicKey: [
+      "GET /repos/{owner}/{repo}/codespaces/secrets/public-key"
+    ],
+    getRepoSecret: [
+      "GET /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+    ],
+    getSecretForAuthenticatedUser: [
+      "GET /user/codespaces/secrets/{secret_name}"
+    ],
+    listDevcontainersInRepositoryForAuthenticatedUser: [
+      "GET /repos/{owner}/{repo}/codespaces/devcontainers"
+    ],
+    listForAuthenticatedUser: ["GET /user/codespaces"],
+    listInOrganization: [
+      "GET /orgs/{org}/codespaces",
+      {},
+      { renamedParameters: { org_id: "org" } }
+    ],
+    listInRepositoryForAuthenticatedUser: [
+      "GET /repos/{owner}/{repo}/codespaces"
+    ],
+    listOrgSecrets: ["GET /orgs/{org}/codespaces/secrets"],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/codespaces/secrets"],
+    listRepositoriesForSecretForAuthenticatedUser: [
+      "GET /user/codespaces/secrets/{secret_name}/repositories"
+    ],
+    listSecretsForAuthenticatedUser: ["GET /user/codespaces/secrets"],
+    listSelectedReposForOrgSecret: [
+      "GET /orgs/{org}/codespaces/secrets/{secret_name}/repositories"
+    ],
+    preFlightWithRepoForAuthenticatedUser: [
+      "GET /repos/{owner}/{repo}/codespaces/new"
+    ],
+    publishForAuthenticatedUser: [
+      "POST /user/codespaces/{codespace_name}/publish"
+    ],
+    removeRepositoryForSecretForAuthenticatedUser: [
+      "DELETE /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    removeSelectedRepoFromOrgSecret: [
+      "DELETE /orgs/{org}/codespaces/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    repoMachinesForAuthenticatedUser: [
+      "GET /repos/{owner}/{repo}/codespaces/machines"
+    ],
+    setRepositoriesForSecretForAuthenticatedUser: [
+      "PUT /user/codespaces/secrets/{secret_name}/repositories"
+    ],
+    setSelectedReposForOrgSecret: [
+      "PUT /orgs/{org}/codespaces/secrets/{secret_name}/repositories"
+    ],
+    startForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/start"],
+    stopForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/stop"],
+    stopInOrganization: [
+      "POST /orgs/{org}/members/{username}/codespaces/{codespace_name}/stop"
+    ],
+    updateForAuthenticatedUser: ["PATCH /user/codespaces/{codespace_name}"]
+  },
+  copilot: {
+    addCopilotSeatsForTeams: [
+      "POST /orgs/{org}/copilot/billing/selected_teams"
+    ],
+    addCopilotSeatsForUsers: [
+      "POST /orgs/{org}/copilot/billing/selected_users"
+    ],
+    cancelCopilotSeatAssignmentForTeams: [
+      "DELETE /orgs/{org}/copilot/billing/selected_teams"
+    ],
+    cancelCopilotSeatAssignmentForUsers: [
+      "DELETE /orgs/{org}/copilot/billing/selected_users"
+    ],
+    getCopilotOrganizationDetails: ["GET /orgs/{org}/copilot/billing"],
+    getCopilotSeatDetailsForUser: [
+      "GET /orgs/{org}/members/{username}/copilot"
+    ],
+    listCopilotSeats: ["GET /orgs/{org}/copilot/billing/seats"],
+    usageMetricsForEnterprise: ["GET /enterprises/{enterprise}/copilot/usage"],
+    usageMetricsForOrg: ["GET /orgs/{org}/copilot/usage"],
+    usageMetricsForTeam: ["GET /orgs/{org}/team/{team_slug}/copilot/usage"]
+  },
+  dependabot: {
+    addSelectedRepoToOrgSecret: [
+      "PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    createOrUpdateOrgSecret: [
+      "PUT /orgs/{org}/dependabot/secrets/{secret_name}"
+    ],
+    createOrUpdateRepoSecret: [
+      "PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+    ],
+    deleteOrgSecret: ["DELETE /orgs/{org}/dependabot/secrets/{secret_name}"],
+    deleteRepoSecret: [
+      "DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+    ],
+    getAlert: ["GET /repos/{owner}/{repo}/dependabot/alerts/{alert_number}"],
+    getOrgPublicKey: ["GET /orgs/{org}/dependabot/secrets/public-key"],
+    getOrgSecret: ["GET /orgs/{org}/dependabot/secrets/{secret_name}"],
+    getRepoPublicKey: [
+      "GET /repos/{owner}/{repo}/dependabot/secrets/public-key"
+    ],
+    getRepoSecret: [
+      "GET /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+    ],
+    listAlertsForEnterprise: [
+      "GET /enterprises/{enterprise}/dependabot/alerts"
+    ],
+    listAlertsForOrg: ["GET /orgs/{org}/dependabot/alerts"],
+    listAlertsForRepo: ["GET /repos/{owner}/{repo}/dependabot/alerts"],
+    listOrgSecrets: ["GET /orgs/{org}/dependabot/secrets"],
+    listRepoSecrets: ["GET /repos/{owner}/{repo}/dependabot/secrets"],
+    listSelectedReposForOrgSecret: [
+      "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories"
+    ],
+    removeSelectedRepoFromOrgSecret: [
+      "DELETE /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"
+    ],
+    setSelectedReposForOrgSecret: [
+      "PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories"
+    ],
+    updateAlert: [
+      "PATCH /repos/{owner}/{repo}/dependabot/alerts/{alert_number}"
+    ]
+  },
+  dependencyGraph: {
+    createRepositorySnapshot: [
+      "POST /repos/{owner}/{repo}/dependency-graph/snapshots"
+    ],
+    diffRange: [
+      "GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
+    ],
+    exportSbom: ["GET /repos/{owner}/{repo}/dependency-graph/sbom"]
+  },
+  emojis: { get: ["GET /emojis"] },
+  gists: {
+    checkIsStarred: ["GET /gists/{gist_id}/star"],
+    create: ["POST /gists"],
+    createComment: ["POST /gists/{gist_id}/comments"],
+    delete: ["DELETE /gists/{gist_id}"],
+    deleteComment: ["DELETE /gists/{gist_id}/comments/{comment_id}"],
+    fork: ["POST /gists/{gist_id}/forks"],
+    get: ["GET /gists/{gist_id}"],
+    getComment: ["GET /gists/{gist_id}/comments/{comment_id}"],
+    getRevision: ["GET /gists/{gist_id}/{sha}"],
+    list: ["GET /gists"],
+    listComments: ["GET /gists/{gist_id}/comments"],
+    listCommits: ["GET /gists/{gist_id}/commits"],
+    listForUser: ["GET /users/{username}/gists"],
+    listForks: ["GET /gists/{gist_id}/forks"],
+    listPublic: ["GET /gists/public"],
+    listStarred: ["GET /gists/starred"],
+    star: ["PUT /gists/{gist_id}/star"],
+    unstar: ["DELETE /gists/{gist_id}/star"],
+    update: ["PATCH /gists/{gist_id}"],
+    updateComment: ["PATCH /gists/{gist_id}/comments/{comment_id}"]
+  },
+  git: {
+    createBlob: ["POST /repos/{owner}/{repo}/git/blobs"],
+    createCommit: ["POST /repos/{owner}/{repo}/git/commits"],
+    createRef: ["POST /repos/{owner}/{repo}/git/refs"],
+    createTag: ["POST /repos/{owner}/{repo}/git/tags"],
+    createTree: ["POST /repos/{owner}/{repo}/git/trees"],
+    deleteRef: ["DELETE /repos/{owner}/{repo}/git/refs/{ref}"],
+    getBlob: ["GET /repos/{owner}/{repo}/git/blobs/{file_sha}"],
+    getCommit: ["GET /repos/{owner}/{repo}/git/commits/{commit_sha}"],
+    getRef: ["GET /repos/{owner}/{repo}/git/ref/{ref}"],
+    getTag: ["GET /repos/{owner}/{repo}/git/tags/{tag_sha}"],
+    getTree: ["GET /repos/{owner}/{repo}/git/trees/{tree_sha}"],
+    listMatchingRefs: ["GET /repos/{owner}/{repo}/git/matching-refs/{ref}"],
+    updateRef: ["PATCH /repos/{owner}/{repo}/git/refs/{ref}"]
+  },
+  gitignore: {
+    getAllTemplates: ["GET /gitignore/templates"],
+    getTemplate: ["GET /gitignore/templates/{name}"]
+  },
+  interactions: {
+    getRestrictionsForAuthenticatedUser: ["GET /user/interaction-limits"],
+    getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits"],
+    getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits"],
+    getRestrictionsForYourPublicRepos: [
+      "GET /user/interaction-limits",
+      {},
+      { renamed: ["interactions", "getRestrictionsForAuthenticatedUser"] }
+    ],
+    removeRestrictionsForAuthenticatedUser: ["DELETE /user/interaction-limits"],
+    removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits"],
+    removeRestrictionsForRepo: [
+      "DELETE /repos/{owner}/{repo}/interaction-limits"
+    ],
+    removeRestrictionsForYourPublicRepos: [
+      "DELETE /user/interaction-limits",
+      {},
+      { renamed: ["interactions", "removeRestrictionsForAuthenticatedUser"] }
+    ],
+    setRestrictionsForAuthenticatedUser: ["PUT /user/interaction-limits"],
+    setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits"],
+    setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits"],
+    setRestrictionsForYourPublicRepos: [
+      "PUT /user/interaction-limits",
+      {},
+      { renamed: ["interactions", "setRestrictionsForAuthenticatedUser"] }
+    ]
+  },
+  issues: {
+    addAssignees: [
+      "POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"
+    ],
+    addLabels: ["POST /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    checkUserCanBeAssigned: ["GET /repos/{owner}/{repo}/assignees/{assignee}"],
+    checkUserCanBeAssignedToIssue: [
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
+    ],
+    create: ["POST /repos/{owner}/{repo}/issues"],
+    createComment: [
+      "POST /repos/{owner}/{repo}/issues/{issue_number}/comments"
+    ],
+    createLabel: ["POST /repos/{owner}/{repo}/labels"],
+    createMilestone: ["POST /repos/{owner}/{repo}/milestones"],
+    deleteComment: [
+      "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}"
+    ],
+    deleteLabel: ["DELETE /repos/{owner}/{repo}/labels/{name}"],
+    deleteMilestone: [
+      "DELETE /repos/{owner}/{repo}/milestones/{milestone_number}"
+    ],
+    get: ["GET /repos/{owner}/{repo}/issues/{issue_number}"],
+    getComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+    getEvent: ["GET /repos/{owner}/{repo}/issues/events/{event_id}"],
+    getLabel: ["GET /repos/{owner}/{repo}/labels/{name}"],
+    getMilestone: ["GET /repos/{owner}/{repo}/milestones/{milestone_number}"],
+    list: ["GET /issues"],
+    listAssignees: ["GET /repos/{owner}/{repo}/assignees"],
+    listComments: ["GET /repos/{owner}/{repo}/issues/{issue_number}/comments"],
+    listCommentsForRepo: ["GET /repos/{owner}/{repo}/issues/comments"],
+    listEvents: ["GET /repos/{owner}/{repo}/issues/{issue_number}/events"],
+    listEventsForRepo: ["GET /repos/{owner}/{repo}/issues/events"],
+    listEventsForTimeline: [
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline"
+    ],
+    listForAuthenticatedUser: ["GET /user/issues"],
+    listForOrg: ["GET /orgs/{org}/issues"],
+    listForRepo: ["GET /repos/{owner}/{repo}/issues"],
+    listLabelsForMilestone: [
+      "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels"
+    ],
+    listLabelsForRepo: ["GET /repos/{owner}/{repo}/labels"],
+    listLabelsOnIssue: [
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/labels"
+    ],
+    listMilestones: ["GET /repos/{owner}/{repo}/milestones"],
+    lock: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/lock"],
+    removeAllLabels: [
+      "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels"
+    ],
+    removeAssignees: [
+      "DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees"
+    ],
+    removeLabel: [
+      "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"
+    ],
+    setLabels: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+    unlock: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/lock"],
+    update: ["PATCH /repos/{owner}/{repo}/issues/{issue_number}"],
+    updateComment: ["PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+    updateLabel: ["PATCH /repos/{owner}/{repo}/labels/{name}"],
+    updateMilestone: [
+      "PATCH /repos/{owner}/{repo}/milestones/{milestone_number}"
+    ]
+  },
+  licenses: {
+    get: ["GET /licenses/{license}"],
+    getAllCommonlyUsed: ["GET /licenses"],
+    getForRepo: ["GET /repos/{owner}/{repo}/license"]
+  },
+  markdown: {
+    render: ["POST /markdown"],
+    renderRaw: [
+      "POST /markdown/raw",
+      { headers: { "content-type": "text/plain; charset=utf-8" } }
+    ]
+  },
+  meta: {
+    get: ["GET /meta"],
+    getAllVersions: ["GET /versions"],
+    getOctocat: ["GET /octocat"],
+    getZen: ["GET /zen"],
+    root: ["GET /"]
+  },
+  migrations: {
+    deleteArchiveForAuthenticatedUser: [
+      "DELETE /user/migrations/{migration_id}/archive"
+    ],
+    deleteArchiveForOrg: [
+      "DELETE /orgs/{org}/migrations/{migration_id}/archive"
+    ],
+    downloadArchiveForOrg: [
+      "GET /orgs/{org}/migrations/{migration_id}/archive"
+    ],
+    getArchiveForAuthenticatedUser: [
+      "GET /user/migrations/{migration_id}/archive"
+    ],
+    getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}"],
+    getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}"],
+    listForAuthenticatedUser: ["GET /user/migrations"],
+    listForOrg: ["GET /orgs/{org}/migrations"],
+    listReposForAuthenticatedUser: [
+      "GET /user/migrations/{migration_id}/repositories"
+    ],
+    listReposForOrg: ["GET /orgs/{org}/migrations/{migration_id}/repositories"],
+    listReposForUser: [
+      "GET /user/migrations/{migration_id}/repositories",
+      {},
+      { renamed: ["migrations", "listReposForAuthenticatedUser"] }
+    ],
+    startForAuthenticatedUser: ["POST /user/migrations"],
+    startForOrg: ["POST /orgs/{org}/migrations"],
+    unlockRepoForAuthenticatedUser: [
+      "DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock"
+    ],
+    unlockRepoForOrg: [
+      "DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock"
+    ]
+  },
+  oidc: {
+    getOidcCustomSubTemplateForOrg: [
+      "GET /orgs/{org}/actions/oidc/customization/sub"
+    ],
+    updateOidcCustomSubTemplateForOrg: [
+      "PUT /orgs/{org}/actions/oidc/customization/sub"
+    ]
+  },
+  orgs: {
+    addSecurityManagerTeam: [
+      "PUT /orgs/{org}/security-managers/teams/{team_slug}"
+    ],
+    assignTeamToOrgRole: [
+      "PUT /orgs/{org}/organization-roles/teams/{team_slug}/{role_id}"
+    ],
+    assignUserToOrgRole: [
+      "PUT /orgs/{org}/organization-roles/users/{username}/{role_id}"
+    ],
+    blockUser: ["PUT /orgs/{org}/blocks/{username}"],
+    cancelInvitation: ["DELETE /orgs/{org}/invitations/{invitation_id}"],
+    checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
+    checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
+    checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
+    convertMemberToOutsideCollaborator: [
+      "PUT /orgs/{org}/outside_collaborators/{username}"
+    ],
+    createCustomOrganizationRole: ["POST /orgs/{org}/organization-roles"],
+    createInvitation: ["POST /orgs/{org}/invitations"],
+    createOrUpdateCustomProperties: ["PATCH /orgs/{org}/properties/schema"],
+    createOrUpdateCustomPropertiesValuesForRepos: [
+      "PATCH /orgs/{org}/properties/values"
+    ],
+    createOrUpdateCustomProperty: [
+      "PUT /orgs/{org}/properties/schema/{custom_property_name}"
+    ],
+    createWebhook: ["POST /orgs/{org}/hooks"],
+    delete: ["DELETE /orgs/{org}"],
+    deleteCustomOrganizationRole: [
+      "DELETE /orgs/{org}/organization-roles/{role_id}"
+    ],
+    deleteWebhook: ["DELETE /orgs/{org}/hooks/{hook_id}"],
+    enableOrDisableSecurityProductOnAllOrgRepos: [
+      "POST /orgs/{org}/{security_product}/{enablement}"
+    ],
+    get: ["GET /orgs/{org}"],
+    getAllCustomProperties: ["GET /orgs/{org}/properties/schema"],
+    getCustomProperty: [
+      "GET /orgs/{org}/properties/schema/{custom_property_name}"
+    ],
+    getMembershipForAuthenticatedUser: ["GET /user/memberships/orgs/{org}"],
+    getMembershipForUser: ["GET /orgs/{org}/memberships/{username}"],
+    getOrgRole: ["GET /orgs/{org}/organization-roles/{role_id}"],
+    getWebhook: ["GET /orgs/{org}/hooks/{hook_id}"],
+    getWebhookConfigForOrg: ["GET /orgs/{org}/hooks/{hook_id}/config"],
+    getWebhookDelivery: [
+      "GET /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}"
+    ],
+    list: ["GET /organizations"],
+    listAppInstallations: ["GET /orgs/{org}/installations"],
+    listBlockedUsers: ["GET /orgs/{org}/blocks"],
+    listCustomPropertiesValuesForRepos: ["GET /orgs/{org}/properties/values"],
+    listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
+    listForAuthenticatedUser: ["GET /user/orgs"],
+    listForUser: ["GET /users/{username}/orgs"],
+    listInvitationTeams: ["GET /orgs/{org}/invitations/{invitation_id}/teams"],
+    listMembers: ["GET /orgs/{org}/members"],
+    listMembershipsForAuthenticatedUser: ["GET /user/memberships/orgs"],
+    listOrgRoleTeams: ["GET /orgs/{org}/organization-roles/{role_id}/teams"],
+    listOrgRoleUsers: ["GET /orgs/{org}/organization-roles/{role_id}/users"],
+    listOrgRoles: ["GET /orgs/{org}/organization-roles"],
+    listOrganizationFineGrainedPermissions: [
+      "GET /orgs/{org}/organization-fine-grained-permissions"
+    ],
+    listOutsideCollaborators: ["GET /orgs/{org}/outside_collaborators"],
+    listPatGrantRepositories: [
+      "GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories"
+    ],
+    listPatGrantRequestRepositories: [
+      "GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories"
+    ],
+    listPatGrantRequests: ["GET /orgs/{org}/personal-access-token-requests"],
+    listPatGrants: ["GET /orgs/{org}/personal-access-tokens"],
+    listPendingInvitations: ["GET /orgs/{org}/invitations"],
+    listPublicMembers: ["GET /orgs/{org}/public_members"],
+    listSecurityManagerTeams: ["GET /orgs/{org}/security-managers"],
+    listWebhookDeliveries: ["GET /orgs/{org}/hooks/{hook_id}/deliveries"],
+    listWebhooks: ["GET /orgs/{org}/hooks"],
+    patchCustomOrganizationRole: [
+      "PATCH /orgs/{org}/organization-roles/{role_id}"
+    ],
+    pingWebhook: ["POST /orgs/{org}/hooks/{hook_id}/pings"],
+    redeliverWebhookDelivery: [
+      "POST /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+    ],
+    removeCustomProperty: [
+      "DELETE /orgs/{org}/properties/schema/{custom_property_name}"
+    ],
+    removeMember: ["DELETE /orgs/{org}/members/{username}"],
+    removeMembershipForUser: ["DELETE /orgs/{org}/memberships/{username}"],
+    removeOutsideCollaborator: [
+      "DELETE /orgs/{org}/outside_collaborators/{username}"
+    ],
+    removePublicMembershipForAuthenticatedUser: [
+      "DELETE /orgs/{org}/public_members/{username}"
+    ],
+    removeSecurityManagerTeam: [
+      "DELETE /orgs/{org}/security-managers/teams/{team_slug}"
+    ],
+    reviewPatGrantRequest: [
+      "POST /orgs/{org}/personal-access-token-requests/{pat_request_id}"
+    ],
+    reviewPatGrantRequestsInBulk: [
+      "POST /orgs/{org}/personal-access-token-requests"
+    ],
+    revokeAllOrgRolesTeam: [
+      "DELETE /orgs/{org}/organization-roles/teams/{team_slug}"
+    ],
+    revokeAllOrgRolesUser: [
+      "DELETE /orgs/{org}/organization-roles/users/{username}"
+    ],
+    revokeOrgRoleTeam: [
+      "DELETE /orgs/{org}/organization-roles/teams/{team_slug}/{role_id}"
+    ],
+    revokeOrgRoleUser: [
+      "DELETE /orgs/{org}/organization-roles/users/{username}/{role_id}"
+    ],
+    setMembershipForUser: ["PUT /orgs/{org}/memberships/{username}"],
+    setPublicMembershipForAuthenticatedUser: [
+      "PUT /orgs/{org}/public_members/{username}"
+    ],
+    unblockUser: ["DELETE /orgs/{org}/blocks/{username}"],
+    update: ["PATCH /orgs/{org}"],
+    updateMembershipForAuthenticatedUser: [
+      "PATCH /user/memberships/orgs/{org}"
+    ],
+    updatePatAccess: ["POST /orgs/{org}/personal-access-tokens/{pat_id}"],
+    updatePatAccesses: ["POST /orgs/{org}/personal-access-tokens"],
+    updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"],
+    updateWebhookConfigForOrg: ["PATCH /orgs/{org}/hooks/{hook_id}/config"]
+  },
+  packages: {
+    deletePackageForAuthenticatedUser: [
+      "DELETE /user/packages/{package_type}/{package_name}"
+    ],
+    deletePackageForOrg: [
+      "DELETE /orgs/{org}/packages/{package_type}/{package_name}"
+    ],
+    deletePackageForUser: [
+      "DELETE /users/{username}/packages/{package_type}/{package_name}"
+    ],
+    deletePackageVersionForAuthenticatedUser: [
+      "DELETE /user/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    deletePackageVersionForOrg: [
+      "DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    deletePackageVersionForUser: [
+      "DELETE /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    getAllPackageVersionsForAPackageOwnedByAnOrg: [
+      "GET /orgs/{org}/packages/{package_type}/{package_name}/versions",
+      {},
+      { renamed: ["packages", "getAllPackageVersionsForPackageOwnedByOrg"] }
+    ],
+    getAllPackageVersionsForAPackageOwnedByTheAuthenticatedUser: [
+      "GET /user/packages/{package_type}/{package_name}/versions",
+      {},
+      {
+        renamed: [
+          "packages",
+          "getAllPackageVersionsForPackageOwnedByAuthenticatedUser"
+        ]
+      }
+    ],
+    getAllPackageVersionsForPackageOwnedByAuthenticatedUser: [
+      "GET /user/packages/{package_type}/{package_name}/versions"
+    ],
+    getAllPackageVersionsForPackageOwnedByOrg: [
+      "GET /orgs/{org}/packages/{package_type}/{package_name}/versions"
+    ],
+    getAllPackageVersionsForPackageOwnedByUser: [
+      "GET /users/{username}/packages/{package_type}/{package_name}/versions"
+    ],
+    getPackageForAuthenticatedUser: [
+      "GET /user/packages/{package_type}/{package_name}"
+    ],
+    getPackageForOrganization: [
+      "GET /orgs/{org}/packages/{package_type}/{package_name}"
+    ],
+    getPackageForUser: [
+      "GET /users/{username}/packages/{package_type}/{package_name}"
+    ],
+    getPackageVersionForAuthenticatedUser: [
+      "GET /user/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    getPackageVersionForOrganization: [
+      "GET /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    getPackageVersionForUser: [
+      "GET /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}"
+    ],
+    listDockerMigrationConflictingPackagesForAuthenticatedUser: [
+      "GET /user/docker/conflicts"
+    ],
+    listDockerMigrationConflictingPackagesForOrganization: [
+      "GET /orgs/{org}/docker/conflicts"
+    ],
+    listDockerMigrationConflictingPackagesForUser: [
+      "GET /users/{username}/docker/conflicts"
+    ],
+    listPackagesForAuthenticatedUser: ["GET /user/packages"],
+    listPackagesForOrganization: ["GET /orgs/{org}/packages"],
+    listPackagesForUser: ["GET /users/{username}/packages"],
+    restorePackageForAuthenticatedUser: [
+      "POST /user/packages/{package_type}/{package_name}/restore{?token}"
+    ],
+    restorePackageForOrg: [
+      "POST /orgs/{org}/packages/{package_type}/{package_name}/restore{?token}"
+    ],
+    restorePackageForUser: [
+      "POST /users/{username}/packages/{package_type}/{package_name}/restore{?token}"
+    ],
+    restorePackageVersionForAuthenticatedUser: [
+      "POST /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"
+    ],
+    restorePackageVersionForOrg: [
+      "POST /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"
+    ],
+    restorePackageVersionForUser: [
+      "POST /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"
+    ]
+  },
+  projects: {
+    addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}"],
+    createCard: ["POST /projects/columns/{column_id}/cards"],
+    createColumn: ["POST /projects/{project_id}/columns"],
+    createForAuthenticatedUser: ["POST /user/projects"],
+    createForOrg: ["POST /orgs/{org}/projects"],
+    createForRepo: ["POST /repos/{owner}/{repo}/projects"],
+    delete: ["DELETE /projects/{project_id}"],
+    deleteCard: ["DELETE /projects/columns/cards/{card_id}"],
+    deleteColumn: ["DELETE /projects/columns/{column_id}"],
+    get: ["GET /projects/{project_id}"],
+    getCard: ["GET /projects/columns/cards/{card_id}"],
+    getColumn: ["GET /projects/columns/{column_id}"],
+    getPermissionForUser: [
+      "GET /projects/{project_id}/collaborators/{username}/permission"
+    ],
+    listCards: ["GET /projects/columns/{column_id}/cards"],
+    listCollaborators: ["GET /projects/{project_id}/collaborators"],
+    listColumns: ["GET /projects/{project_id}/columns"],
+    listForOrg: ["GET /orgs/{org}/projects"],
+    listForRepo: ["GET /repos/{owner}/{repo}/projects"],
+    listForUser: ["GET /users/{username}/projects"],
+    moveCard: ["POST /projects/columns/cards/{card_id}/moves"],
+    moveColumn: ["POST /projects/columns/{column_id}/moves"],
+    removeCollaborator: [
+      "DELETE /projects/{project_id}/collaborators/{username}"
+    ],
+    update: ["PATCH /projects/{project_id}"],
+    updateCard: ["PATCH /projects/columns/cards/{card_id}"],
+    updateColumn: ["PATCH /projects/columns/{column_id}"]
+  },
+  pulls: {
+    checkIfMerged: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
+    create: ["POST /repos/{owner}/{repo}/pulls"],
+    createReplyForReviewComment: [
+      "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
+    ],
+    createReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
+    createReviewComment: [
+      "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments"
+    ],
+    deletePendingReview: [
+      "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+    ],
+    deleteReviewComment: [
+      "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}"
+    ],
+    dismissReview: [
+      "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals"
+    ],
+    get: ["GET /repos/{owner}/{repo}/pulls/{pull_number}"],
+    getReview: [
+      "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+    ],
+    getReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}"],
+    list: ["GET /repos/{owner}/{repo}/pulls"],
+    listCommentsForReview: [
+      "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
+    ],
+    listCommits: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"],
+    listFiles: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/files"],
+    listRequestedReviewers: [
+      "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+    ],
+    listReviewComments: [
+      "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments"
+    ],
+    listReviewCommentsForRepo: ["GET /repos/{owner}/{repo}/pulls/comments"],
+    listReviews: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
+    merge: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
+    removeRequestedReviewers: [
+      "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+    ],
+    requestReviewers: [
+      "POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+    ],
+    submitReview: [
+      "POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"
+    ],
+    update: ["PATCH /repos/{owner}/{repo}/pulls/{pull_number}"],
+    updateBranch: [
+      "PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch"
+    ],
+    updateReview: [
+      "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+    ],
+    updateReviewComment: [
+      "PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"
+    ]
+  },
+  rateLimit: { get: ["GET /rate_limit"] },
+  reactions: {
+    createForCommitComment: [
+      "POST /repos/{owner}/{repo}/comments/{comment_id}/reactions"
+    ],
+    createForIssue: [
+      "POST /repos/{owner}/{repo}/issues/{issue_number}/reactions"
+    ],
+    createForIssueComment: [
+      "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+    ],
+    createForPullRequestReviewComment: [
+      "POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+    ],
+    createForRelease: [
+      "POST /repos/{owner}/{repo}/releases/{release_id}/reactions"
+    ],
+    createForTeamDiscussionCommentInOrg: [
+      "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"
+    ],
+    createForTeamDiscussionInOrg: [
+      "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"
+    ],
+    deleteForCommitComment: [
+      "DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}"
+    ],
+    deleteForIssue: [
+      "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"
+    ],
+    deleteForIssueComment: [
+      "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"
+    ],
+    deleteForPullRequestComment: [
+      "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"
+    ],
+    deleteForRelease: [
+      "DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"
+    ],
+    deleteForTeamDiscussion: [
+      "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}"
+    ],
+    deleteForTeamDiscussionComment: [
+      "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}"
+    ],
+    listForCommitComment: [
+      "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions"
+    ],
+    listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions"],
+    listForIssueComment: [
+      "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+    ],
+    listForPullRequestReviewComment: [
+      "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+    ],
+    listForRelease: [
+      "GET /repos/{owner}/{repo}/releases/{release_id}/reactions"
+    ],
+    listForTeamDiscussionCommentInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"
+    ],
+    listForTeamDiscussionInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"
+    ]
+  },
+  repos: {
+    acceptInvitation: [
+      "PATCH /user/repository_invitations/{invitation_id}",
+      {},
+      { renamed: ["repos", "acceptInvitationForAuthenticatedUser"] }
+    ],
+    acceptInvitationForAuthenticatedUser: [
+      "PATCH /user/repository_invitations/{invitation_id}"
+    ],
+    addAppAccessRestrictions: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      {},
+      { mapToData: "apps" }
+    ],
+    addCollaborator: ["PUT /repos/{owner}/{repo}/collaborators/{username}"],
+    addStatusCheckContexts: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      {},
+      { mapToData: "contexts" }
+    ],
+    addTeamAccessRestrictions: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      {},
+      { mapToData: "teams" }
+    ],
+    addUserAccessRestrictions: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      {},
+      { mapToData: "users" }
+    ],
+    cancelPagesDeployment: [
+      "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel"
+    ],
+    checkAutomatedSecurityFixes: [
+      "GET /repos/{owner}/{repo}/automated-security-fixes"
+    ],
+    checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
+    checkPrivateVulnerabilityReporting: [
+      "GET /repos/{owner}/{repo}/private-vulnerability-reporting"
+    ],
+    checkVulnerabilityAlerts: [
+      "GET /repos/{owner}/{repo}/vulnerability-alerts"
+    ],
+    codeownersErrors: ["GET /repos/{owner}/{repo}/codeowners/errors"],
+    compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
+    compareCommitsWithBasehead: [
+      "GET /repos/{owner}/{repo}/compare/{basehead}"
+    ],
+    createAutolink: ["POST /repos/{owner}/{repo}/autolinks"],
+    createCommitComment: [
+      "POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"
+    ],
+    createCommitSignatureProtection: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+    ],
+    createCommitStatus: ["POST /repos/{owner}/{repo}/statuses/{sha}"],
+    createDeployKey: ["POST /repos/{owner}/{repo}/keys"],
+    createDeployment: ["POST /repos/{owner}/{repo}/deployments"],
+    createDeploymentBranchPolicy: [
+      "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+    ],
+    createDeploymentProtectionRule: [
+      "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+    ],
+    createDeploymentStatus: [
+      "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+    ],
+    createDispatchEvent: ["POST /repos/{owner}/{repo}/dispatches"],
+    createForAuthenticatedUser: ["POST /user/repos"],
+    createFork: ["POST /repos/{owner}/{repo}/forks"],
+    createInOrg: ["POST /orgs/{org}/repos"],
+    createOrUpdateCustomPropertiesValues: [
+      "PATCH /repos/{owner}/{repo}/properties/values"
+    ],
+    createOrUpdateEnvironment: [
+      "PUT /repos/{owner}/{repo}/environments/{environment_name}"
+    ],
+    createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
+    createOrgRuleset: ["POST /orgs/{org}/rulesets"],
+    createPagesDeployment: ["POST /repos/{owner}/{repo}/pages/deployments"],
+    createPagesSite: ["POST /repos/{owner}/{repo}/pages"],
+    createRelease: ["POST /repos/{owner}/{repo}/releases"],
+    createRepoRuleset: ["POST /repos/{owner}/{repo}/rulesets"],
+    createTagProtection: ["POST /repos/{owner}/{repo}/tags/protection"],
+    createUsingTemplate: [
+      "POST /repos/{template_owner}/{template_repo}/generate"
+    ],
+    createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
+    declineInvitation: [
+      "DELETE /user/repository_invitations/{invitation_id}",
+      {},
+      { renamed: ["repos", "declineInvitationForAuthenticatedUser"] }
+    ],
+    declineInvitationForAuthenticatedUser: [
+      "DELETE /user/repository_invitations/{invitation_id}"
+    ],
+    delete: ["DELETE /repos/{owner}/{repo}"],
+    deleteAccessRestrictions: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+    ],
+    deleteAdminBranchProtection: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+    ],
+    deleteAnEnvironment: [
+      "DELETE /repos/{owner}/{repo}/environments/{environment_name}"
+    ],
+    deleteAutolink: ["DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}"],
+    deleteBranchProtection: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection"
+    ],
+    deleteCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}"],
+    deleteCommitSignatureProtection: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+    ],
+    deleteDeployKey: ["DELETE /repos/{owner}/{repo}/keys/{key_id}"],
+    deleteDeployment: [
+      "DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"
+    ],
+    deleteDeploymentBranchPolicy: [
+      "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+    ],
+    deleteFile: ["DELETE /repos/{owner}/{repo}/contents/{path}"],
+    deleteInvitation: [
+      "DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"
+    ],
+    deleteOrgRuleset: ["DELETE /orgs/{org}/rulesets/{ruleset_id}"],
+    deletePagesSite: ["DELETE /repos/{owner}/{repo}/pages"],
+    deletePullRequestReviewProtection: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+    ],
+    deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
+    deleteReleaseAsset: [
+      "DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"
+    ],
+    deleteRepoRuleset: ["DELETE /repos/{owner}/{repo}/rulesets/{ruleset_id}"],
+    deleteTagProtection: [
+      "DELETE /repos/{owner}/{repo}/tags/protection/{tag_protection_id}"
+    ],
+    deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
+    disableAutomatedSecurityFixes: [
+      "DELETE /repos/{owner}/{repo}/automated-security-fixes"
+    ],
+    disableDeploymentProtectionRule: [
+      "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+    ],
+    disablePrivateVulnerabilityReporting: [
+      "DELETE /repos/{owner}/{repo}/private-vulnerability-reporting"
+    ],
+    disableVulnerabilityAlerts: [
+      "DELETE /repos/{owner}/{repo}/vulnerability-alerts"
+    ],
+    downloadArchive: [
+      "GET /repos/{owner}/{repo}/zipball/{ref}",
+      {},
+      { renamed: ["repos", "downloadZipballArchive"] }
+    ],
+    downloadTarballArchive: ["GET /repos/{owner}/{repo}/tarball/{ref}"],
+    downloadZipballArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}"],
+    enableAutomatedSecurityFixes: [
+      "PUT /repos/{owner}/{repo}/automated-security-fixes"
+    ],
+    enablePrivateVulnerabilityReporting: [
+      "PUT /repos/{owner}/{repo}/private-vulnerability-reporting"
+    ],
+    enableVulnerabilityAlerts: [
+      "PUT /repos/{owner}/{repo}/vulnerability-alerts"
+    ],
+    generateReleaseNotes: [
+      "POST /repos/{owner}/{repo}/releases/generate-notes"
+    ],
+    get: ["GET /repos/{owner}/{repo}"],
+    getAccessRestrictions: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+    ],
+    getAdminBranchProtection: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+    ],
+    getAllDeploymentProtectionRules: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+    ],
+    getAllEnvironments: ["GET /repos/{owner}/{repo}/environments"],
+    getAllStatusCheckContexts: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+    ],
+    getAllTopics: ["GET /repos/{owner}/{repo}/topics"],
+    getAppsWithAccessToProtectedBranch: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+    ],
+    getAutolink: ["GET /repos/{owner}/{repo}/autolinks/{autolink_id}"],
+    getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
+    getBranchProtection: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection"
+    ],
+    getBranchRules: ["GET /repos/{owner}/{repo}/rules/branches/{branch}"],
+    getClones: ["GET /repos/{owner}/{repo}/traffic/clones"],
+    getCodeFrequencyStats: ["GET /repos/{owner}/{repo}/stats/code_frequency"],
+    getCollaboratorPermissionLevel: [
+      "GET /repos/{owner}/{repo}/collaborators/{username}/permission"
+    ],
+    getCombinedStatusForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/status"],
+    getCommit: ["GET /repos/{owner}/{repo}/commits/{ref}"],
+    getCommitActivityStats: ["GET /repos/{owner}/{repo}/stats/commit_activity"],
+    getCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}"],
+    getCommitSignatureProtection: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+    ],
+    getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile"],
+    getContent: ["GET /repos/{owner}/{repo}/contents/{path}"],
+    getContributorsStats: ["GET /repos/{owner}/{repo}/stats/contributors"],
+    getCustomDeploymentProtectionRule: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+    ],
+    getCustomPropertiesValues: ["GET /repos/{owner}/{repo}/properties/values"],
+    getDeployKey: ["GET /repos/{owner}/{repo}/keys/{key_id}"],
+    getDeployment: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}"],
+    getDeploymentBranchPolicy: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+    ],
+    getDeploymentStatus: [
+      "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"
+    ],
+    getEnvironment: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}"
+    ],
+    getLatestPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/latest"],
+    getLatestRelease: ["GET /repos/{owner}/{repo}/releases/latest"],
+    getOrgRuleSuite: ["GET /orgs/{org}/rulesets/rule-suites/{rule_suite_id}"],
+    getOrgRuleSuites: ["GET /orgs/{org}/rulesets/rule-suites"],
+    getOrgRuleset: ["GET /orgs/{org}/rulesets/{ruleset_id}"],
+    getOrgRulesets: ["GET /orgs/{org}/rulesets"],
+    getPages: ["GET /repos/{owner}/{repo}/pages"],
+    getPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/{build_id}"],
+    getPagesDeployment: [
+      "GET /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
+    ],
+    getPagesHealthCheck: ["GET /repos/{owner}/{repo}/pages/health"],
+    getParticipationStats: ["GET /repos/{owner}/{repo}/stats/participation"],
+    getPullRequestReviewProtection: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+    ],
+    getPunchCardStats: ["GET /repos/{owner}/{repo}/stats/punch_card"],
+    getReadme: ["GET /repos/{owner}/{repo}/readme"],
+    getReadmeInDirectory: ["GET /repos/{owner}/{repo}/readme/{dir}"],
+    getRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}"],
+    getReleaseAsset: ["GET /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+    getReleaseByTag: ["GET /repos/{owner}/{repo}/releases/tags/{tag}"],
+    getRepoRuleSuite: [
+      "GET /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
+    ],
+    getRepoRuleSuites: ["GET /repos/{owner}/{repo}/rulesets/rule-suites"],
+    getRepoRuleset: ["GET /repos/{owner}/{repo}/rulesets/{ruleset_id}"],
+    getRepoRulesets: ["GET /repos/{owner}/{repo}/rulesets"],
+    getStatusChecksProtection: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+    ],
+    getTeamsWithAccessToProtectedBranch: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+    ],
+    getTopPaths: ["GET /repos/{owner}/{repo}/traffic/popular/paths"],
+    getTopReferrers: ["GET /repos/{owner}/{repo}/traffic/popular/referrers"],
+    getUsersWithAccessToProtectedBranch: [
+      "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+    ],
+    getViews: ["GET /repos/{owner}/{repo}/traffic/views"],
+    getWebhook: ["GET /repos/{owner}/{repo}/hooks/{hook_id}"],
+    getWebhookConfigForRepo: [
+      "GET /repos/{owner}/{repo}/hooks/{hook_id}/config"
+    ],
+    getWebhookDelivery: [
+      "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
+    ],
+    listActivities: ["GET /repos/{owner}/{repo}/activity"],
+    listAutolinks: ["GET /repos/{owner}/{repo}/autolinks"],
+    listBranches: ["GET /repos/{owner}/{repo}/branches"],
+    listBranchesForHeadCommit: [
+      "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
+    ],
+    listCollaborators: ["GET /repos/{owner}/{repo}/collaborators"],
+    listCommentsForCommit: [
+      "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"
+    ],
+    listCommitCommentsForRepo: ["GET /repos/{owner}/{repo}/comments"],
+    listCommitStatusesForRef: [
+      "GET /repos/{owner}/{repo}/commits/{ref}/statuses"
+    ],
+    listCommits: ["GET /repos/{owner}/{repo}/commits"],
+    listContributors: ["GET /repos/{owner}/{repo}/contributors"],
+    listCustomDeploymentRuleIntegrations: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
+    ],
+    listDeployKeys: ["GET /repos/{owner}/{repo}/keys"],
+    listDeploymentBranchPolicies: [
+      "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+    ],
+    listDeploymentStatuses: [
+      "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+    ],
+    listDeployments: ["GET /repos/{owner}/{repo}/deployments"],
+    listForAuthenticatedUser: ["GET /user/repos"],
+    listForOrg: ["GET /orgs/{org}/repos"],
+    listForUser: ["GET /users/{username}/repos"],
+    listForks: ["GET /repos/{owner}/{repo}/forks"],
+    listInvitations: ["GET /repos/{owner}/{repo}/invitations"],
+    listInvitationsForAuthenticatedUser: ["GET /user/repository_invitations"],
+    listLanguages: ["GET /repos/{owner}/{repo}/languages"],
+    listPagesBuilds: ["GET /repos/{owner}/{repo}/pages/builds"],
+    listPublic: ["GET /repositories"],
+    listPullRequestsAssociatedWithCommit: [
+      "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls"
+    ],
+    listReleaseAssets: [
+      "GET /repos/{owner}/{repo}/releases/{release_id}/assets"
+    ],
+    listReleases: ["GET /repos/{owner}/{repo}/releases"],
+    listTagProtection: ["GET /repos/{owner}/{repo}/tags/protection"],
+    listTags: ["GET /repos/{owner}/{repo}/tags"],
+    listTeams: ["GET /repos/{owner}/{repo}/teams"],
+    listWebhookDeliveries: [
+      "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
+    ],
+    listWebhooks: ["GET /repos/{owner}/{repo}/hooks"],
+    merge: ["POST /repos/{owner}/{repo}/merges"],
+    mergeUpstream: ["POST /repos/{owner}/{repo}/merge-upstream"],
+    pingWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/pings"],
+    redeliverWebhookDelivery: [
+      "POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+    ],
+    removeAppAccessRestrictions: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      {},
+      { mapToData: "apps" }
+    ],
+    removeCollaborator: [
+      "DELETE /repos/{owner}/{repo}/collaborators/{username}"
+    ],
+    removeStatusCheckContexts: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      {},
+      { mapToData: "contexts" }
+    ],
+    removeStatusCheckProtection: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+    ],
+    removeTeamAccessRestrictions: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      {},
+      { mapToData: "teams" }
+    ],
+    removeUserAccessRestrictions: [
+      "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      {},
+      { mapToData: "users" }
+    ],
+    renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
+    replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics"],
+    requestPagesBuild: ["POST /repos/{owner}/{repo}/pages/builds"],
+    setAdminBranchProtection: [
+      "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+    ],
+    setAppAccessRestrictions: [
+      "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      {},
+      { mapToData: "apps" }
+    ],
+    setStatusCheckContexts: [
+      "PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      {},
+      { mapToData: "contexts" }
+    ],
+    setTeamAccessRestrictions: [
+      "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      {},
+      { mapToData: "teams" }
+    ],
+    setUserAccessRestrictions: [
+      "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      {},
+      { mapToData: "users" }
+    ],
+    testPushWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/tests"],
+    transfer: ["POST /repos/{owner}/{repo}/transfer"],
+    update: ["PATCH /repos/{owner}/{repo}"],
+    updateBranchProtection: [
+      "PUT /repos/{owner}/{repo}/branches/{branch}/protection"
+    ],
+    updateCommitComment: ["PATCH /repos/{owner}/{repo}/comments/{comment_id}"],
+    updateDeploymentBranchPolicy: [
+      "PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+    ],
+    updateInformationAboutPagesSite: ["PUT /repos/{owner}/{repo}/pages"],
+    updateInvitation: [
+      "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}"
+    ],
+    updateOrgRuleset: ["PUT /orgs/{org}/rulesets/{ruleset_id}"],
+    updatePullRequestReviewProtection: [
+      "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+    ],
+    updateRelease: ["PATCH /repos/{owner}/{repo}/releases/{release_id}"],
+    updateReleaseAsset: [
+      "PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"
+    ],
+    updateRepoRuleset: ["PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}"],
+    updateStatusCheckPotection: [
+      "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      {},
+      { renamed: ["repos", "updateStatusCheckProtection"] }
+    ],
+    updateStatusCheckProtection: [
+      "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+    ],
+    updateWebhook: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}"],
+    updateWebhookConfigForRepo: [
+      "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config"
+    ],
+    uploadReleaseAsset: [
+      "POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}",
+      { baseUrl: "https://uploads.github.com" }
+    ]
+  },
+  search: {
+    code: ["GET /search/code"],
+    commits: ["GET /search/commits"],
+    issuesAndPullRequests: ["GET /search/issues"],
+    labels: ["GET /search/labels"],
+    repos: ["GET /search/repositories"],
+    topics: ["GET /search/topics"],
+    users: ["GET /search/users"]
+  },
+  secretScanning: {
+    getAlert: [
+      "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
+    ],
+    listAlertsForEnterprise: [
+      "GET /enterprises/{enterprise}/secret-scanning/alerts"
+    ],
+    listAlertsForOrg: ["GET /orgs/{org}/secret-scanning/alerts"],
+    listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
+    listLocationsForAlert: [
+      "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
+    ],
+    updateAlert: [
+      "PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
+    ]
+  },
+  securityAdvisories: {
+    createFork: [
+      "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks"
+    ],
+    createPrivateVulnerabilityReport: [
+      "POST /repos/{owner}/{repo}/security-advisories/reports"
+    ],
+    createRepositoryAdvisory: [
+      "POST /repos/{owner}/{repo}/security-advisories"
+    ],
+    createRepositoryAdvisoryCveRequest: [
+      "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve"
+    ],
+    getGlobalAdvisory: ["GET /advisories/{ghsa_id}"],
+    getRepositoryAdvisory: [
+      "GET /repos/{owner}/{repo}/security-advisories/{ghsa_id}"
+    ],
+    listGlobalAdvisories: ["GET /advisories"],
+    listOrgRepositoryAdvisories: ["GET /orgs/{org}/security-advisories"],
+    listRepositoryAdvisories: ["GET /repos/{owner}/{repo}/security-advisories"],
+    updateRepositoryAdvisory: [
+      "PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}"
+    ]
+  },
+  teams: {
+    addOrUpdateMembershipForUserInOrg: [
+      "PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"
+    ],
+    addOrUpdateProjectPermissionsInOrg: [
+      "PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}"
+    ],
+    addOrUpdateRepoPermissionsInOrg: [
+      "PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+    ],
+    checkPermissionsForProjectInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/projects/{project_id}"
+    ],
+    checkPermissionsForRepoInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+    ],
+    create: ["POST /orgs/{org}/teams"],
+    createDiscussionCommentInOrg: [
+      "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"
+    ],
+    createDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions"],
+    deleteDiscussionCommentInOrg: [
+      "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+    ],
+    deleteDiscussionInOrg: [
+      "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+    ],
+    deleteInOrg: ["DELETE /orgs/{org}/teams/{team_slug}"],
+    getByName: ["GET /orgs/{org}/teams/{team_slug}"],
+    getDiscussionCommentInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+    ],
+    getDiscussionInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+    ],
+    getMembershipForUserInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/memberships/{username}"
+    ],
+    list: ["GET /orgs/{org}/teams"],
+    listChildInOrg: ["GET /orgs/{org}/teams/{team_slug}/teams"],
+    listDiscussionCommentsInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"
+    ],
+    listDiscussionsInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions"],
+    listForAuthenticatedUser: ["GET /user/teams"],
+    listMembersInOrg: ["GET /orgs/{org}/teams/{team_slug}/members"],
+    listPendingInvitationsInOrg: [
+      "GET /orgs/{org}/teams/{team_slug}/invitations"
+    ],
+    listProjectsInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects"],
+    listReposInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos"],
+    removeMembershipForUserInOrg: [
+      "DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"
+    ],
+    removeProjectInOrg: [
+      "DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"
+    ],
+    removeRepoInOrg: [
+      "DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+    ],
+    updateDiscussionCommentInOrg: [
+      "PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+    ],
+    updateDiscussionInOrg: [
+      "PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+    ],
+    updateInOrg: ["PATCH /orgs/{org}/teams/{team_slug}"]
+  },
+  users: {
+    addEmailForAuthenticated: [
+      "POST /user/emails",
+      {},
+      { renamed: ["users", "addEmailForAuthenticatedUser"] }
+    ],
+    addEmailForAuthenticatedUser: ["POST /user/emails"],
+    addSocialAccountForAuthenticatedUser: ["POST /user/social_accounts"],
+    block: ["PUT /user/blocks/{username}"],
+    checkBlocked: ["GET /user/blocks/{username}"],
+    checkFollowingForUser: ["GET /users/{username}/following/{target_user}"],
+    checkPersonIsFollowedByAuthenticated: ["GET /user/following/{username}"],
+    createGpgKeyForAuthenticated: [
+      "POST /user/gpg_keys",
+      {},
+      { renamed: ["users", "createGpgKeyForAuthenticatedUser"] }
+    ],
+    createGpgKeyForAuthenticatedUser: ["POST /user/gpg_keys"],
+    createPublicSshKeyForAuthenticated: [
+      "POST /user/keys",
+      {},
+      { renamed: ["users", "createPublicSshKeyForAuthenticatedUser"] }
+    ],
+    createPublicSshKeyForAuthenticatedUser: ["POST /user/keys"],
+    createSshSigningKeyForAuthenticatedUser: ["POST /user/ssh_signing_keys"],
+    deleteEmailForAuthenticated: [
+      "DELETE /user/emails",
+      {},
+      { renamed: ["users", "deleteEmailForAuthenticatedUser"] }
+    ],
+    deleteEmailForAuthenticatedUser: ["DELETE /user/emails"],
+    deleteGpgKeyForAuthenticated: [
+      "DELETE /user/gpg_keys/{gpg_key_id}",
+      {},
+      { renamed: ["users", "deleteGpgKeyForAuthenticatedUser"] }
+    ],
+    deleteGpgKeyForAuthenticatedUser: ["DELETE /user/gpg_keys/{gpg_key_id}"],
+    deletePublicSshKeyForAuthenticated: [
+      "DELETE /user/keys/{key_id}",
+      {},
+      { renamed: ["users", "deletePublicSshKeyForAuthenticatedUser"] }
+    ],
+    deletePublicSshKeyForAuthenticatedUser: ["DELETE /user/keys/{key_id}"],
+    deleteSocialAccountForAuthenticatedUser: ["DELETE /user/social_accounts"],
+    deleteSshSigningKeyForAuthenticatedUser: [
+      "DELETE /user/ssh_signing_keys/{ssh_signing_key_id}"
+    ],
+    follow: ["PUT /user/following/{username}"],
+    getAuthenticated: ["GET /user"],
+    getByUsername: ["GET /users/{username}"],
+    getContextForUser: ["GET /users/{username}/hovercard"],
+    getGpgKeyForAuthenticated: [
+      "GET /user/gpg_keys/{gpg_key_id}",
+      {},
+      { renamed: ["users", "getGpgKeyForAuthenticatedUser"] }
+    ],
+    getGpgKeyForAuthenticatedUser: ["GET /user/gpg_keys/{gpg_key_id}"],
+    getPublicSshKeyForAuthenticated: [
+      "GET /user/keys/{key_id}",
+      {},
+      { renamed: ["users", "getPublicSshKeyForAuthenticatedUser"] }
+    ],
+    getPublicSshKeyForAuthenticatedUser: ["GET /user/keys/{key_id}"],
+    getSshSigningKeyForAuthenticatedUser: [
+      "GET /user/ssh_signing_keys/{ssh_signing_key_id}"
+    ],
+    list: ["GET /users"],
+    listBlockedByAuthenticated: [
+      "GET /user/blocks",
+      {},
+      { renamed: ["users", "listBlockedByAuthenticatedUser"] }
+    ],
+    listBlockedByAuthenticatedUser: ["GET /user/blocks"],
+    listEmailsForAuthenticated: [
+      "GET /user/emails",
+      {},
+      { renamed: ["users", "listEmailsForAuthenticatedUser"] }
+    ],
+    listEmailsForAuthenticatedUser: ["GET /user/emails"],
+    listFollowedByAuthenticated: [
+      "GET /user/following",
+      {},
+      { renamed: ["users", "listFollowedByAuthenticatedUser"] }
+    ],
+    listFollowedByAuthenticatedUser: ["GET /user/following"],
+    listFollowersForAuthenticatedUser: ["GET /user/followers"],
+    listFollowersForUser: ["GET /users/{username}/followers"],
+    listFollowingForUser: ["GET /users/{username}/following"],
+    listGpgKeysForAuthenticated: [
+      "GET /user/gpg_keys",
+      {},
+      { renamed: ["users", "listGpgKeysForAuthenticatedUser"] }
+    ],
+    listGpgKeysForAuthenticatedUser: ["GET /user/gpg_keys"],
+    listGpgKeysForUser: ["GET /users/{username}/gpg_keys"],
+    listPublicEmailsForAuthenticated: [
+      "GET /user/public_emails",
+      {},
+      { renamed: ["users", "listPublicEmailsForAuthenticatedUser"] }
+    ],
+    listPublicEmailsForAuthenticatedUser: ["GET /user/public_emails"],
+    listPublicKeysForUser: ["GET /users/{username}/keys"],
+    listPublicSshKeysForAuthenticated: [
+      "GET /user/keys",
+      {},
+      { renamed: ["users", "listPublicSshKeysForAuthenticatedUser"] }
+    ],
+    listPublicSshKeysForAuthenticatedUser: ["GET /user/keys"],
+    listSocialAccountsForAuthenticatedUser: ["GET /user/social_accounts"],
+    listSocialAccountsForUser: ["GET /users/{username}/social_accounts"],
+    listSshSigningKeysForAuthenticatedUser: ["GET /user/ssh_signing_keys"],
+    listSshSigningKeysForUser: ["GET /users/{username}/ssh_signing_keys"],
+    setPrimaryEmailVisibilityForAuthenticated: [
+      "PATCH /user/email/visibility",
+      {},
+      { renamed: ["users", "setPrimaryEmailVisibilityForAuthenticatedUser"] }
+    ],
+    setPrimaryEmailVisibilityForAuthenticatedUser: [
+      "PATCH /user/email/visibility"
+    ],
+    unblock: ["DELETE /user/blocks/{username}"],
+    unfollow: ["DELETE /user/following/{username}"],
+    updateAuthenticated: ["PATCH /user"]
+  }
+};
+var endpoints_default = Endpoints;
+
+//# sourceMappingURL=endpoints.js.map
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@13.2.1_@octokit+core@6.1.2/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/endpoints-to-methods.js
+
+const endpointMethodsMap = /* @__PURE__ */ new Map();
+for (const [scope, endpoints] of Object.entries(endpoints_default)) {
+  for (const [methodName, endpoint] of Object.entries(endpoints)) {
+    const [route, defaults, decorations] = endpoint;
+    const [method, url] = route.split(/ /);
+    const endpointDefaults = Object.assign(
+      {
+        method,
+        url
+      },
+      defaults
+    );
+    if (!endpointMethodsMap.has(scope)) {
+      endpointMethodsMap.set(scope, /* @__PURE__ */ new Map());
+    }
+    endpointMethodsMap.get(scope).set(methodName, {
+      scope,
+      methodName,
+      endpointDefaults,
+      decorations
+    });
+  }
+}
+const handler = {
+  has({ scope }, methodName) {
+    return endpointMethodsMap.get(scope).has(methodName);
+  },
+  getOwnPropertyDescriptor(target, methodName) {
+    return {
+      value: this.get(target, methodName),
+      // ensures method is in the cache
+      configurable: true,
+      writable: true,
+      enumerable: true
+    };
+  },
+  defineProperty(target, methodName, descriptor) {
+    Object.defineProperty(target.cache, methodName, descriptor);
+    return true;
+  },
+  deleteProperty(target, methodName) {
+    delete target.cache[methodName];
+    return true;
+  },
+  ownKeys({ scope }) {
+    return [...endpointMethodsMap.get(scope).keys()];
+  },
+  set(target, methodName, value) {
+    return target.cache[methodName] = value;
+  },
+  get({ octokit, scope, cache }, methodName) {
+    if (cache[methodName]) {
+      return cache[methodName];
+    }
+    const method = endpointMethodsMap.get(scope).get(methodName);
+    if (!method) {
+      return void 0;
+    }
+    const { endpointDefaults, decorations } = method;
+    if (decorations) {
+      cache[methodName] = decorate(
+        octokit,
+        scope,
+        methodName,
+        endpointDefaults,
+        decorations
+      );
+    } else {
+      cache[methodName] = octokit.request.defaults(endpointDefaults);
+    }
+    return cache[methodName];
+  }
+};
+function endpointsToMethods(octokit) {
+  const newMethods = {};
+  for (const scope of endpointMethodsMap.keys()) {
+    newMethods[scope] = new Proxy({ octokit, scope, cache: {} }, handler);
+  }
+  return newMethods;
+}
+function decorate(octokit, scope, methodName, defaults, decorations) {
+  const requestWithDefaults = octokit.request.defaults(defaults);
+  function withDecorations(...args) {
+    let options = requestWithDefaults.endpoint.merge(...args);
+    if (decorations.mapToData) {
+      options = Object.assign({}, options, {
+        data: options[decorations.mapToData],
+        [decorations.mapToData]: void 0
+      });
+      return requestWithDefaults(options);
+    }
+    if (decorations.renamed) {
+      const [newScope, newMethodName] = decorations.renamed;
+      octokit.log.warn(
+        `octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`
+      );
+    }
+    if (decorations.deprecated) {
+      octokit.log.warn(decorations.deprecated);
+    }
+    if (decorations.renamedParameters) {
+      const options2 = requestWithDefaults.endpoint.merge(...args);
+      for (const [name, alias] of Object.entries(
+        decorations.renamedParameters
+      )) {
+        if (name in options2) {
+          octokit.log.warn(
+            `"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`
+          );
+          if (!(alias in options2)) {
+            options2[alias] = options2[name];
+          }
+          delete options2[name];
+        }
+      }
+      return requestWithDefaults(options2);
+    }
+    return requestWithDefaults(...args);
+  }
+  return Object.assign(withDecorations, requestWithDefaults);
+}
+
+//# sourceMappingURL=endpoints-to-methods.js.map
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@13.2.1_@octokit+core@6.1.2/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/index.js
+
+
+function restEndpointMethods(octokit) {
+  const api = endpointsToMethods(octokit);
+  return {
+    rest: api
+  };
+}
+restEndpointMethods.VERSION = dist_src_version_VERSION;
+function legacyRestEndpointMethods(octokit) {
+  const api = endpointsToMethods(octokit);
+  return {
+    ...api,
+    rest: api
+  };
+}
+legacyRestEndpointMethods.VERSION = dist_src_version_VERSION;
+
+//# sourceMappingURL=index.js.map
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/undici@6.19.2/node_modules/undici/index.js
+var undici = __nccwpck_require__(8167);
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+action@7.0.0/node_modules/@octokit/action/dist-bundle/index.js
+// pkg/dist-src/index.js
+
+
+
+
+
+
+// pkg/dist-src/version.js
+var action_dist_bundle_VERSION = "0.0.0-development";
+
+// pkg/dist-src/index.js
+var dist_bundle_DEFAULTS = {
+  authStrategy: createActionAuth,
+  baseUrl: getApiBaseUrl(),
+  userAgent: `octokit-action.js/${action_dist_bundle_VERSION}`
+};
+function getProxyAgent() {
+  const httpProxy = process.env["HTTP_PROXY"] || process.env["http_proxy"];
+  if (httpProxy) {
+    return new undici.ProxyAgent(httpProxy);
+  }
+  const httpsProxy = process.env["HTTPS_PROXY"] || process.env["https_proxy"];
+  if (httpsProxy) {
+    return new undici.ProxyAgent(httpsProxy);
+  }
+  return void 0;
+}
+var customFetch = async function(url, opts) {
+  return await (0,undici.fetch)(url, {
+    dispatcher: getProxyAgent(),
+    ...opts
+  });
+};
+var dist_bundle_Octokit = Octokit.plugin(paginateRest, legacyRestEndpointMethods).defaults(
+  function buildDefaults(options) {
+    return {
+      ...dist_bundle_DEFAULTS,
+      ...options,
+      request: {
+        fetch: customFetch,
+        ...options.request
+      }
+    };
+  }
+);
+function getApiBaseUrl() {
+  return process.env["GITHUB_API_URL"] || "https://api.github.com";
+}
+
+
+
+/***/ }),
+
+/***/ 6354:
 /***/ ((module) => {
 
 "use strict";
@@ -65964,7 +69463,7 @@ module.exports = JSON.parse('{"$id":"https://raw.githubusercontent.com/ajv-valid
 
 /***/ }),
 
-/***/ 2468:
+/***/ 2026:
 /***/ ((module) => {
 
 "use strict";
@@ -66005,6 +69504,34 @@ module.exports = JSON.parse('{"$schema":"http://json-schema.org/draft-07/schema#
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
