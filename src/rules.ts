@@ -23,7 +23,7 @@ function parseRulePatternFromJson(json: string): RuleStringPatterns {
   let parsed: unknown
   try {
     parsed = JSON.parse(json)
-  } catch (e: unknown) {
+  } catch (_e: unknown) {
     throw new Error('Invalid JSON')
   }
   const validated = validateRules(parsed)
@@ -51,7 +51,7 @@ export function parseRules(json: string): MessageForRuleSet {
         rule: new RegExp(rule.rule),
         message: rule.message,
       })
-    } catch (e: unknown) {
+    } catch (_e: unknown) {
       throw new Error(`Invalid rule: ${rule.rule}`)
     }
   }
