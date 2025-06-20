@@ -12,8 +12,8 @@ export default defineConfig({
       '**/dist/**',
       '**/build/**',
       '**/coverage/**',
-      "**/.git/**",
-    ]
+      '**/.git/**',
+    ],
   },
   /**
    * clearScreen: true clears the screen when running tests. The default is true
