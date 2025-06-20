@@ -572,8 +572,8 @@ class OidcClient {
             const res = yield httpclient
                 .getJson(id_token_url)
                 .catch(error => {
-                throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error.statusCode}\n 
+                throw new Error(`Failed to get ID Token. \n
+        Error Code : ${error.statusCode}\n
         Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
@@ -63729,15 +63729,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateMessage = updateMessage;
 exports.getCommitIds = getCommitIds;
@@ -63754,28 +63745,37 @@ const github = __importStar(__nccwpck_require__(5380));
  * @param userLogin {string} the user login name
  * @param message {MessageContext} the message context
  */
-function updateMessage(octokit, prNum, userLogin, message) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const context = github.context;
-        const pastComment = yield getFirstComment(octokit, prNum, userLogin);
-        const { lucky, body } = message;
-        if (lucky) {
-            // if there is a comment from the current user and the message is different, update it
-            if (pastComment && pastComment.body !== body) {
-                yield octokit.issues.updateComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id, body }));
-            }
-            else {
-                // if there is no comment from the current user, create it
-                yield octokit.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: prNum, body }));
-            }
+async function updateMessage(octokit, prNum, userLogin, message) {
+    const context = github.context;
+    const pastComment = await getFirstComment(octokit, prNum, userLogin);
+    const { lucky, body } = message;
+    if (lucky) {
+        // if there is a comment from the current user and the message is different, update it
+        if (pastComment && pastComment.body !== body) {
+            await octokit.issues.updateComment({
+                ...context.repo,
+                comment_id: pastComment.id,
+                body,
+            });
         }
         else {
-            // if there is a comment from the current user, delete it
-            if (pastComment) {
-                yield octokit.issues.deleteComment(Object.assign(Object.assign({}, context.repo), { comment_id: pastComment.id }));
-            }
+            // if there is no comment from the current user, create it
+            await octokit.issues.createComment({
+                ...context.repo,
+                issue_number: prNum,
+                body,
+            });
         }
-    });
+    }
+    else {
+        // if there is a comment from the current user, delete it
+        if (pastComment) {
+            await octokit.issues.deleteComment({
+                ...context.repo,
+                comment_id: pastComment.id,
+            });
+        }
+    }
 }
 /**
  * Get the first comment of the current PR by the current user
@@ -63784,35 +63784,36 @@ function updateMessage(octokit, prNum, userLogin, message) {
  * @param userLogin {string} the user login name
  * @returns comment id {LastComment}
  */
-function getFirstComment(octokit, prNum, userLogin) {
-    return __awaiter(this, void 0, void 0, function* () {
-        var _a;
-        const context = github.context;
-        // get comments on the PR
-        const comments = yield octokit.issues.listComments(Object.assign(Object.assign({}, context.repo), { issue_number: prNum }));
-        // find the comment by the current user if it exists
-        for (const comment of comments.data) {
-            if (((_a = comment.user) === null || _a === void 0 ? void 0 : _a.login) === userLogin) {
-                return {
-                    id: comment.id,
-                    body: comment.body_text || '',
-                };
-            }
-        }
-        return null;
+async function getFirstComment(octokit, prNum, userLogin) {
+    const context = github.context;
+    // get comments on the PR
+    const comments = await octokit.issues.listComments({
+        ...context.repo,
+        issue_number: prNum,
     });
+    // find the comment by the current user if it exists
+    for (const comment of comments.data) {
+        if (comment.user?.login === userLogin) {
+            return {
+                id: comment.id,
+                body: comment.body_text || '',
+            };
+        }
+    }
+    return null;
 }
 /**
  * Get commit ids of the current PR
  * @param octokit {Octokit} the octokit instance
  * @returns commit ids {string[]}
  */
-function getCommitIds(octokit) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const context = github.context;
-        const commits = yield octokit.pulls.listCommits(Object.assign(Object.assign({}, context.repo), { pull_number: context.issue.number }));
-        return commits.data.map((commit) => commit.sha);
+async function getCommitIds(octokit) {
+    const context = github.context;
+    const commits = await octokit.pulls.listCommits({
+        ...context.repo,
+        pull_number: context.issue.number,
     });
+    return commits.data.map((commit) => commit.sha);
 }
 /**
  * Get login name of the current user
@@ -63820,16 +63821,14 @@ function getCommitIds(octokit) {
  * @param octokit {Octokit} the octokit instance
  * @returns user login {string}
  */
-function getUserLogin(octokit) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const resp = yield octokit.graphql(`
+async function getUserLogin(octokit) {
+    const resp = await octokit.graphql(`
 query {
   viewer {
     login
   }
 }`);
-        return resp.viewer.login;
-    });
+    return resp.viewer.login;
 }
 
 
@@ -63873,15 +63872,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(9999));
 const github = __importStar(__nccwpck_require__(5380));
@@ -63889,31 +63879,29 @@ const action_1 = __nccwpck_require__(6439);
 const github_1 = __nccwpck_require__(238);
 const message_builder_1 = __nccwpck_require__(3982);
 const rules_1 = __nccwpck_require__(6454);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const context = github.context;
-            const octokit = new action_1.Octokit();
-            const userLogin = yield (0, github_1.getUserLogin)(octokit);
-            const prNum = context.issue.number;
-            const commitIds = yield (0, github_1.getCommitIds)(octokit);
-            let additionalRules = [];
-            if (process.env.INPUT_ADDITIONAL_RULES) {
-                additionalRules = (0, rules_1.parseRules)(process.env.INPUT_ADDITIONAL_RULES);
-            }
-            const mb = new message_builder_1.CustomMessageBuilder('# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}', {}, additionalRules);
-            const message = mb.build({ commitIds, prNum });
-            yield (0, github_1.updateMessage)(octokit, prNum, userLogin, message);
+async function run() {
+    try {
+        const context = github.context;
+        const octokit = new action_1.Octokit();
+        const userLogin = await (0, github_1.getUserLogin)(octokit);
+        const prNum = context.issue.number;
+        const commitIds = await (0, github_1.getCommitIds)(octokit);
+        let additionalRules = [];
+        if (process.env.INPUT_ADDITIONAL_RULES) {
+            additionalRules = (0, rules_1.parseRules)(process.env.INPUT_ADDITIONAL_RULES);
         }
-        catch (error) {
-            if (error instanceof Error) {
-                core.setFailed(`Unexpected error: ${error.message}`);
-            }
-            else {
-                core.setFailed(`Unexpected error: ${error}`);
-            }
+        const mb = new message_builder_1.CustomMessageBuilder('# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}', {}, additionalRules);
+        const message = mb.build({ commitIds, prNum });
+        await (0, github_1.updateMessage)(octokit, prNum, userLogin, message);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(`Unexpected error: ${error.message}`);
         }
-    });
+        else {
+            core.setFailed(`Unexpected error: ${error}`);
+        }
+    }
 }
 if (require.main === require.cache[eval('__filename')]) {
     run().then();
@@ -63940,6 +63928,8 @@ const rules_1 = __nccwpck_require__(6454);
  * It has two kinds of rules, one is for pull request, the other is for commit.
  */
 class MessageBuilder {
+    rules;
+    baseTemplate;
     constructor(rules, baseTemplate) {
         this.rules = rules;
         this.baseTemplate = baseTemplate;
@@ -63993,6 +63983,7 @@ const defaultRules = {
  * CustomMessageBuilder is a class to build a message for a pull request with custom rules
  */
 class CustomMessageBuilder {
+    builder;
     constructor(message, overrides = {}, additionalRules = []) {
         const rules = [...additionalRules].concat(Object.entries(rules_1.Rules)
             .filter(([key]) => {
@@ -64035,7 +64026,7 @@ function parseRulePatternFromJson(json) {
     try {
         parsed = JSON.parse(json);
     }
-    catch (e) {
+    catch (_e) {
         throw new Error('Invalid JSON');
     }
     const validated = (0, validate_1.validateRules)(parsed);
@@ -64063,7 +64054,7 @@ function parseRules(json) {
                 message: rule.message,
             });
         }
-        catch (e) {
+        catch (_e) {
             throw new Error(`Invalid rule: ${rule.rule}`);
         }
     }
@@ -70954,7 +70945,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"http://json-schema.org/dra
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -70968,7 +70959,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"http://json-schema.org/dra
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -70977,11 +70968,11 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"http://json-schema.org/dra
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
@@ -70994,12 +70985,12 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"http://json-schema.org/dra
 /******/ 			}
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -71010,18 +71001,18 @@ module.exports = /*#__PURE__*/JSON.parse('{"$schema":"http://json-schema.org/dra
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
+/******/
 /************************************************************************/
-/******/ 	
+/******/
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
 /******/ 	var __webpack_exports__ = __nccwpck_require__(6677);
 /******/ 	module.exports = __webpack_exports__;
-/******/ 	
+/******/
 /******/ })()
 ;
