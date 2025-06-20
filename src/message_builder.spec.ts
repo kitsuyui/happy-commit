@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest'
+
 import { CustomMessageBuilder } from './message_builder'
 
 describe('MessageBuilder', () => {
