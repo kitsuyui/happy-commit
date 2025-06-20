@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "ncc build src/index.ts --license licenses.txt",
-    "test": "jest",
+    "test": "vitest run --coverage",
     "lint": "biome check ./src",
     "format": "biome check --write ./src",
     "generate-json-schema": "typescript-json-schema --strictNullChecks true --noExtraProps true src/rules.ts RuleStringPatterns > ./schema.json"
@@ -22,14 +22,12 @@
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
     "@swc/core": "^1.6.5",
-    "@swc/jest": "^0.2.36",
-    "@types/jest": "^29.5.12",
     "@types/mustache": "^4.2.5",
     "@types/node": "^22.0.0",
     "@vercel/ncc": "^0.38.1",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.5",
+    "@vitest/coverage-v8": "3.2.4",
     "typescript": "^5.5.2",
-    "typescript-json-schema": "^0.65.0"
+    "typescript-json-schema": "^0.65.0",
+    "vitest": "^3.2.4"
   }
 }

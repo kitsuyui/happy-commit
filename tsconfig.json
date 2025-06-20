@@ -112,6 +112,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "exclude": [
-    "src/**/*.spec.ts"
+    "src/**/*.spec.ts",
+    "vitest.config.ts"
   ]
 }
