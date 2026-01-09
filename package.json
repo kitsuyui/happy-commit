@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@actions/core": "^2.0.0",
-    "@actions/github": "^6.0.0",
+    "@actions/github": "^7.0.0",
     "@octokit/action": "^8.0.0",
     "ajv": "^8.16.0",
     "mustache": "^4.2.0"
