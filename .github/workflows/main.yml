@@ -14,7 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./
-        continue-on-error: true
+        # Enable the following line to ignore errors from the action
+        # continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           additional_rules: |
