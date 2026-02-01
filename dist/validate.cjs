@@ -1,0 +1,1 @@
+const e=require(`./validate-BcD2lTbX.cjs`);exports.validateRules=e.t;

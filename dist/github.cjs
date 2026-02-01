@@ -1,0 +1,1 @@
+const e=require(`./github-aGsDCXK6.cjs`);exports.getCommitIds=e.t,exports.getUserLogin=e.n,exports.updateMessage=e.r;
