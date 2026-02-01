@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   target: 'es2022',
-  format: ['cjs', 'esm'],
+  format: ['esm'],
   entry: ['./src/**/*.ts', '!./src/**/*.spec.ts'],
   platform: 'node',
   splitting: true,

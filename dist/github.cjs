@@ -1,1 +1,0 @@
-const e=require(`./github-DVJV4Ju6.cjs`);exports.getCommitIds=e.t,exports.getUserLogin=e.n,exports.updateMessage=e.r;

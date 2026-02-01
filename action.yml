@@ -17,4 +17,4 @@ runs:
   # https://json.schemastore.org/github-action.json
   # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
   using: 'node24'
-  main: 'dist/index.js'
+  main: 'dist/index.mjs'
