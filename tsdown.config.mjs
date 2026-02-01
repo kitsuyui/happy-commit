@@ -1,3 +1,4 @@
+import licenses from 'rollup-plugin-license'
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
@@ -11,6 +12,23 @@ export default defineConfig({
   minify: true,
   dts: true,
   skipNodeModulesBundle: true,
+  plugins: [
+    licenses({
+      thirdParty: {
+        output: {
+          file: 'dist/LICENSES.txt',
+          template(dependencies) {
+            return dependencies
+              .map(
+                (dependency) =>
+                  `${dependency.name}:${dependency.version} -- ${dependency.licenseText}`
+              )
+              .join('\n')
+          },
+        },
+      },
+    }),
+  ],
   noExternal: [
     '@actions/core',
     '@actions/github',
