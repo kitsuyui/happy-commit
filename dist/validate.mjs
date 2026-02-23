@@ -1,1 +1,2 @@
-import{n as e,t}from"./validate-Brg-ynLv.mjs";t();export{e as validateRules};
+import{r as e}from"./chunk-Bwx8J3ba.mjs";import{t}from"./ajv-QtvvyOqs.mjs";const n=new(e(t())).default().compile({$schema:`http://json-schema.org/draft-07/schema#`,items:{additionalProperties:!1,properties:{kind:{enum:[`commit`,`pr`],type:`string`},message:{type:`string`},rule:{type:`string`}},type:`object`},type:`array`});export{n as validateRules};
+//# sourceMappingURL=validate.mjs.map
