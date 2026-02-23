@@ -1,6 +1,4 @@
-import { URIComponent } from "fast-uri";
-
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/codegen/code.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/codegen/code.d.ts
 declare abstract class _CodeOrName {
   abstract readonly str: string;
   abstract readonly names: UsedNames;
@@ -28,7 +26,7 @@ type CodeItem = Name | string | number | boolean | null;
 type UsedNames = Record<string, number | undefined>;
 type Code = _Code | Name;
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/codegen/scope.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/codegen/scope.d.ts
 interface NameGroup {
   prefix: string;
   index: number;
@@ -100,7 +98,7 @@ declare class ValueScope extends Scope {
   private _reduceValues;
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/codegen/index.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/codegen/index.d.ts
 type SafeExpr = Code | number | boolean | null;
 type Block = Code | (() => void);
 interface CodeGenOptions {
@@ -161,7 +159,7 @@ declare class CodeGen {
   private set _currNode(value);
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/rules.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/rules.d.ts
 declare const _jsonTypes: readonly ["string", "number", "integer", "boolean", "null", "object", "array"];
 type JSONType$1 = (typeof _jsonTypes)[number];
 type ValidationTypes = { [K in JSONType$1]: boolean | RuleGroup | undefined };
@@ -181,13 +179,13 @@ interface Rule {
   definition: AddedKeywordDefinition;
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/util.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/util.d.ts
 declare enum Type {
   Num = 0,
   Str = 1
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/validate/subschema.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/validate/subschema.d.ts
 type SubschemaArgs = Partial<{
   keyword: string;
   schemaProp: string | number;
@@ -208,14 +206,14 @@ type SubschemaArgs = Partial<{
   allErrors: boolean;
 }>;
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/errors.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/errors.d.ts
 interface ErrorPaths {
   instancePath?: Code;
   schemaPath?: string;
   parentSchema?: boolean;
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/validate/index.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/validate/index.d.ts
 declare class KeywordCxt implements KeywordErrorCxt {
   readonly gen: CodeGen;
   readonly allErrors?: boolean;
@@ -251,7 +249,7 @@ declare class KeywordCxt implements KeywordErrorCxt {
   mergeValidEvaluated(schemaCxt: SchemaCxt, valid: Name): boolean | void;
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/types/json-schema.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/types/json-schema.d.ts
 type StrictNullChecksWrapper<Name extends string, Type> = undefined extends null ? `strictNullChecks must be true in tsconfig to use ${Name}` : Type;
 type UnionToIntersection<U> = (U extends any ? (_: U) => void : never) extends ((_: infer I) => void) ? I : never;
 type UncheckedPartialSchema<T> = Partial<UncheckedJSONSchemaType<T, true>>;
@@ -361,7 +359,7 @@ type Nullable<T> = undefined extends T ? {
   default?: T;
 };
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/types/jtd-schema.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/types/jtd-schema.d.ts
 /** numeric strings */
 type NumberType = "float32" | "float64" | "int8" | "uint8" | "int16" | "uint16" | "int32" | "uint32";
 /** string strings */
@@ -504,7 +502,7 @@ type JTDDataType<S> = S extends {
   definitions: Record<string, unknown>;
 } ? JTDDataDef<S, S["definitions"]> : JTDDataDef<S, Record<string, never>>;
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/runtime/validation_error.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/runtime/validation_error.d.ts
 declare class ValidationError extends Error {
   readonly errors: Partial<ErrorObject>[];
   readonly ajv: true;
@@ -512,14 +510,14 @@ declare class ValidationError extends Error {
   constructor(errors: Partial<ErrorObject>[]);
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/ref_error.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/ref_error.d.ts
 declare class MissingRefError extends Error {
   readonly missingRef: string;
   readonly missingSchema: string;
   constructor(resolver: UriResolver, baseId: string, ref: string, msg?: string);
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/core.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/core.d.ts
 type Options = CurrentOptions & DeprecatedOptions;
 interface CurrentOptions {
   strict?: boolean | "log";
@@ -539,6 +537,7 @@ interface CurrentOptions {
   timestamp?: "string" | "date";
   parseDate?: boolean;
   allowDate?: boolean;
+  specialNumbers?: "fast" | "null";
   $comment?: true | ((comment: string, schemaPath?: string, rootSchema?: AnySchemaObject) => unknown);
   formats?: { [Name in string]?: Format };
   keywords?: Vocabulary;
@@ -665,10 +664,10 @@ interface ErrorsTextOptions {
   dataVar?: string;
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/resolve.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/resolve.d.ts
 type LocalRefs = { [Ref in string]?: AnySchemaObject };
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/compile/index.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/compile/index.d.ts
 type SchemaRefs = { [Ref in string]?: SchemaEnv | AnySchema };
 interface SchemaCxt {
   readonly gen: CodeGen;
@@ -734,7 +733,7 @@ declare class SchemaEnv implements SchemaEnvArgs {
   constructor(env: SchemaEnvArgs);
 }
 //#endregion
-//#region node_modules/.pnpm/ajv@8.17.1/node_modules/ajv/dist/types/index.d.ts
+//#region node_modules/.pnpm/ajv@8.18.0/node_modules/ajv/dist/types/index.d.ts
 interface _SchemaObject {
   id?: string;
   $id?: string;

@@ -11,7 +11,7 @@ export default defineConfig({
   sourcemap: true,
   minify: true,
   dts: true,
-  skipNodeModulesBundle: true,
+  skipNodeModulesBundle: false,
   plugins: [
     licenses({
       thirdParty: {
@@ -38,13 +38,5 @@ export default defineConfig({
     'ajv',
     'mustache',
   ],
-  inlineOnly: [
-    '@actions/core',
-    '@actions/github',
-    '@octokit/action',
-    '@octokit/core',
-    '@octokit/types',
-    'ajv',
-    'mustache',
-  ],
+  inlineOnly: false,
 })

@@ -1,6 +1,6 @@
 # happy-commit
 
-[![codecov](https://codecov.io/gh/kitsuyui/happy-commit/branch/main/graph/badge.svg?token=FM7RYWGV0P)](https://codecov.io/gh/kitsuyui/happy-commit)
+![Coverage](https://raw.githubusercontent.com/kitsuyui/octocov-central/main/badges/kitsuyui/happy-commit/coverage.svg)
 
 - GitHub Action to celebrate your commits on PR.
 
