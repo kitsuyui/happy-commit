@@ -34,6 +34,4 @@ async function run() {
   }
 }
 
-if (require.main === module) {
-  run().then()
-}
+run().then()
