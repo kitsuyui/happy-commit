@@ -29,34 +29,45 @@ class MessageBuilder {
     return this.rules.filter((rule) => rule.kind === 'commit')
   }
 
-  build(context: LuckyJudgeContext): MessageContext {
-    const { commitIds, prNum } = context
-    const messages = []
-    let lucky = false
+  private renderMessages<
+    T extends Record<string, string | RegExpMatchArray | number>,
+  >(rules: MessageForRule[], values: T[], valueName: keyof T): string[] {
+    const messages: string[] = []
 
-    for (const { rule, message } of this.prRules()) {
-      const matched = prNum.toString().match(rule)
-      if (matched) {
-        const builtMessage = Mustache.render(message, { matched, prNum })
-        messages.push(builtMessage)
-        lucky = true
-      }
-    }
-
-    for (const { rule, message } of this.commitRules()) {
-      for (const commitId of commitIds) {
-        const matched = commitId.match(rule)
+    for (const { rule, message } of rules) {
+      for (const value of values) {
+        const target = value[valueName]
+        if (typeof target !== 'string') {
+          continue
+        }
+        const matched = target.match(rule)
         if (matched) {
-          const builtMessage = Mustache.render(message, { matched, commitId })
-          messages.push(builtMessage)
-          lucky = true
+          messages.push(Mustache.render(message, { ...value, matched }))
         }
       }
     }
 
+    return messages
+  }
+
+  build(context: LuckyJudgeContext): MessageContext {
+    const { commitIds, prNum } = context
+    const messages = [
+      ...this.renderMessages(
+        this.prRules(),
+        [{ prNum: prNum.toString() }],
+        'prNum'
+      ),
+      ...this.renderMessages(
+        this.commitRules(),
+        commitIds.map((commitId) => ({ commitId })),
+        'commitId'
+      ),
+    ]
+
     const body = Mustache.render(this.baseTemplate, { messages })
     return {
-      lucky,
+      lucky: messages.length > 0,
       body,
     }
   }

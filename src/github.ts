@@ -3,6 +3,39 @@ import type { Octokit } from '@octokit/action'
 
 import type { Comment, MessageContext } from './interfaces'
 
+type CommentAction =
+  | { type: 'create'; body: string }
+  | { type: 'update'; commentId: number; body: string }
+  | { type: 'delete'; commentId: number }
+  | { type: 'noop' }
+
+export function decideCommentAction(
+  pastComment: Comment | null,
+  message: MessageContext
+): CommentAction {
+  const { lucky, body } = message
+
+  if (lucky) {
+    if (!pastComment) {
+      return { type: 'create', body }
+    }
+    if (pastComment.body !== body) {
+      return {
+        type: 'update',
+        commentId: pastComment.id,
+        body,
+      }
+    }
+    return { type: 'noop' }
+  }
+
+  if (pastComment) {
+    return { type: 'delete', commentId: pastComment.id }
+  }
+
+  return { type: 'noop' }
+}
+
 /**
  * Update the comment of the current PR
  * if lucky and past comment does not exist, create it.
@@ -22,32 +55,34 @@ export async function updateMessage(
 ): Promise<void> {
   const context = github.context
   const pastComment = await getFirstComment(octokit, prNum, userLogin)
+  const action = decideCommentAction(pastComment, message)
 
-  const { lucky, body } = message
-  if (lucky) {
-    // if there is a comment from the current user and the message is different, update it
-    if (pastComment && pastComment.body !== body) {
+  switch (action.type) {
+    case 'update': {
       await octokit.issues.updateComment({
         ...context.repo,
-        comment_id: pastComment.id,
-        body,
+        comment_id: action.commentId,
+        body: action.body,
       })
-    } else {
-      // if there is no comment from the current user, create it
+      return
+    }
+    case 'create': {
       await octokit.issues.createComment({
         ...context.repo,
         issue_number: prNum,
-        body,
+        body: action.body,
       })
+      return
     }
-  } else {
-    // if there is a comment from the current user, delete it
-    if (pastComment) {
+    case 'delete': {
       await octokit.issues.deleteComment({
         ...context.repo,
-        comment_id: pastComment.id,
+        comment_id: action.commentId,
       })
+      return
     }
+    case 'noop':
+      return
   }
 }
 
