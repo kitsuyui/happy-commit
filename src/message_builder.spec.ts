@@ -132,4 +132,53 @@ describe('MessageBuilder', () => {
       ].join('\n'),
     })
   })
+
+  it('allows disabling built-in rules through overrides', () => {
+    const context = {
+      commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+      prNum: 777,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {
+        pr_reaches_777: false,
+        commit_hits_777: false,
+      }
+    )
+    const message = mb.build(context)
+
+    expect(message).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
+  it('appends additional rules before built-in rules', () => {
+    const context = {
+      commitIds: ['abcdef123'],
+      prNum: 42,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {},
+      [
+        {
+          kind: 'commit',
+          rule: /abc/,
+          message: 'Custom match for `{{commitId}}`: **{{matched}}**',
+        },
+      ]
+    )
+    const message = mb.build(context)
+
+    expect(message).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Custom match for `abcdef123`: **abc**',
+        '- Commit `abcdef123` is lucky! It contains **123**!.',
+        '',
+      ].join('\n'),
+    })
+  })
 })
