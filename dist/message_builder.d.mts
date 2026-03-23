@@ -13,6 +13,7 @@ declare class MessageBuilder {
   constructor(rules: MessageForRule[], baseTemplate: string);
   prRules(): MessageForRule[];
   commitRules(): MessageForRule[];
+  private renderMessages;
   build(context: LuckyJudgeContext): MessageContext;
 }
 /**
