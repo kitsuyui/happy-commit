@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-03-24T14:30:38.772Z",
+  "repository": "kitsuyui/happy-commit",
+  "default_branch": "main",
+  "publish_branch": "gh-counter-assets",
+  "event_name": "push",
+  "base_reference": null,
+  "head_reference": "675b3842ff184e7cde0e4b7f9fbb5c3341676d7a",
+  "bootstrap_message": null,
+  "counters": [
+    {
+      "id": "maintenance-comments",
+      "label": "TODO/FIXME",
+      "current": 0,
+      "base": null,
+      "delta": null,
+      "commentable": true,
+      "touched_files": [],
+      "violations": [],
+      "badge_path": ".gh-counter/badges/maintenance-comments.svg",
+      "counter_path": ".gh-counter/counters/maintenance-comments.json"
+    }
+  ]
+}
