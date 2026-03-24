@@ -1,8 +1,10 @@
 # happy-commit
 
 ![Coverage](https://raw.githubusercontent.com/kitsuyui/octocov-central/main/badges/kitsuyui/happy-commit/coverage.svg)
+[![TODO/FIXME](https://raw.githubusercontent.com/kitsuyui/happy-commit/gh-counter-assets/badges/maintenance-comments.svg)](https://github.com/kitsuyui/happy-commit/search?q=%28TODO+OR+FIXME%29+path%3Asrc&type=code)
 
 - GitHub Action to celebrate your commits on PR.
+- The repository tracks `TODO` and `FIXME` markers with [`gh-counter`](https://github.com/kitsuyui/gh-counter).
 
 ## Example
 
