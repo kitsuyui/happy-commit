@@ -3,27 +3,34 @@ import type { Octokit } from '@octokit/action'
 
 import type { Comment, MessageContext } from './interfaces'
 
+const COMMENT_MARKER = '<!-- happy-commit -->'
+
 type CommentAction =
   | { type: 'create'; body: string }
   | { type: 'update'; commentId: number; body: string }
   | { type: 'delete'; commentId: number }
   | { type: 'noop' }
 
+function buildManagedBody(body: string): string {
+  return `${COMMENT_MARKER}\n${body}`
+}
+
 export function decideCommentAction(
   pastComment: Comment | null,
   message: MessageContext
 ): CommentAction {
   const { lucky, body } = message
+  const managedBody = buildManagedBody(body)
 
   if (lucky) {
     if (!pastComment) {
-      return { type: 'create', body }
+      return { type: 'create', body: managedBody }
     }
-    if (pastComment.body !== body) {
+    if (pastComment.body !== managedBody) {
       return {
         type: 'update',
         commentId: pastComment.id,
-        body,
+        body: managedBody,
       }
     }
     return { type: 'noop' }
@@ -54,7 +61,7 @@ export async function updateMessage(
   message: MessageContext
 ): Promise<void> {
   const context = github.context
-  const pastComment = await getFirstComment(octokit, prNum, userLogin)
+  const pastComment = await getManagedComment(octokit, prNum, userLogin)
   const action = decideCommentAction(pastComment, message)
 
   switch (action.type) {
@@ -87,13 +94,13 @@ export async function updateMessage(
 }
 
 /**
- * Get the first comment of the current PR by the current user
+ * Get the managed comment of the current PR by the current user
  * @param octokit {Octokit} the octokit instance
  * @param prNum {number} the PR number
  * @param userLogin {string} the user login name
  * @returns comment id {LastComment}
  */
-async function getFirstComment(
+async function getManagedComment(
   octokit: Octokit,
   prNum: number,
   userLogin: string
@@ -104,9 +111,12 @@ async function getFirstComment(
     ...context.repo,
     issue_number: prNum,
   })
-  // find the comment by the current user if it exists
+  // find the managed comment by the current user if it exists
   for (const comment of comments.data) {
-    if (comment.user?.login === userLogin) {
+    if (
+      comment.user?.login === userLogin &&
+      (comment.body || comment.body_text || '').includes(COMMENT_MARKER)
+    ) {
       return {
         id: comment.id,
         body: comment.body_text || '',

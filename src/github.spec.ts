@@ -47,7 +47,7 @@ describe('decideCommentAction', () => {
       })
     ).toEqual({
       type: 'create',
-      body: 'hello',
+      body: '<!-- happy-commit -->\nhello',
     })
   })
 
@@ -66,7 +66,7 @@ describe('decideCommentAction', () => {
     ).toEqual({
       type: 'update',
       commentId: 1,
-      body: 'new',
+      body: '<!-- happy-commit -->\nnew',
     })
   })
 
@@ -75,7 +75,7 @@ describe('decideCommentAction', () => {
       decideCommentAction(
         {
           id: 1,
-          body: 'same',
+          body: '<!-- happy-commit -->\nsame',
         },
         {
           lucky: true,
@@ -140,7 +140,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       issue_number: 123,
-      body: 'new body',
+      body: '<!-- happy-commit -->\nnew body',
     })
     expect(octokit.issues.updateComment).not.toHaveBeenCalled()
     expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
@@ -152,7 +152,8 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: 'old body',
+          body_text: '<!-- happy-commit -->\nold body',
+          body: '<!-- happy-commit -->\nold body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -167,7 +168,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       comment_id: 55,
-      body: 'new body',
+      body: '<!-- happy-commit -->\nnew body',
     })
     expect(octokit.issues.createComment).not.toHaveBeenCalled()
     expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
@@ -179,7 +180,8 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: 'same body',
+          body_text: '<!-- happy-commit -->\nsame body',
+          body: '<!-- happy-commit -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -201,7 +203,8 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: 'same body',
+          body_text: '<!-- happy-commit -->\nsame body',
+          body: '<!-- happy-commit -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -230,7 +233,8 @@ describe('updateMessage', () => {
         },
         {
           id: 11,
-          body_text: null,
+          body_text: '<!-- happy-commit -->\nstale body',
+          body: '<!-- happy-commit -->\nstale body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -245,8 +249,35 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       issue_number: 123,
+      body: '<!-- happy-commit -->\nfresh body',
+    })
+  })
+
+  it('ignores unrelated comments from the same user and creates a managed comment', async () => {
+    const octokit = createOctokitMock()
+    octokit.issues.listComments.mockResolvedValue({
+      data: [
+        {
+          id: 12,
+          body_text: 'plain comment',
+          body: 'plain comment',
+          user: { login: 'github-actions[bot]' },
+        },
+      ],
+    })
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: true,
       body: 'fresh body',
     })
+
+    expect(octokit.issues.createComment).toHaveBeenCalledWith({
+      owner: 'kitsuyui',
+      repo: 'happy-commit',
+      issue_number: 123,
+      body: '<!-- happy-commit -->\nfresh body',
+    })
+    expect(octokit.issues.updateComment).not.toHaveBeenCalled()
   })
 })
 
