@@ -51,6 +51,47 @@ describe('MessageBuilder', () => {
     })
   })
 
+  it('celebrates only all-seven pull request numbers around 777x', () => {
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+
+    expect(
+      mb.build({
+        commitIds: ['1243a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 7776,
+      })
+    ).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+
+    expect(
+      mb.build({
+        commitIds: ['1243a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 7777,
+      })
+    ).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        `- Now pull request issue number reaches **7777** (777). It's time to celebrate!`,
+        '',
+      ].join('\n'),
+    })
+
+    expect(
+      mb.build({
+        commitIds: ['1243a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 7778,
+      })
+    ).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
   it('congratulates when pull request id is lucky', () => {
     const context = {
       commitIds: ['1243a86968b837366e6603cab1142462c8f33ea5'],
@@ -107,6 +148,42 @@ describe('MessageBuilder', () => {
         '# :tada: Happy commit!',
         '- Commit `ffd063a5a43ec1239587a76966348dde07ac6fc3` is lucky! It contains **123**!.',
         '- Commit `ffd063a5a43ec1234587a76966348dde07ac6fc3` is lucky! It contains **12345**!.',
+        '',
+      ].join('\n'),
+    })
+  })
+
+  it('celebrates only contiguous 777 runs in commit ids', () => {
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+
+    expect(
+      mb.build({
+        commitIds: ['7a7b7c4d5e6f0123456789abcdefabcd12345678'],
+        prNum: 5432,
+      })
+    ).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `7a7b7c4d5e6f0123456789abcdefabcd12345678` is lucky! It contains **123456789**!.',
+        '',
+      ].join('\n'),
+    })
+
+    expect(
+      mb.build({
+        commitIds: ['abc777def0123456789abcdefabcd1234567890'],
+        prNum: 5432,
+      })
+    ).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `abc777def0123456789abcdefabcd1234567890` is lucky! It contains **777**!.',
+        '- Commit `abc777def0123456789abcdefabcd1234567890` is lucky! It contains **123456789**!.',
         '',
       ].join('\n'),
     })
