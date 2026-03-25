@@ -9,13 +9,12 @@ permissions:
 
 jobs:
   example:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    name: test
+    name: dogfooding
     steps:
       - uses: actions/checkout@v6
       - uses: ./
-        # Enable the following line to ignore errors from the action
-        # continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           additional_rules: |

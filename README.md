@@ -21,12 +21,12 @@
 
 c.f. https://github.com/kitsuyui/happy-commit/blob/main/src/rules.ts
 
-## Example usage
+## Recommended usage
 
 ```yaml
 name: happy-commit
 on:
-  - pull_request
+  pull_request_target:
 
 permissions:
   contents: read
@@ -36,12 +36,23 @@ permissions:
 jobs:
   happy:
     runs-on: ubuntu-latest
-    name: happy
     steps:
-      - uses: kitsuyui/happy-commit
+      - uses: kitsuyui/happy-commit@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+This action only needs pull-request metadata and commit ids from the GitHub API,
+so the published action can run without `actions/checkout`. `pull_request_target`
+is the safer default when you want to comment on pull requests from forks.
+
+## Dogfooding example
+
+This repository keeps a local example workflow in `.github/workflows/main.yml`.
+It uses `pull_request` and `uses: ./` so changes in the current branch are tested
+before release. That pattern should stay limited to the action repository itself,
+because a local action from an untrusted fork must not run with
+`pull_request_target`.
 
 ## Additional patterns
 
@@ -50,8 +61,7 @@ For example, you can celebrate when commit id contains `1`.
 
 ```yaml
       - name: happy-commit
-        uses: kitsuyui/happy-commit
-        continue-on-error: true
+        uses: kitsuyui/happy-commit@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           additional_rules: |
