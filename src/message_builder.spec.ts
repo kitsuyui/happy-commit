@@ -249,6 +249,41 @@ describe('MessageBuilder', () => {
     })
   })
 
+  it('changes commit celebrations when repository size crosses the ceiling', () => {
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+
+    expect(
+      mb.build({
+        commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 410,
+        repositoryCommitCount: 10,
+        maxExpectedOccurrences: 1,
+      })
+    ).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `7774a86968b837366e6603cab1142462c8f33ea5` is lucky! It contains **777**!.',
+        '',
+      ].join('\n'),
+    })
+
+    expect(
+      mb.build({
+        commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 410,
+        repositoryCommitCount: 1000,
+        maxExpectedOccurrences: 1,
+      })
+    ).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
   it('keeps additional rules even when built-in rarity filtering is active', () => {
     const context = {
       commitIds: ['abc777def'],
