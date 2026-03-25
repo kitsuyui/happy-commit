@@ -12,6 +12,9 @@ inputs:
   additional_rules:
     description: 'Additional rules to check'
     required: false
+  max_expected_occurrences:
+    description: 'Celebrate built-in rules only when their expected occurrences at the current repository size stay below this value'
+    required: false
 
 runs:
   # https://json.schemastore.org/github-action.json

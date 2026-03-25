@@ -40,11 +40,16 @@ jobs:
       - uses: kitsuyui/happy-commit@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          max_expected_occurrences: 1
 ```
 
 This action only needs pull-request metadata and commit ids from the GitHub API,
 so the published action can run without `actions/checkout`. `pull_request_target`
 is the safer default when you want to comment on pull requests from forks.
+`max_expected_occurrences` is optional. When you set it, built-in rules are
+celebrated only if they are still rare enough at the current repository size.
+For pull request numbers this uses the current PR number as the search range,
+and for commit hashes it uses the total number of commits on the default branch.
 
 ## Dogfooding example
 

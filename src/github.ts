@@ -140,6 +140,50 @@ export async function getCommitIds(octokit: Octokit): Promise<string[]> {
   return commits.data.map((commit: { sha: string }) => commit.sha)
 }
 
+export async function getRepositoryCommitCount(
+  octokit: Octokit,
+  defaultBranch: string
+): Promise<number> {
+  interface Result {
+    repository: {
+      object: {
+        history: {
+          totalCount: number
+        }
+      } | null
+    } | null
+  }
+
+  const context = github.context
+  const resp: Result = await octokit.graphql(
+    `
+query ($owner: String!, $repo: String!, $expression: String!) {
+  repository(owner: $owner, name: $repo) {
+    object(expression: $expression) {
+      ... on Commit {
+        history(first: 1) {
+          totalCount
+        }
+      }
+    }
+  }
+}
+`,
+    {
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      expression: `refs/heads/${defaultBranch}`,
+    }
+  )
+
+  const totalCount = resp.repository?.object?.history.totalCount
+  if (typeof totalCount !== 'number') {
+    throw new Error(`Could not resolve commit count for ${defaultBranch}`)
+  }
+
+  return totalCount
+}
+
 /**
  * Get login name of the current user
  * By default, this returns `github-actions[bot]`

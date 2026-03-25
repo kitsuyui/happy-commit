@@ -1,7 +1,19 @@
-import{t as e}from"./github-30evUmUL.mjs";const t=`<!-- happy-commit -->`;function n(e){return`${t}\n${e}`}function r(e,t){let{lucky:r,body:i}=t,a=n(i);return r?e?e.body===a?{type:`noop`}:{type:`update`,commentId:e.id,body:a}:{type:`create`,body:a}:e?{type:`delete`,commentId:e.id}:{type:`noop`}}async function i(t,n,i,o){let s=e,c=r(await a(t,n,i),o);switch(c.type){case`update`:await t.issues.updateComment({...s.repo,comment_id:c.commentId,body:c.body});return;case`create`:await t.issues.createComment({...s.repo,issue_number:n,body:c.body});return;case`delete`:await t.issues.deleteComment({...s.repo,comment_id:c.commentId});return;case`noop`:return}}async function a(n,r,i){let a=e,o=await n.issues.listComments({...a.repo,issue_number:r});for(let e of o.data)if(e.user?.login===i&&(e.body||e.body_text||``).includes(t))return{id:e.id,body:e.body_text||``};return null}async function o(t){let n=e;return(await t.pulls.listCommits({...n.repo,pull_number:n.issue.number})).data.map(e=>e.sha)}async function s(e){return(await e.graphql(`
+import{t as e}from"./github-30evUmUL.mjs";const t=`<!-- happy-commit -->`;function n(e){return`${t}\n${e}`}function r(e,t){let{lucky:r,body:i}=t,a=n(i);return r?e?e.body===a?{type:`noop`}:{type:`update`,commentId:e.id,body:a}:{type:`create`,body:a}:e?{type:`delete`,commentId:e.id}:{type:`noop`}}async function i(t,n,i,o){let s=e,c=r(await a(t,n,i),o);switch(c.type){case`update`:await t.issues.updateComment({...s.repo,comment_id:c.commentId,body:c.body});return;case`create`:await t.issues.createComment({...s.repo,issue_number:n,body:c.body});return;case`delete`:await t.issues.deleteComment({...s.repo,comment_id:c.commentId});return;case`noop`:return}}async function a(n,r,i){let a=e,o=await n.issues.listComments({...a.repo,issue_number:r});for(let e of o.data)if(e.user?.login===i&&(e.body||e.body_text||``).includes(t))return{id:e.id,body:e.body_text||``};return null}async function o(t){let n=e;return(await t.pulls.listCommits({...n.repo,pull_number:n.issue.number})).data.map(e=>e.sha)}async function s(t,n){let r=e,i=(await t.graphql(`
+query ($owner: String!, $repo: String!, $expression: String!) {
+  repository(owner: $owner, name: $repo) {
+    object(expression: $expression) {
+      ... on Commit {
+        history(first: 1) {
+          totalCount
+        }
+      }
+    }
+  }
+}
+`,{owner:r.repo.owner,repo:r.repo.repo,expression:`refs/heads/${n}`})).repository?.object?.history.totalCount;if(typeof i!=`number`)throw Error(`Could not resolve commit count for ${n}`);return i}async function c(e){return(await e.graphql(`
 query {
   viewer {
     login
   }
-}`)).viewer.login}export{r as decideCommentAction,o as getCommitIds,s as getUserLogin,i as updateMessage};
+}`)).viewer.login}export{r as decideCommentAction,o as getCommitIds,s as getRepositoryCommitCount,c as getUserLogin,i as updateMessage};
 //# sourceMappingURL=github.mjs.map
