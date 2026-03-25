@@ -52,7 +52,9 @@ This repository keeps a local example workflow in `.github/workflows/main.yml`.
 It uses `pull_request` and `uses: ./` so changes in the current branch are tested
 before release. That pattern should stay limited to the action repository itself,
 because a local action from an untrusted fork must not run with
-`pull_request_target`.
+`pull_request_target`. The dogfooding workflow also uses always-matching rules
+for both the pull request number and commit SHA so the managed comment path is
+exercised on every same-repository PR.
 
 ## Additional patterns
 

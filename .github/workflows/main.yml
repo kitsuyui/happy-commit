@@ -20,8 +20,13 @@ jobs:
           additional_rules: |
             [
               {
+                "kind": "pr",
+                "rule": ".+",
+                "message": "dogfooding: PR #{{prNum}} always celebrates."
+              },
+              {
                 "kind": "commit",
-                "rule": "(?:1)",
-                "message": "custom message! `{{commitId}}` is lucky! It contains {{matched}}"
+                "rule": "[0-9a-f]",
+                "message": "dogfooding: `{{commitId}}` always celebrates."
               }
             ]
