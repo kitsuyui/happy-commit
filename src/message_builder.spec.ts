@@ -230,6 +230,90 @@ describe('MessageBuilder', () => {
     })
   })
 
+  it('filters built-in rules by expected occurrences when a ceiling is set', () => {
+    const context = {
+      commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+      prNum: 10000,
+      repositoryCommitCount: 1000,
+      maxExpectedOccurrences: 1,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+    const message = mb.build(context)
+
+    expect(message).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
+  it('changes commit celebrations when repository size crosses the ceiling', () => {
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+
+    expect(
+      mb.build({
+        commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 410,
+        repositoryCommitCount: 10,
+        maxExpectedOccurrences: 1,
+      })
+    ).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `7774a86968b837366e6603cab1142462c8f33ea5` is lucky! It contains **777**!.',
+        '',
+      ].join('\n'),
+    })
+
+    expect(
+      mb.build({
+        commitIds: ['7774a86968b837366e6603cab1142462c8f33ea5'],
+        prNum: 410,
+        repositoryCommitCount: 1000,
+        maxExpectedOccurrences: 1,
+      })
+    ).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
+  it('keeps additional rules even when built-in rarity filtering is active', () => {
+    const context = {
+      commitIds: ['abc777def'],
+      prNum: 10000,
+      repositoryCommitCount: 1000,
+      maxExpectedOccurrences: 0,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {},
+      [
+        {
+          kind: 'commit',
+          rule: /777/,
+          message: 'Custom match for `{{commitId}}`: **{{matched}}**',
+        },
+      ]
+    )
+    const message = mb.build(context)
+
+    expect(message).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Custom match for `abc777def`: **777**',
+        '',
+      ].join('\n'),
+    })
+  })
+
   it('appends additional rules before built-in rules', () => {
     const context = {
       commitIds: ['abcdef123'],

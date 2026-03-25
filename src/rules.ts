@@ -3,6 +3,16 @@ import type {
   NamedMessageForRuleSet,
   RuleStringPatterns,
 } from './interfaces'
+import {
+  expectedAllSevens,
+  expectedCommitHits123,
+  expectedCommitHits666,
+  expectedCommitHits777,
+  expectedCommitHitsHexspeak,
+  expectedCommitHitsSameNumbers,
+  expectedPowersOfTen,
+  expectedPowersOfTwo,
+} from './rarity'
 import { validateRules } from './validate'
 
 export type RuleStringPattern = {
@@ -60,45 +70,66 @@ export function parseRules(json: string): MessageForRuleSet {
 
 export const Rules: NamedMessageForRuleSet = {
   pr_reaches_contain_only_one_nonzero_digit: {
+    id: 'pr_reaches_contain_only_one_nonzero_digit',
     kind: 'pr',
     rule: /(?:^[1-9]0+$)/,
     message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
+    expectedOccurrences: ({ prNum }) => expectedPowersOfTen(prNum),
   },
   pr_reaches_power_of_2: {
+    id: 'pr_reaches_power_of_2',
     kind: 'pr',
     rule: /(?:^(512|1024|2048|4096|8192|16384|32768|65536)$)/,
     message: `Now pull request issue number reaches **{{prNum}}** (power of 2). It's time to celebrate!`,
+    expectedOccurrences: ({ prNum }) => expectedPowersOfTwo(prNum),
   },
   pr_reaches_777: {
+    id: 'pr_reaches_777',
     kind: 'pr',
     rule: /(?:^7{3,}$)/,
     message: `Now pull request issue number reaches **{{prNum}}** (777). It's time to celebrate!`,
+    expectedOccurrences: ({ prNum }) => expectedAllSevens(prNum),
   },
   commit_hits_777: {
+    id: 'commit_hits_777',
     kind: 'commit',
     rule: /(?:7{3,})/,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    expectedOccurrences: ({ repositoryCommitCount }) =>
+      expectedCommitHits777(repositoryCommitCount),
   },
   commit_hits_same_numbers: {
+    id: 'commit_hits_same_numbers',
     kind: 'commit',
     rule: /(?:([0-9a-f])\1{4,})/,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    expectedOccurrences: ({ repositoryCommitCount }) =>
+      expectedCommitHitsSameNumbers(repositoryCommitCount),
   },
   commit_hits_123: {
+    id: 'commit_hits_123',
     kind: 'commit',
     rule: /(?:123(?:4(?:5(?:6(?:7(?:8(?:9)?)?)?)?)?)?)/,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    expectedOccurrences: ({ repositoryCommitCount }) =>
+      expectedCommitHits123(repositoryCommitCount),
   },
   commit_hits_hexspeak: {
+    id: 'commit_hits_hexspeak',
     kind: 'commit',
     rule: /(?:(?:f00d|feed|cafe|c0ffee|deadbeef|defecated|0ffice|badcable))/i,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
+    expectedOccurrences: ({ repositoryCommitCount }) =>
+      expectedCommitHitsHexspeak(repositoryCommitCount),
   },
   commit_hits_666: {
+    id: 'commit_hits_666',
     kind: 'commit',
     rule: /(?:666)/,
     message:
       'Commit `{{commitId}}` is unlucky... It contains **{{matched}}**!.',
+    expectedOccurrences: ({ repositoryCommitCount }) =>
+      expectedCommitHits666(repositoryCommitCount),
   },
 } as const
 

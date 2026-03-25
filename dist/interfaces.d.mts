@@ -10,6 +10,8 @@ interface Comment {
 interface LuckyJudgeContext {
   commitIds: string[];
   prNum: number;
+  repositoryCommitCount: number;
+  maxExpectedOccurrences?: number;
 }
 interface LuckyCommitResult {
   lucky: boolean;
@@ -18,9 +20,11 @@ interface LuckyCommitResult {
 type Rule = RegExp;
 type Message = string;
 interface MessageForRule {
+  id?: string;
   kind: 'commit' | 'pr';
   rule: Rule;
   message: string;
+  expectedOccurrences?: (context: LuckyJudgeContext) => number;
 }
 type MessageForRuleSet = MessageForRule[];
 type NamedMessageForRuleSet = {

@@ -5,6 +5,7 @@ import type {
   MessageContext,
   MessageForRule,
 } from './interfaces'
+import { isRareEnough } from './rarity'
 import { Rules, type RulesKey } from './rules'
 
 /**
@@ -31,10 +32,15 @@ class MessageBuilder {
 
   private renderMessages<
     T extends Record<string, string | RegExpMatchArray | number>,
-  >(rules: MessageForRule[], values: T[], valueName: keyof T): string[] {
+  >(
+    rules: MessageForRule[],
+    values: T[],
+    valueName: keyof T,
+    context: LuckyJudgeContext
+  ): string[] {
     const messages: string[] = []
 
-    for (const { rule, message } of rules) {
+    for (const { rule, message, expectedOccurrences } of rules) {
       for (const value of values) {
         const target = value[valueName]
         if (typeof target !== 'string') {
@@ -42,6 +48,15 @@ class MessageBuilder {
         }
         const matched = target.match(rule)
         if (matched) {
+          if (
+            expectedOccurrences &&
+            !isRareEnough(
+              expectedOccurrences(context),
+              context.maxExpectedOccurrences
+            )
+          ) {
+            continue
+          }
           messages.push(Mustache.render(message, { ...value, matched }))
         }
       }
@@ -56,12 +71,14 @@ class MessageBuilder {
       ...this.renderMessages(
         this.prRules(),
         [{ prNum: prNum.toString() }],
-        'prNum'
+        'prNum',
+        context
       ),
       ...this.renderMessages(
         this.commitRules(),
         commitIds.map((commitId) => ({ commitId })),
-        'commitId'
+        'commitId',
+        context
       ),
     ]
 

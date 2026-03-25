@@ -19,6 +19,7 @@ vi.mock('@actions/github', () => ({
 import {
   decideCommentAction,
   getCommitIds,
+  getRepositoryCommitCount,
   getUserLogin,
   updateMessage,
 } from './github'
@@ -315,5 +316,43 @@ describe('github helpers', () => {
       'github-actions[bot]'
     )
     expect(octokit.graphql).toHaveBeenCalledOnce()
+  })
+
+  it('returns the repository commit count from graphql', async () => {
+    const octokit = createOctokitMock()
+    octokit.graphql.mockResolvedValue({
+      repository: {
+        object: {
+          history: {
+            totalCount: 4321,
+          },
+        },
+      },
+    })
+
+    await expect(
+      getRepositoryCommitCount(octokit as never, 'main')
+    ).resolves.toBe(4321)
+    expect(octokit.graphql).toHaveBeenCalledWith(
+      expect.stringContaining('history(first: 1)'),
+      {
+        owner: 'kitsuyui',
+        repo: 'happy-commit',
+        expression: 'refs/heads/main',
+      }
+    )
+  })
+
+  it('throws when the repository commit count cannot be resolved', async () => {
+    const octokit = createOctokitMock()
+    octokit.graphql.mockResolvedValue({
+      repository: {
+        object: null,
+      },
+    })
+
+    await expect(
+      getRepositoryCommitCount(octokit as never, 'main')
+    ).rejects.toThrowError('Could not resolve commit count for main')
   })
 })
