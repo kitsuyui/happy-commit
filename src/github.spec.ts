@@ -342,4 +342,17 @@ describe('github helpers', () => {
       }
     )
   })
+
+  it('throws when the repository commit count cannot be resolved', async () => {
+    const octokit = createOctokitMock()
+    octokit.graphql.mockResolvedValue({
+      repository: {
+        object: null,
+      },
+    })
+
+    await expect(
+      getRepositoryCommitCount(octokit as never, 'main')
+    ).rejects.toThrowError('Could not resolve commit count for main')
+  })
 })

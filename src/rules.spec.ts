@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { parseRules } from './rules'
+import { parseRules, Rules } from './rules'
 
 describe('parseRules', () => {
   it('can parse when passed valid json', () => {
@@ -35,5 +35,31 @@ describe('parseRules', () => {
         '[{"kind": "pr", "rule": "(", "message": "Now pull request issue number reaches **{{prNum}}**. It\'s time to celebrate!"}]'
       )
     ).toThrowError('Invalid rule: (')
+  })
+
+  it('exposes expected-occurrence calculators for built-in rarity gating', () => {
+    expect(
+      Rules.pr_reaches_power_of_2.expectedOccurrences?.({
+        commitIds: [],
+        prNum: 4096,
+        repositoryCommitCount: 0,
+      })
+    ).toBe(4)
+
+    expect(
+      Rules.commit_hits_same_numbers.expectedOccurrences?.({
+        commitIds: [],
+        prNum: 1,
+        repositoryCommitCount: 1000,
+      })
+    ).toBeGreaterThan(0)
+
+    expect(
+      Rules.commit_hits_hexspeak.expectedOccurrences?.({
+        commitIds: [],
+        prNum: 1,
+        repositoryCommitCount: 1000,
+      })
+    ).toBeGreaterThan(0)
   })
 })
