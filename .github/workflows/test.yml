@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4.2.0
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -36,4 +36,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-
