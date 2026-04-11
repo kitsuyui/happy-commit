@@ -16,27 +16,24 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v6
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 10
+          bun-version: 1.3.11
 
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
       - name: Install dependencies
-        run: pnpm install
+        run: bun install --frozen-lockfile
 
       - name: Lint
-        run: pnpm lint
+        run: bun run lint
 
       - name: Test
-        run: pnpm test
+        run: bun run test
 
       - name: Build
-        run: pnpm build
+        run: bun run build
 
       # See also: https://github.com/k1LoW/octocov-action
       - name: Report coverage with octocov
