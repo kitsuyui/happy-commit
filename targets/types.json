@@ -1,0 +1,67 @@
+{
+  "id": "types",
+  "label": "Type declarations",
+  "files": [
+    {
+      "path": "dist/github.d.mts",
+      "sizes": {
+        "raw": 4935167,
+        "gzip": 526099,
+        "brotli": 251017
+      }
+    },
+    {
+      "path": "dist/index.d.mts",
+      "sizes": {
+        "raw": 11,
+        "gzip": 31,
+        "brotli": 15
+      }
+    },
+    {
+      "path": "dist/interfaces.d.mts",
+      "sizes": {
+        "raw": 1050,
+        "gzip": 417,
+        "brotli": 364
+      }
+    },
+    {
+      "path": "dist/message_builder.d.mts",
+      "sizes": {
+        "raw": 1034,
+        "gzip": 434,
+        "brotli": 350
+      }
+    },
+    {
+      "path": "dist/rarity.d.mts",
+      "sizes": {
+        "raw": 1074,
+        "gzip": 319,
+        "brotli": 270
+      }
+    },
+    {
+      "path": "dist/rules.d.mts",
+      "sizes": {
+        "raw": 738,
+        "gzip": 370,
+        "brotli": 308
+      }
+    },
+    {
+      "path": "dist/validate.d.mts",
+      "sizes": {
+        "raw": 34417,
+        "gzip": 7904,
+        "brotli": 7146
+      }
+    }
+  ],
+  "totals": {
+    "raw": 4973491,
+    "gzip": 535574,
+    "brotli": 259470
+  }
+}

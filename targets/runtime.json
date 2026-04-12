@@ -1,0 +1,99 @@
+{
+  "id": "runtime",
+  "label": "Runtime bundle",
+  "files": [
+    {
+      "path": "dist/ajv-QtvvyOqs.mjs",
+      "sizes": {
+        "raw": 110892,
+        "gzip": 32417,
+        "brotli": 28676
+      }
+    },
+    {
+      "path": "dist/chunk-Bwx8J3ba.mjs",
+      "sizes": {
+        "raw": 630,
+        "gzip": 397,
+        "brotli": 347
+      }
+    },
+    {
+      "path": "dist/github-D91hw1gk.mjs",
+      "sizes": {
+        "raw": 519975,
+        "gzip": 151333,
+        "brotli": 113001
+      }
+    },
+    {
+      "path": "dist/github.mjs",
+      "sizes": {
+        "raw": 1740,
+        "gzip": 810,
+        "brotli": 717
+      }
+    },
+    {
+      "path": "dist/index.mjs",
+      "sizes": {
+        "raw": 506654,
+        "gzip": 157094,
+        "brotli": 119957
+      }
+    },
+    {
+      "path": "dist/interfaces.mjs",
+      "sizes": {
+        "raw": 9,
+        "gzip": 29,
+        "brotli": 13
+      }
+    },
+    {
+      "path": "dist/message_builder.mjs",
+      "sizes": {
+        "raw": 1351,
+        "gzip": 705,
+        "brotli": 634
+      }
+    },
+    {
+      "path": "dist/mustache-BhZz4e-Z.mjs",
+      "sizes": {
+        "raw": 6533,
+        "gzip": 2697,
+        "brotli": 2451
+      }
+    },
+    {
+      "path": "dist/rarity.mjs",
+      "sizes": {
+        "raw": 926,
+        "gzip": 486,
+        "brotli": 431
+      }
+    },
+    {
+      "path": "dist/rules.mjs",
+      "sizes": {
+        "raw": 2528,
+        "gzip": 883,
+        "brotli": 799
+      }
+    },
+    {
+      "path": "dist/validate.mjs",
+      "sizes": {
+        "raw": 390,
+        "gzip": 284,
+        "brotli": 237
+      }
+    }
+  ],
+  "totals": {
+    "raw": 1151628,
+    "gzip": 347135,
+    "brotli": 267263
+  }
+}

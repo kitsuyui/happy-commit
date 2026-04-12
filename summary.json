@@ -1,0 +1,196 @@
+{
+  "generated_at": "2026-04-12T16:17:07.752Z",
+  "repository": "kitsuyui/happy-commit",
+  "default_branch": "main",
+  "publish_branch": "gh-build-size-assets",
+  "event_name": "push",
+  "base_label": "main",
+  "base_reference": null,
+  "head_label": "main",
+  "head_reference": "b16f570c32d0112de58ad03ac1ed52d3c5a0d3b4",
+  "targets": [
+    {
+      "id": "total",
+      "label": "Total action artifacts",
+      "files": [
+        "dist/LICENSES.txt",
+        "dist/ajv-QtvvyOqs.mjs",
+        "dist/ajv-QtvvyOqs.mjs.map",
+        "dist/chunk-Bwx8J3ba.mjs",
+        "dist/github-D91hw1gk.mjs",
+        "dist/github-D91hw1gk.mjs.map",
+        "dist/github.d.mts",
+        "dist/github.d.mts.map",
+        "dist/github.mjs",
+        "dist/github.mjs.map",
+        "dist/index.d.mts",
+        "dist/index.mjs",
+        "dist/index.mjs.map",
+        "dist/interfaces.d.mts",
+        "dist/interfaces.d.mts.map",
+        "dist/interfaces.mjs",
+        "dist/message_builder.d.mts",
+        "dist/message_builder.d.mts.map",
+        "dist/message_builder.mjs",
+        "dist/message_builder.mjs.map",
+        "dist/mustache-BhZz4e-Z.mjs",
+        "dist/mustache-BhZz4e-Z.mjs.map",
+        "dist/rarity.d.mts",
+        "dist/rarity.d.mts.map",
+        "dist/rarity.mjs",
+        "dist/rarity.mjs.map",
+        "dist/rules.d.mts",
+        "dist/rules.d.mts.map",
+        "dist/rules.mjs",
+        "dist/rules.mjs.map",
+        "dist/validate.d.mts",
+        "dist/validate.d.mts.map",
+        "dist/validate.mjs",
+        "dist/validate.mjs.map"
+      ],
+      "touched_files": [],
+      "baseline_missing": false,
+      "commentable": true,
+      "sizes": {
+        "raw": {
+          "current": 23288187,
+          "base": null,
+          "delta": null
+        },
+        "gzip": {
+          "current": 2276016,
+          "base": null,
+          "delta": null
+        },
+        "brotli": {
+          "current": 1552104,
+          "base": null,
+          "delta": null
+        }
+      },
+      "violations": [],
+      "badge_path": ".gh-build-size/badges/total.svg",
+      "target_path": ".gh-build-size/targets/total.json"
+    },
+    {
+      "id": "runtime",
+      "label": "Runtime bundle",
+      "files": [
+        "dist/ajv-QtvvyOqs.mjs",
+        "dist/chunk-Bwx8J3ba.mjs",
+        "dist/github-D91hw1gk.mjs",
+        "dist/github.mjs",
+        "dist/index.mjs",
+        "dist/interfaces.mjs",
+        "dist/message_builder.mjs",
+        "dist/mustache-BhZz4e-Z.mjs",
+        "dist/rarity.mjs",
+        "dist/rules.mjs",
+        "dist/validate.mjs"
+      ],
+      "touched_files": [],
+      "baseline_missing": false,
+      "commentable": true,
+      "sizes": {
+        "raw": {
+          "current": 1151628,
+          "base": null,
+          "delta": null
+        },
+        "gzip": {
+          "current": 347135,
+          "base": null,
+          "delta": null
+        },
+        "brotli": {
+          "current": 267263,
+          "base": null,
+          "delta": null
+        }
+      },
+      "violations": [],
+      "badge_path": ".gh-build-size/badges/runtime.svg",
+      "target_path": ".gh-build-size/targets/runtime.json"
+    },
+    {
+      "id": "sourcemaps",
+      "label": "Source maps",
+      "files": [
+        "dist/ajv-QtvvyOqs.mjs.map",
+        "dist/github-D91hw1gk.mjs.map",
+        "dist/github.d.mts.map",
+        "dist/github.mjs.map",
+        "dist/index.mjs.map",
+        "dist/interfaces.d.mts.map",
+        "dist/message_builder.d.mts.map",
+        "dist/message_builder.mjs.map",
+        "dist/mustache-BhZz4e-Z.mjs.map",
+        "dist/rarity.d.mts.map",
+        "dist/rarity.mjs.map",
+        "dist/rules.d.mts.map",
+        "dist/rules.mjs.map",
+        "dist/validate.d.mts.map",
+        "dist/validate.mjs.map"
+      ],
+      "touched_files": [],
+      "baseline_missing": false,
+      "commentable": true,
+      "sizes": {
+        "raw": {
+          "current": 17120999,
+          "base": null,
+          "delta": null
+        },
+        "gzip": {
+          "current": 1386968,
+          "base": null,
+          "delta": null
+        },
+        "brotli": {
+          "current": 1020439,
+          "base": null,
+          "delta": null
+        }
+      },
+      "violations": [],
+      "badge_path": ".gh-build-size/badges/sourcemaps.svg",
+      "target_path": ".gh-build-size/targets/sourcemaps.json"
+    },
+    {
+      "id": "types",
+      "label": "Type declarations",
+      "files": [
+        "dist/github.d.mts",
+        "dist/index.d.mts",
+        "dist/interfaces.d.mts",
+        "dist/message_builder.d.mts",
+        "dist/rarity.d.mts",
+        "dist/rules.d.mts",
+        "dist/validate.d.mts"
+      ],
+      "touched_files": [],
+      "baseline_missing": false,
+      "commentable": true,
+      "sizes": {
+        "raw": {
+          "current": 4973491,
+          "base": null,
+          "delta": null
+        },
+        "gzip": {
+          "current": 535574,
+          "base": null,
+          "delta": null
+        },
+        "brotli": {
+          "current": 259470,
+          "base": null,
+          "delta": null
+        }
+      },
+      "violations": [],
+      "badge_path": ".gh-build-size/badges/types.svg",
+      "target_path": ".gh-build-size/targets/types.json"
+    }
+  ]
+}
