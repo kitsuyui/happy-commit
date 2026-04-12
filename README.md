@@ -5,6 +5,8 @@
 
 Celebrate pull requests when their number or commit SHA matches a fun pattern.
 The repository also tracks `TODO` and `FIXME` markers with [`gh-counter`](https://github.com/kitsuyui/gh-counter).
+It also tracks built action artifact size with
+[`gh-build-size`](https://github.com/kitsuyui/gh-build-size).
 
 ## What it does
 

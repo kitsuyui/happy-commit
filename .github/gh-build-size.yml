@@ -1,0 +1,32 @@
+version: 1
+publish:
+  enabled: true
+  branch: gh-build-size-assets
+comment:
+  key: action-build-size
+targets:
+  - id: total
+    label: Total action artifacts
+    files:
+      - dist/**
+    compressions: [raw, gzip, brotli]
+    badge:
+      compression: gzip
+      label: action artifacts (gzip)
+  - id: runtime
+    label: Runtime bundle
+    files:
+      - dist/**/*.mjs
+    compressions: [raw, gzip, brotli]
+  - id: sourcemaps
+    label: Source maps
+    files:
+      - dist/**/*.map
+    compressions: [raw, gzip, brotli]
+  - id: types
+    label: Type declarations
+    files:
+      - dist/**/*.d.ts
+      - dist/**/*.d.mts
+      - dist/**/*.d.cts
+    compressions: [raw, gzip, brotli]
