@@ -2,6 +2,7 @@
 
 ![Coverage](https://raw.githubusercontent.com/kitsuyui/octocov-central/main/badges/kitsuyui/happy-commit/coverage.svg)
 [![TODO/FIXME](https://raw.githubusercontent.com/kitsuyui/happy-commit/gh-counter-assets/badges/maintenance-comments.svg)](https://github.com/kitsuyui/happy-commit/search?q=%28TODO+OR+FIXME%29+path%3Asrc&type=code)
+[![Build Size Report](https://raw.githubusercontent.com/kitsuyui/happy-commit/gh-build-size-assets/badges/total.svg)](https://github.com/kitsuyui/happy-commit/blob/gh-build-size-assets/report.md)
 
 Celebrate pull requests when their number or commit SHA matches a fun pattern.
 The repository also tracks `TODO` and `FIXME` markers with [`gh-counter`](https://github.com/kitsuyui/gh-counter).
