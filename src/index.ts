@@ -40,6 +40,22 @@ function getMaxExpectedOccurrences(
   return value
 }
 
+async function resolveRepositoryCommitCount(
+  octokit: Octokit,
+  maxExpectedOccurrences: number | undefined,
+  defaultBranch: string | undefined
+): Promise<number> {
+  if (maxExpectedOccurrences === undefined || !defaultBranch) {
+    return 0
+  }
+
+  return getRepositoryCommitCount(octokit, defaultBranch)
+}
+
+function formatUnexpectedError(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
 async function run() {
   try {
     const context = github.context
@@ -48,11 +64,11 @@ async function run() {
     const prNum = context.issue.number
     const commitIds = await getCommitIds(octokit)
     const maxExpectedOccurrences = getMaxExpectedOccurrences()
-    const defaultBranch = context.payload.repository?.default_branch
-    const repositoryCommitCount =
-      maxExpectedOccurrences === undefined || !defaultBranch
-        ? 0
-        : await getRepositoryCommitCount(octokit, defaultBranch)
+    const repositoryCommitCount = await resolveRepositoryCommitCount(
+      octokit,
+      maxExpectedOccurrences,
+      context.payload.repository?.default_branch
+    )
     const mb = new CustomMessageBuilder(BASE_TEMPLATE, {}, getAdditionalRules())
     const message = mb.build({
       commitIds,
@@ -62,11 +78,7 @@ async function run() {
     })
     await updateMessage(octokit, prNum, userLogin, message)
   } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(`Unexpected error: ${error.message}`)
-    } else {
-      core.setFailed(`Unexpected error: ${error}`)
-    }
+    core.setFailed(`Unexpected error: ${formatUnexpectedError(error)}`)
   }
 }
 

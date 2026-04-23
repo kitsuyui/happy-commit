@@ -30,6 +30,40 @@ class MessageBuilder {
     return this.rules.filter((rule) => rule.kind === 'commit')
   }
 
+  private canRenderRule(
+    expectedOccurrences: MessageForRule['expectedOccurrences'],
+    context: LuckyJudgeContext
+  ): boolean {
+    return (
+      !expectedOccurrences ||
+      isRareEnough(expectedOccurrences(context), context.maxExpectedOccurrences)
+    )
+  }
+
+  private renderMessage<
+    T extends Record<string, string | RegExpMatchArray | number>,
+  >(
+    ruleConfig: MessageForRule,
+    value: T,
+    valueName: keyof T,
+    context: LuckyJudgeContext
+  ): string | null {
+    const target = value[valueName]
+    if (typeof target !== 'string') {
+      return null
+    }
+
+    const matched = target.match(ruleConfig.rule)
+    if (
+      !matched ||
+      !this.canRenderRule(ruleConfig.expectedOccurrences, context)
+    ) {
+      return null
+    }
+
+    return Mustache.render(ruleConfig.message, { ...value, matched })
+  }
+
   private renderMessages<
     T extends Record<string, string | RegExpMatchArray | number>,
   >(
@@ -38,31 +72,17 @@ class MessageBuilder {
     valueName: keyof T,
     context: LuckyJudgeContext
   ): string[] {
-    const messages: string[] = []
-
-    for (const { rule, message, expectedOccurrences } of rules) {
-      for (const value of values) {
-        const target = value[valueName]
-        if (typeof target !== 'string') {
-          continue
-        }
-        const matched = target.match(rule)
-        if (matched) {
-          if (
-            expectedOccurrences &&
-            !isRareEnough(
-              expectedOccurrences(context),
-              context.maxExpectedOccurrences
-            )
-          ) {
-            continue
-          }
-          messages.push(Mustache.render(message, { ...value, matched }))
-        }
-      }
-    }
-
-    return messages
+    return rules.flatMap((ruleConfig) =>
+      values.flatMap((value) => {
+        const message = this.renderMessage(
+          ruleConfig,
+          value,
+          valueName,
+          context
+        )
+        return message ? [message] : []
+      })
+    )
   }
 
   build(context: LuckyJudgeContext): MessageContext {
