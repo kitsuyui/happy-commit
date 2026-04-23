@@ -5,6 +5,14 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 14
+          }
+        }
+      },
       "style": {
         "noParameterAssign": "error",
         "useAsConstAssertion": "error",
@@ -51,6 +59,7 @@
       "!**/dist",
       "!**/build",
       "!**/coverage",
+      "!**/.tmp",
       "!**/.turbo",
       "!**/*.md",
       "!**/*.yml",
