@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-04-19T00:06:19.510Z",
+  "generated_at": "2026-04-23T14:54:36.301Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
-  "head_reference": "6fa2cc0e57b6d8f2f8f4dcf363ce66fc7bca96ea",
+  "head_reference": "1151ca7fb2219d426227d44c9e6aa7c91c21d9b9",
   "files": [
     {
       "path": "dist/ajv-QtvvyOqs.mjs",
@@ -57,25 +57,25 @@
     {
       "path": "dist/github.d.mts.map",
       "sizes": {
-        "raw": 13232898,
-        "gzip": 518665,
-        "brotli": 341257
+        "raw": 13232900,
+        "gzip": 518669,
+        "brotli": 341321
       }
     },
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1740,
-        "gzip": 810,
-        "brotli": 717
+        "raw": 1774,
+        "gzip": 808,
+        "brotli": 716
       }
     },
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 6795,
-        "gzip": 2145,
-        "brotli": 1910
+        "raw": 7134,
+        "gzip": 2236,
+        "brotli": 2007
       }
     },
     {
@@ -89,17 +89,17 @@
     {
       "path": "dist/index.mjs",
       "sizes": {
-        "raw": 506654,
-        "gzip": 157094,
-        "brotli": 119957
+        "raw": 506702,
+        "gzip": 157108,
+        "brotli": 119988
       }
     },
     {
       "path": "dist/index.mjs.map",
       "sizes": {
-        "raw": 1740842,
-        "gzip": 405575,
-        "brotli": 314566
+        "raw": 1741216,
+        "gzip": 405673,
+        "brotli": 314599
       }
     },
     {
@@ -137,33 +137,33 @@
     {
       "path": "dist/message_builder.d.mts",
       "sizes": {
-        "raw": 1034,
-        "gzip": 434,
-        "brotli": 350
+        "raw": 1084,
+        "gzip": 444,
+        "brotli": 361
       }
     },
     {
       "path": "dist/message_builder.d.mts.map",
       "sizes": {
-        "raw": 2323,
-        "gzip": 259,
-        "brotli": 216
+        "raw": 2544,
+        "gzip": 271,
+        "brotli": 235
       }
     },
     {
       "path": "dist/message_builder.mjs",
       "sizes": {
-        "raw": 1351,
-        "gzip": 705,
-        "brotli": 634
+        "raw": 1449,
+        "gzip": 727,
+        "brotli": 641
       }
     },
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 4815,
-        "gzip": 1754,
-        "brotli": 1548
+        "raw": 5404,
+        "gzip": 1877,
+        "brotli": 1656
       }
     },
     {

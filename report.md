@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `6fa2cc0e57b6d8f2f8f4dcf363ce66fc7bca96ea`
-- Generated at: 2026-04-19T00:06:19.510Z
+- Head: `1151ca7fb2219d426227d44c9e6aa7c91c21d9b9`
+- Generated at: 2026-04-23T14:54:36.301Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
@@ -12,20 +12,20 @@
 | `dist/github-D91hw1gk.mjs` | 519,975 B | 151,333 B | 113,001 B |
 | `dist/github-D91hw1gk.mjs.map` | 1,513,259 B | 352,423 B | 271,407 B |
 | `dist/github.d.mts` | 4,935,167 B | 526,099 B | 251,017 B |
-| `dist/github.d.mts.map` | 13,232,898 B | 518,665 B | 341,257 B |
-| `dist/github.mjs` | 1,740 B | 810 B | 717 B |
-| `dist/github.mjs.map` | 6,795 B | 2,145 B | 1,910 B |
+| `dist/github.d.mts.map` | 13,232,900 B | 518,669 B | 341,321 B |
+| `dist/github.mjs` | 1,774 B | 808 B | 716 B |
+| `dist/github.mjs.map` | 7,134 B | 2,236 B | 2,007 B |
 | `dist/index.d.mts` | 11 B | 31 B | 15 B |
-| `dist/index.mjs` | 506,654 B | 157,094 B | 119,957 B |
-| `dist/index.mjs.map` | 1,740,842 B | 405,575 B | 314,566 B |
+| `dist/index.mjs` | 506,702 B | 157,108 B | 119,988 B |
+| `dist/index.mjs.map` | 1,741,216 B | 405,673 B | 314,599 B |
 | `dist/interfaces.d.mts` | 1,050 B | 417 B | 364 B |
 | `dist/interfaces.d.mts.map` | 3,571 B | 268 B | 240 B |
 | `dist/interfaces.mjs` | 9 B | 29 B | 13 B |
 | `dist/LICENSES.txt` | 42,069 B | 6,339 B | 4,932 B |
-| `dist/message_builder.d.mts` | 1,034 B | 434 B | 350 B |
-| `dist/message_builder.d.mts.map` | 2,323 B | 259 B | 216 B |
-| `dist/message_builder.mjs` | 1,351 B | 705 B | 634 B |
-| `dist/message_builder.mjs.map` | 4,815 B | 1,754 B | 1,548 B |
+| `dist/message_builder.d.mts` | 1,084 B | 444 B | 361 B |
+| `dist/message_builder.d.mts.map` | 2,544 B | 271 B | 235 B |
+| `dist/message_builder.mjs` | 1,449 B | 727 B | 641 B |
+| `dist/message_builder.mjs.map` | 5,404 B | 1,877 B | 1,656 B |
 | `dist/mustache-BhZz4e-Z.mjs` | 6,533 B | 2,697 B | 2,451 B |
 | `dist/mustache-BhZz4e-Z.mjs.map` | 32,899 B | 9,702 B | 8,311 B |
 | `dist/rarity.d.mts` | 1,074 B | 319 B | 270 B |

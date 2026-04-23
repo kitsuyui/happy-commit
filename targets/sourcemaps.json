@@ -21,25 +21,25 @@
     {
       "path": "dist/github.d.mts.map",
       "sizes": {
-        "raw": 13232898,
-        "gzip": 518665,
-        "brotli": 341257
+        "raw": 13232900,
+        "gzip": 518669,
+        "brotli": 341321
       }
     },
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 6795,
-        "gzip": 2145,
-        "brotli": 1910
+        "raw": 7134,
+        "gzip": 2236,
+        "brotli": 2007
       }
     },
     {
       "path": "dist/index.mjs.map",
       "sizes": {
-        "raw": 1740842,
-        "gzip": 405575,
-        "brotli": 314566
+        "raw": 1741216,
+        "gzip": 405673,
+        "brotli": 314599
       }
     },
     {
@@ -53,17 +53,17 @@
     {
       "path": "dist/message_builder.d.mts.map",
       "sizes": {
-        "raw": 2323,
-        "gzip": 259,
-        "brotli": 216
+        "raw": 2544,
+        "gzip": 271,
+        "brotli": 235
       }
     },
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 4815,
-        "gzip": 1754,
-        "brotli": 1548
+        "raw": 5404,
+        "gzip": 1877,
+        "brotli": 1656
       }
     },
     {
@@ -124,8 +124,8 @@
     }
   ],
   "totals": {
-    "raw": 17120999,
-    "gzip": 1386968,
-    "brotli": 1020439
+    "raw": 17122524,
+    "gzip": 1387296,
+    "brotli": 1020760
   }
 }

@@ -29,17 +29,17 @@
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1740,
-        "gzip": 810,
-        "brotli": 717
+        "raw": 1774,
+        "gzip": 808,
+        "brotli": 716
       }
     },
     {
       "path": "dist/index.mjs",
       "sizes": {
-        "raw": 506654,
-        "gzip": 157094,
-        "brotli": 119957
+        "raw": 506702,
+        "gzip": 157108,
+        "brotli": 119988
       }
     },
     {
@@ -53,9 +53,9 @@
     {
       "path": "dist/message_builder.mjs",
       "sizes": {
-        "raw": 1351,
-        "gzip": 705,
-        "brotli": 634
+        "raw": 1449,
+        "gzip": 727,
+        "brotli": 641
       }
     },
     {
@@ -92,8 +92,8 @@
     }
   ],
   "totals": {
-    "raw": 1151628,
-    "gzip": 347135,
-    "brotli": 267263
+    "raw": 1151808,
+    "gzip": 347169,
+    "brotli": 267300
   }
 }

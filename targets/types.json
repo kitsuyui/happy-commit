@@ -29,9 +29,9 @@
     {
       "path": "dist/message_builder.d.mts",
       "sizes": {
-        "raw": 1034,
-        "gzip": 434,
-        "brotli": 350
+        "raw": 1084,
+        "gzip": 444,
+        "brotli": 361
       }
     },
     {
@@ -60,8 +60,8 @@
     }
   ],
   "totals": {
-    "raw": 4973491,
-    "gzip": 535574,
-    "brotli": 259470
+    "raw": 4973541,
+    "gzip": 535584,
+    "brotli": 259481
   }
 }
