@@ -15,32 +15,34 @@ function buildManagedBody(body: string): string {
   return `${COMMENT_MARKER}\n${body}`
 }
 
+function createLuckyCommentAction(
+  pastComment: Comment | null,
+  managedBody: string
+): CommentAction {
+  if (!pastComment) {
+    return { type: 'create', body: managedBody }
+  }
+  if (pastComment.body === managedBody) {
+    return { type: 'noop' }
+  }
+  return {
+    type: 'update',
+    commentId: pastComment.id,
+    body: managedBody,
+  }
+}
+
 export function decideCommentAction(
   pastComment: Comment | null,
   message: MessageContext
 ): CommentAction {
-  const { lucky, body } = message
-  const managedBody = buildManagedBody(body)
-
-  if (lucky) {
-    if (!pastComment) {
-      return { type: 'create', body: managedBody }
-    }
-    if (pastComment.body !== managedBody) {
-      return {
-        type: 'update',
-        commentId: pastComment.id,
-        body: managedBody,
-      }
-    }
-    return { type: 'noop' }
+  if (!message.lucky) {
+    return pastComment
+      ? { type: 'delete', commentId: pastComment.id }
+      : { type: 'noop' }
   }
 
-  if (pastComment) {
-    return { type: 'delete', commentId: pastComment.id }
-  }
-
-  return { type: 'noop' }
+  return createLuckyCommentAction(pastComment, buildManagedBody(message.body))
 }
 
 /**
@@ -111,19 +113,29 @@ async function getManagedComment(
     ...context.repo,
     issue_number: prNum,
   })
-  // find the managed comment by the current user if it exists
-  for (const comment of comments.data) {
-    if (
-      comment.user?.login === userLogin &&
-      (comment.body || comment.body_text || '').includes(COMMENT_MARKER)
-    ) {
-      return {
+  const comment = comments.data.find((candidate) =>
+    isManagedCommentByUser(candidate, userLogin)
+  )
+  return comment
+    ? {
         id: comment.id,
         body: comment.body_text || '',
       }
-    }
-  }
-  return null
+    : null
+}
+
+function isManagedCommentByUser(
+  comment: {
+    user?: { login?: string | null } | null
+    body?: string | null
+    body_text?: string | null
+  },
+  userLogin: string
+): boolean {
+  return (
+    comment.user?.login === userLogin &&
+    (comment.body || comment.body_text || '').includes(COMMENT_MARKER)
+  )
 }
 
 /**
