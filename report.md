@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `1151ca7fb2219d426227d44c9e6aa7c91c21d9b9`
-- Generated at: 2026-04-23T14:54:36.301Z
+- Head: `3e38265c6049c71a351c126da827c54dfaeaf1ee`
+- Generated at: 2026-05-04T22:43:58.178Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
@@ -37,6 +37,6 @@
 | `dist/rules.mjs` | 2,528 B | 883 B | 799 B |
 | `dist/rules.mjs.map` | 5,833 B | 1,699 B | 1,528 B |
 | `dist/validate.d.mts` | 34,417 B | 7,904 B | 7,146 B |
-| `dist/validate.d.mts.map` | 195,650 B | 12,579 B | 10,134 B |
-| `dist/validate.mjs` | 390 B | 284 B | 237 B |
-| `dist/validate.mjs.map` | 827 B | 447 B | 391 B |
+| `dist/validate.d.mts.map` | 195,650 B | 12,579 B | 10,137 B |
+| `dist/validate.mjs` | 425 B | 303 B | 254 B |
+| `dist/validate.mjs.map` | 902 B | 484 B | 413 B |

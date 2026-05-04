@@ -111,21 +111,21 @@
       "sizes": {
         "raw": 195650,
         "gzip": 12579,
-        "brotli": 10134
+        "brotli": 10137
       }
     },
     {
       "path": "dist/validate.mjs.map",
       "sizes": {
-        "raw": 827,
-        "gzip": 447,
-        "brotli": 391
+        "raw": 902,
+        "gzip": 484,
+        "brotli": 413
       }
     }
   ],
   "totals": {
-    "raw": 17122524,
-    "gzip": 1387296,
-    "brotli": 1020760
+    "raw": 17122599,
+    "gzip": 1387333,
+    "brotli": 1020785
   }
 }

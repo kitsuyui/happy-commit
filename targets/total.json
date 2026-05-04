@@ -255,29 +255,29 @@
       "sizes": {
         "raw": 195650,
         "gzip": 12579,
-        "brotli": 10134
+        "brotli": 10137
       }
     },
     {
       "path": "dist/validate.mjs",
       "sizes": {
-        "raw": 390,
-        "gzip": 284,
-        "brotli": 237
+        "raw": 425,
+        "gzip": 303,
+        "brotli": 254
       }
     },
     {
       "path": "dist/validate.mjs.map",
       "sizes": {
-        "raw": 827,
-        "gzip": 447,
-        "brotli": 391
+        "raw": 902,
+        "gzip": 484,
+        "brotli": 413
       }
     }
   ],
   "totals": {
-    "raw": 23289942,
-    "gzip": 2276388,
-    "brotli": 1552473
+    "raw": 23290052,
+    "gzip": 2276444,
+    "brotli": 1552515
   }
 }

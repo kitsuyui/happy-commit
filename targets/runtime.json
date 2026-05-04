@@ -85,15 +85,15 @@
     {
       "path": "dist/validate.mjs",
       "sizes": {
-        "raw": 390,
-        "gzip": 284,
-        "brotli": 237
+        "raw": 425,
+        "gzip": 303,
+        "brotli": 254
       }
     }
   ],
   "totals": {
-    "raw": 1151808,
-    "gzip": 347169,
-    "brotli": 267300
+    "raw": 1151843,
+    "gzip": 347188,
+    "brotli": 267317
   }
 }
