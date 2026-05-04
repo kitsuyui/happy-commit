@@ -17,6 +17,7 @@ const schema = {
         type: 'string',
       },
     },
+    required: ['kind', 'rule', 'message'],
     type: 'object',
   },
   type: 'array',

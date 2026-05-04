@@ -29,6 +29,24 @@ describe('parseRules', () => {
     ).toThrowError('Invalid rules')
   })
 
+  it('throws when passed rules missing required fields', () => {
+    expect(() =>
+      parseRules(
+        '[{"rule": "(?:[1]0+)", "message": "Now pull request issue number reaches **{{prNum}}**. It\'s time to celebrate!"}]'
+      )
+    ).toThrowError('Invalid rules')
+
+    expect(() =>
+      parseRules(
+        '[{"kind": "pr", "message": "Now pull request issue number reaches **{{prNum}}**. It\'s time to celebrate!"}]'
+      )
+    ).toThrowError('Invalid rules')
+
+    expect(() =>
+      parseRules('[{"kind": "pr", "rule": "(?:[1]0+)"}]')
+    ).toThrowError('Invalid rules')
+  })
+
   it('throws when passed broken regexp pattern', () => {
     expect(() =>
       parseRules(
