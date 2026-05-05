@@ -1,12 +1,15 @@
 {
-  "generated_at": "2026-05-05T02:15:50.702Z",
+  "generated_at": "2026-05-05T15:32:04.829Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-counter-assets",
   "event_name": "push",
-  "base_reference": "db19f4c7609c0f16cf15a4996e1b92c5b61dc341",
-  "head_reference": "4cc8b0cc92622db7c1a4ce3eccfb0f24a0ef22e4",
+  "base_label": "main",
+  "base_reference": "4cc8b0cc92622db7c1a4ce3eccfb0f24a0ef22e4",
+  "head_label": "main",
+  "head_reference": "197c3204be97d9ea7c6bd94b3e93159c33299966",
   "bootstrap_message": null,
+  "base_only_paths": [],
   "counters": [
     {
       "id": "maintenance-comments",
@@ -14,8 +17,13 @@
       "current": 0,
       "base": 0,
       "delta": 0,
+      "dashboard_current": 0,
+      "dashboard_base": 0,
+      "dashboard_delta": 0,
       "commentable": true,
       "touched_files": [],
+      "file_deltas": [],
+      "patch_file_deltas": [],
       "violations": [],
       "badge_path": ".gh-counter/badges/maintenance-comments.svg",
       "counter_path": ".gh-counter/counters/maintenance-comments.json"
