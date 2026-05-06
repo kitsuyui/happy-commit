@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-05T15:32:50.383Z",
+  "generated_at": "2026-05-06T04:52:06.788Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
   "base_label": "main",
-  "base_reference": "4cc8b0cc92622db7c1a4ce3eccfb0f24a0ef22e4",
+  "base_reference": "197c3204be97d9ea7c6bd94b3e93159c33299966",
   "head_label": "main",
-  "head_reference": "197c3204be97d9ea7c6bd94b3e93159c33299966",
+  "head_reference": "faa34694b7bbe89bb7d4ea6503c79f66569b9bf7",
   "targets": [
     {
       "id": "total",

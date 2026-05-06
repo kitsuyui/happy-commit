@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `197c3204be97d9ea7c6bd94b3e93159c33299966`
-- Generated at: 2026-05-05T15:32:50.383Z
+- Head: `faa34694b7bbe89bb7d4ea6503c79f66569b9bf7`
+- Generated at: 2026-05-06T04:52:06.789Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
