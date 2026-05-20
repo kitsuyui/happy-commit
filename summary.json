@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-20T11:26:36.622Z",
+  "generated_at": "2026-05-20T17:04:40.731Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
   "base_label": "main",
-  "base_reference": "45435c8c261d33b71a9f8ca520009ca87e04c484",
+  "base_reference": "5c059d69a03bcd969741aad38ba557de2fb6623f",
   "head_label": "main",
-  "head_reference": "5c059d69a03bcd969741aad38ba557de2fb6623f",
+  "head_reference": "048b9dd2ed215b5d18683117ec249df0ea5a13e2",
   "targets": [
     {
       "id": "total",
@@ -54,18 +54,18 @@
       "sizes": {
         "raw": {
           "current": 23290098,
-          "base": 23290052,
-          "delta": 46
+          "base": 23290098,
+          "delta": 0
         },
         "gzip": {
           "current": 2276454,
-          "base": 2276444,
-          "delta": 10
+          "base": 2276454,
+          "delta": 0
         },
         "brotli": {
           "current": 1552544,
-          "base": 1552515,
-          "delta": 29
+          "base": 1552544,
+          "delta": 0
         }
       },
       "violations": [],
@@ -94,18 +94,18 @@
       "sizes": {
         "raw": {
           "current": 1151846,
-          "base": 1151843,
-          "delta": 3
+          "base": 1151846,
+          "delta": 0
         },
         "gzip": {
           "current": 347190,
-          "base": 347188,
-          "delta": 2
+          "base": 347190,
+          "delta": 0
         },
         "brotli": {
           "current": 267339,
-          "base": 267317,
-          "delta": 22
+          "base": 267339,
+          "delta": 0
         }
       },
       "violations": [],
@@ -138,18 +138,18 @@
       "sizes": {
         "raw": {
           "current": 17122642,
-          "base": 17122599,
-          "delta": 43
+          "base": 17122642,
+          "delta": 0
         },
         "gzip": {
           "current": 1387341,
-          "base": 1387333,
-          "delta": 8
+          "base": 1387341,
+          "delta": 0
         },
         "brotli": {
           "current": 1020792,
-          "base": 1020785,
-          "delta": 7
+          "base": 1020792,
+          "delta": 0
         }
       },
       "violations": [],
