@@ -119,7 +119,7 @@ async function getManagedComment(
   return comment
     ? {
         id: comment.id,
-        body: comment.body_text || '',
+        body: comment.body || comment.body_text || '',
       }
     : null
 }

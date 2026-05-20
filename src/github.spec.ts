@@ -153,7 +153,7 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: '<!-- happy-commit -->\nold body',
+          body_text: 'old body',
           body: '<!-- happy-commit -->\nold body',
           user: { login: 'github-actions[bot]' },
         },
@@ -181,7 +181,7 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: '<!-- happy-commit -->\nsame body',
+          body_text: 'same body',
           body: '<!-- happy-commit -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
@@ -204,7 +204,7 @@ describe('updateMessage', () => {
       data: [
         {
           id: 55,
-          body_text: '<!-- happy-commit -->\nsame body',
+          body_text: 'same body',
           body: '<!-- happy-commit -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
