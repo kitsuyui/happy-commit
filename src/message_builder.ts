@@ -61,7 +61,10 @@ class MessageBuilder {
       return null
     }
 
-    return Mustache.render(ruleConfig.message, { ...value, matched })
+    return Mustache.render(ruleConfig.message, {
+      ...value,
+      matched: matched[0],
+    })
   }
 
   private renderMessages<

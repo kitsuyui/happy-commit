@@ -314,6 +314,26 @@ describe('MessageBuilder', () => {
     })
   })
 
+  it('shows only the full match string for commit_hits_same_numbers, not capture groups', () => {
+    const context = {
+      commitIds: ['aaaaa86968b837366e6603cab1142462c8f33ea5'],
+      prNum: 410,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+    const message = mb.build(context)
+    expect(message).toEqual({
+      lucky: true,
+      body: [
+        '# :tada: Happy commit!',
+        '- Commit `aaaaa86968b837366e6603cab1142462c8f33ea5` is lucky! It contains **aaaaa**!.',
+        '',
+      ].join('\n'),
+    })
+  })
+
   it('appends additional rules before built-in rules', () => {
     const context = {
       commitIds: ['abcdef123'],
