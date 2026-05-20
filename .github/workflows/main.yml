@@ -16,8 +16,8 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          additional_rules: |
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          additional-rules: |
             [
               {
                 "kind": "pr",

@@ -14,9 +14,39 @@ import { parseRules } from './rules'
 
 const BASE_TEMPLATE =
   '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}'
+const GITHUB_TOKEN_INPUT = 'github-token'
+const LEGACY_GITHUB_TOKEN_INPUT = 'GITHUB_TOKEN'
+const ADDITIONAL_RULES_INPUT = 'additional-rules'
+const LEGACY_ADDITIONAL_RULES_INPUT = 'additional_rules'
+const MAX_EXPECTED_OCCURRENCES_INPUT = 'max-expected-occurrences'
+const LEGACY_MAX_EXPECTED_OCCURRENCES_INPUT = 'max_expected_occurrences'
+
+function getActionInput(
+  inputName: string,
+  legacyInputName?: string
+): string | undefined {
+  const input = core.getInput(inputName)
+  if (input) {
+    return input
+  }
+
+  if (!legacyInputName) {
+    return undefined
+  }
+
+  const legacyInput = core.getInput(legacyInputName)
+  return legacyInput || undefined
+}
+
+function setLegacyOctokitTokenInputEnv(): void {
+  const token = getActionInput(GITHUB_TOKEN_INPUT, LEGACY_GITHUB_TOKEN_INPUT)
+  if (token) {
+    process.env.INPUT_GITHUB_TOKEN = token
+  }
+}
 
 function getAdditionalRules(
-  input = process.env.INPUT_ADDITIONAL_RULES
+  input = getActionInput(ADDITIONAL_RULES_INPUT, LEGACY_ADDITIONAL_RULES_INPUT)
 ): MessageForRule[] {
   if (!input) {
     return []
@@ -26,7 +56,10 @@ function getAdditionalRules(
 }
 
 function getMaxExpectedOccurrences(
-  input = process.env.INPUT_MAX_EXPECTED_OCCURRENCES
+  input = getActionInput(
+    MAX_EXPECTED_OCCURRENCES_INPUT,
+    LEGACY_MAX_EXPECTED_OCCURRENCES_INPUT
+  )
 ): number | undefined {
   if (!input) {
     return undefined
@@ -34,7 +67,9 @@ function getMaxExpectedOccurrences(
 
   const value = Number(input)
   if (!Number.isFinite(value) || value < 0) {
-    throw new Error('max_expected_occurrences must be a non-negative number')
+    throw new Error(
+      `${MAX_EXPECTED_OCCURRENCES_INPUT} must be a non-negative number`
+    )
   }
 
   return value
@@ -59,6 +94,7 @@ function formatUnexpectedError(error: unknown): string {
 async function run() {
   try {
     const context = github.context
+    setLegacyOctokitTokenInputEnv()
     const octokit = new Octokit()
     const userLogin = await getUserLogin(octokit)
     const prNum = context.issue.number
