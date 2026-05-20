@@ -53,9 +53,9 @@
     {
       "path": "dist/message_builder.mjs",
       "sizes": {
-        "raw": 1449,
-        "gzip": 727,
-        "brotli": 641
+        "raw": 1452,
+        "gzip": 729,
+        "brotli": 663
       }
     },
     {
@@ -92,8 +92,8 @@
     }
   ],
   "totals": {
-    "raw": 1151843,
-    "gzip": 347188,
-    "brotli": 267317
+    "raw": 1151846,
+    "gzip": 347190,
+    "brotli": 267339
   }
 }

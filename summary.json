@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-06T08:38:45.085Z",
+  "generated_at": "2026-05-20T11:26:36.622Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
   "base_label": "main",
-  "base_reference": "faa34694b7bbe89bb7d4ea6503c79f66569b9bf7",
+  "base_reference": "45435c8c261d33b71a9f8ca520009ca87e04c484",
   "head_label": "main",
-  "head_reference": "45435c8c261d33b71a9f8ca520009ca87e04c484",
+  "head_reference": "5c059d69a03bcd969741aad38ba557de2fb6623f",
   "targets": [
     {
       "id": "total",
@@ -53,19 +53,19 @@
       "commentable": true,
       "sizes": {
         "raw": {
-          "current": 23290052,
+          "current": 23290098,
           "base": 23290052,
-          "delta": 0
+          "delta": 46
         },
         "gzip": {
-          "current": 2276444,
+          "current": 2276454,
           "base": 2276444,
-          "delta": 0
+          "delta": 10
         },
         "brotli": {
-          "current": 1552515,
+          "current": 1552544,
           "base": 1552515,
-          "delta": 0
+          "delta": 29
         }
       },
       "violations": [],
@@ -93,19 +93,19 @@
       "commentable": true,
       "sizes": {
         "raw": {
-          "current": 1151843,
+          "current": 1151846,
           "base": 1151843,
-          "delta": 0
+          "delta": 3
         },
         "gzip": {
-          "current": 347188,
+          "current": 347190,
           "base": 347188,
-          "delta": 0
+          "delta": 2
         },
         "brotli": {
-          "current": 267317,
+          "current": 267339,
           "base": 267317,
-          "delta": 0
+          "delta": 22
         }
       },
       "violations": [],
@@ -137,19 +137,19 @@
       "commentable": true,
       "sizes": {
         "raw": {
-          "current": 17122599,
+          "current": 17122642,
           "base": 17122599,
-          "delta": 0
+          "delta": 43
         },
         "gzip": {
-          "current": 1387333,
+          "current": 1387341,
           "base": 1387333,
-          "delta": 0
+          "delta": 8
         },
         "brotli": {
-          "current": 1020785,
+          "current": 1020792,
           "base": 1020785,
-          "delta": 0
+          "delta": 7
         }
       },
       "violations": [],

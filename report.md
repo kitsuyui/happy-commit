@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `45435c8c261d33b71a9f8ca520009ca87e04c484`
-- Generated at: 2026-05-06T08:38:45.086Z
+- Head: `5c059d69a03bcd969741aad38ba557de2fb6623f`
+- Generated at: 2026-05-20T11:26:36.623Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
@@ -23,9 +23,9 @@
 | `dist/interfaces.mjs` | 9 B | 29 B | 13 B |
 | `dist/LICENSES.txt` | 42,069 B | 6,339 B | 4,932 B |
 | `dist/message_builder.d.mts` | 1,084 B | 444 B | 361 B |
-| `dist/message_builder.d.mts.map` | 2,544 B | 271 B | 235 B |
-| `dist/message_builder.mjs` | 1,449 B | 727 B | 641 B |
-| `dist/message_builder.mjs.map` | 5,404 B | 1,877 B | 1,656 B |
+| `dist/message_builder.d.mts.map` | 2,544 B | 270 B | 234 B |
+| `dist/message_builder.mjs` | 1,452 B | 729 B | 663 B |
+| `dist/message_builder.mjs.map` | 5,447 B | 1,886 B | 1,664 B |
 | `dist/mustache-BhZz4e-Z.mjs` | 6,533 B | 2,697 B | 2,451 B |
 | `dist/mustache-BhZz4e-Z.mjs.map` | 32,899 B | 9,702 B | 8,311 B |
 | `dist/rarity.d.mts` | 1,074 B | 319 B | 270 B |

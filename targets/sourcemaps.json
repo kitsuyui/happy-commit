@@ -54,16 +54,16 @@
       "path": "dist/message_builder.d.mts.map",
       "sizes": {
         "raw": 2544,
-        "gzip": 271,
-        "brotli": 235
+        "gzip": 270,
+        "brotli": 234
       }
     },
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 5404,
-        "gzip": 1877,
-        "brotli": 1656
+        "raw": 5447,
+        "gzip": 1886,
+        "brotli": 1664
       }
     },
     {
@@ -124,8 +124,8 @@
     }
   ],
   "totals": {
-    "raw": 17122599,
-    "gzip": 1387333,
-    "brotli": 1020785
+    "raw": 17122642,
+    "gzip": 1387341,
+    "brotli": 1020792
   }
 }

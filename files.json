@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-06T08:38:45.086Z",
+  "generated_at": "2026-05-20T11:26:36.623Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
-  "head_reference": "45435c8c261d33b71a9f8ca520009ca87e04c484",
+  "head_reference": "5c059d69a03bcd969741aad38ba557de2fb6623f",
   "files": [
     {
       "path": "dist/ajv-QtvvyOqs.mjs",
@@ -146,24 +146,24 @@
       "path": "dist/message_builder.d.mts.map",
       "sizes": {
         "raw": 2544,
-        "gzip": 271,
-        "brotli": 235
+        "gzip": 270,
+        "brotli": 234
       }
     },
     {
       "path": "dist/message_builder.mjs",
       "sizes": {
-        "raw": 1449,
-        "gzip": 727,
-        "brotli": 641
+        "raw": 1452,
+        "gzip": 729,
+        "brotli": 663
       }
     },
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 5404,
-        "gzip": 1877,
-        "brotli": 1656
+        "raw": 5447,
+        "gzip": 1886,
+        "brotli": 1664
       }
     },
     {

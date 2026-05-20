@@ -142,24 +142,24 @@
       "path": "dist/message_builder.d.mts.map",
       "sizes": {
         "raw": 2544,
-        "gzip": 271,
-        "brotli": 235
+        "gzip": 270,
+        "brotli": 234
       }
     },
     {
       "path": "dist/message_builder.mjs",
       "sizes": {
-        "raw": 1449,
-        "gzip": 727,
-        "brotli": 641
+        "raw": 1452,
+        "gzip": 729,
+        "brotli": 663
       }
     },
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 5404,
-        "gzip": 1877,
-        "brotli": 1656
+        "raw": 5447,
+        "gzip": 1886,
+        "brotli": 1664
       }
     },
     {
@@ -276,8 +276,8 @@
     }
   ],
   "totals": {
-    "raw": 23290052,
-    "gzip": 2276444,
-    "brotli": 1552515
+    "raw": 23290098,
+    "gzip": 2276454,
+    "brotli": 1552544
   }
 }
