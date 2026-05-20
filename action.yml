@@ -16,6 +16,10 @@ inputs:
     description: 'Celebrate built-in rules only when their expected occurrences at the current repository size stay below this value'
     required: false
 
+outputs:
+  lucky:
+    description: "'true' if a lucky commit or PR number was found, 'false' otherwise"
+
 runs:
   # https://json.schemastore.org/github-action.json
   # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
