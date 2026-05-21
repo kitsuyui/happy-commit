@@ -318,6 +318,17 @@ describe('github helpers', () => {
     expect(octokit.graphql).toHaveBeenCalledOnce()
   })
 
+  it('throws a clear error when the current user login cannot be resolved', async () => {
+    const octokit = createOctokitMock()
+    octokit.graphql.mockResolvedValue({
+      viewer: null,
+    })
+
+    await expect(getUserLogin(octokit as never)).rejects.toThrowError(
+      'Could not resolve current user login'
+    )
+  })
+
   it('returns the repository commit count from graphql', async () => {
     const octokit = createOctokitMock()
     octokit.graphql.mockResolvedValue({
@@ -348,6 +359,21 @@ describe('github helpers', () => {
     octokit.graphql.mockResolvedValue({
       repository: {
         object: null,
+      },
+    })
+
+    await expect(
+      getRepositoryCommitCount(octokit as never, 'main')
+    ).rejects.toThrowError('Could not resolve commit count for main')
+  })
+
+  it('throws when the repository history cannot be resolved', async () => {
+    const octokit = createOctokitMock()
+    octokit.graphql.mockResolvedValue({
+      repository: {
+        object: {
+          history: null,
+        },
       },
     })
 
