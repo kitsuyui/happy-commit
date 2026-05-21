@@ -76,6 +76,7 @@ async function run() {
       repositoryCommitCount,
       maxExpectedOccurrences,
     })
+    core.setOutput('lucky', String(message.lucky))
     await updateMessage(octokit, prNum, userLogin, message)
   } catch (error) {
     core.setFailed(`Unexpected error: ${formatUnexpectedError(error)}`)
