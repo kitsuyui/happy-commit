@@ -65,6 +65,14 @@ describe('parseRules', () => {
     ).toBe(4)
 
     expect(
+      Rules.pr_reaches_contain_only_one_nonzero_digit.expectedOccurrences?.({
+        commitIds: [],
+        prNum: 100,
+        repositoryCommitCount: 0,
+      })
+    ).toBe(10)
+
+    expect(
       Rules.commit_hits_same_numbers.expectedOccurrences?.({
         commitIds: [],
         prNum: 1,

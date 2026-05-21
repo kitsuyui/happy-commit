@@ -249,6 +249,25 @@ describe('MessageBuilder', () => {
     })
   })
 
+  it('filters single-nonzero-digit pull request milestones by their real match count', () => {
+    const context = {
+      commitIds: [],
+      prNum: 90,
+      repositoryCommitCount: 0,
+      maxExpectedOccurrences: 1,
+    }
+    const mb = new CustomMessageBuilder(
+      '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',
+      {}
+    )
+    const message = mb.build(context)
+
+    expect(message).toEqual({
+      lucky: false,
+      body: '# :tada: Happy commit!\n',
+    })
+  })
+
   it('changes commit celebrations when repository size crosses the ceiling', () => {
     const mb = new CustomMessageBuilder(
       '# :tada: Happy commit!\n{{#messages}}- {{&.}}\n{{/messages}}',

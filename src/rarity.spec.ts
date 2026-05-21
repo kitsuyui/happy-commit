@@ -9,6 +9,7 @@ import {
   expectedCommitHitsSameNumbers,
   expectedPowersOfTen,
   expectedPowersOfTwo,
+  expectedSingleNonzeroDigitPrNumbers,
   isRareEnough,
 } from './rarity'
 
@@ -18,6 +19,16 @@ describe('rarity helpers', () => {
     expect(expectedPowersOfTen(10)).toBe(1)
     expect(expectedPowersOfTen(999)).toBe(2)
     expect(expectedPowersOfTen(10000)).toBe(4)
+  })
+
+  it('counts single nonzero digit pull request milestones', () => {
+    expect(expectedSingleNonzeroDigitPrNumbers(9)).toBe(0)
+    expect(expectedSingleNonzeroDigitPrNumbers(10)).toBe(1)
+    expect(expectedSingleNonzeroDigitPrNumbers(90)).toBe(9)
+    expect(expectedSingleNonzeroDigitPrNumbers(99)).toBe(9)
+    expect(expectedSingleNonzeroDigitPrNumbers(100)).toBe(10)
+    expect(expectedSingleNonzeroDigitPrNumbers(999)).toBe(18)
+    expect(expectedSingleNonzeroDigitPrNumbers(10000)).toBe(28)
   })
 
   it('counts configured power-of-two pull request milestones', () => {
