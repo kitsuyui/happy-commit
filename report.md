@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `048b9dd2ed215b5d18683117ec249df0ea5a13e2`
-- Generated at: 2026-05-20T17:04:40.731Z
+- Head: `3677d9a989071f130fd6e660187fc52b3f3486c8`
+- Generated at: 2026-05-21T13:35:22.526Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
@@ -16,8 +16,8 @@
 | `dist/github.mjs` | 1,774 B | 808 B | 716 B |
 | `dist/github.mjs.map` | 7,134 B | 2,236 B | 2,007 B |
 | `dist/index.d.mts` | 11 B | 31 B | 15 B |
-| `dist/index.mjs` | 506,702 B | 157,108 B | 119,988 B |
-| `dist/index.mjs.map` | 1,741,216 B | 405,673 B | 314,599 B |
+| `dist/index.mjs` | 507,444 B | 157,359 B | 120,000 B |
+| `dist/index.mjs.map` | 1,743,561 B | 406,290 B | 315,103 B |
 | `dist/interfaces.d.mts` | 1,050 B | 417 B | 364 B |
 | `dist/interfaces.d.mts.map` | 3,571 B | 268 B | 240 B |
 | `dist/interfaces.mjs` | 9 B | 29 B | 13 B |
