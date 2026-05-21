@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-21T13:35:22.526Z",
+  "generated_at": "2026-05-21T13:35:52.139Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
   "base_label": "main",
-  "base_reference": "048b9dd2ed215b5d18683117ec249df0ea5a13e2",
+  "base_reference": "3677d9a989071f130fd6e660187fc52b3f3486c8",
   "head_label": "main",
   "head_reference": "3677d9a989071f130fd6e660187fc52b3f3486c8",
   "targets": [
@@ -54,18 +54,18 @@
       "sizes": {
         "raw": {
           "current": 23293185,
-          "base": 23290098,
-          "delta": 3087
+          "base": 23293185,
+          "delta": 0
         },
         "gzip": {
           "current": 2277322,
-          "base": 2276454,
-          "delta": 868
+          "base": 2277322,
+          "delta": 0
         },
         "brotli": {
           "current": 1553060,
-          "base": 1552544,
-          "delta": 516
+          "base": 1553060,
+          "delta": 0
         }
       },
       "violations": [],
@@ -94,18 +94,18 @@
       "sizes": {
         "raw": {
           "current": 1152588,
-          "base": 1151846,
-          "delta": 742
+          "base": 1152588,
+          "delta": 0
         },
         "gzip": {
           "current": 347441,
-          "base": 347190,
-          "delta": 251
+          "base": 347441,
+          "delta": 0
         },
         "brotli": {
           "current": 267351,
-          "base": 267339,
-          "delta": 12
+          "base": 267351,
+          "delta": 0
         }
       },
       "violations": [],
@@ -138,18 +138,18 @@
       "sizes": {
         "raw": {
           "current": 17124987,
-          "base": 17122642,
-          "delta": 2345
+          "base": 17124987,
+          "delta": 0
         },
         "gzip": {
           "current": 1387958,
-          "base": 1387341,
-          "delta": 617
+          "base": 1387958,
+          "delta": 0
         },
         "brotli": {
           "current": 1021296,
-          "base": 1020792,
-          "delta": 504
+          "base": 1021296,
+          "delta": 0
         }
       },
       "violations": [],
