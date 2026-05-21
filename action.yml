@@ -6,14 +6,23 @@ branding:
   color: yellow
 
 inputs:
+  github-token:
+    description: 'GitHub token used to read pull request metadata and create or update the managed comment'
+    required: false
   GITHUB_TOKEN:
-    description: 'GITHUB_TOKEN'
-    required: true
-  additional_rules:
+    description: 'Legacy alias for github-token'
+    required: false
+  additional-rules:
     description: 'Additional rules to check'
     required: false
-  max_expected_occurrences:
+  additional_rules:
+    description: 'Legacy alias for additional-rules'
+    required: false
+  max-expected-occurrences:
     description: 'Celebrate built-in rules only when their expected occurrences at the current repository size stay below this value'
+    required: false
+  max_expected_occurrences:
+    description: 'Legacy alias for max-expected-occurrences'
     required: false
 
 outputs:

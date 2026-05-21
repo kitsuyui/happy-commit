@@ -1,6 +1,7 @@
 import type {
   MessageForRuleSet,
   NamedMessageForRuleSet,
+  RuleStringPattern,
   RuleStringPatterns,
 } from './interfaces'
 import {
@@ -15,11 +16,7 @@ import {
 } from './rarity'
 import { validateRules } from './validate'
 
-export type RuleStringPattern = {
-  kind: 'pr' | 'commit'
-  rule: string
-  message: string
-}
+export type { RuleStringPattern }
 
 /**
  * Parse the rule pattern from JSON string

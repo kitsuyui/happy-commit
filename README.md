@@ -42,8 +42,8 @@ jobs:
     steps:
       - uses: kitsuyui/happy-commit@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          max_expected_occurrences: 1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          max-expected-occurrences: 1
 ```
 
 This action only needs pull-request metadata and commit ids from the GitHub API, so the published action can run without `actions/checkout`. `pull_request_target` is the safer default when you want to comment on pull requests from forks.
@@ -52,21 +52,23 @@ This action only needs pull-request metadata and commit ids from the GitHub API,
 
 | Input | Required | Default | Description |
 | --- | --- | --- | --- |
-| `GITHUB_TOKEN` | Yes | none | Token used to read pull request metadata and create or update the managed comment |
-| `additional_rules` | No | none | JSON array of extra `pr` or `commit` rules to evaluate in addition to the built-in set |
-| `max_expected_occurrences` | No | none | Optional rarity ceiling for built-in rules. Lower values celebrate only rarer events |
+| `github-token` | Yes | none | Token used to read pull request metadata and create or update the managed comment |
+| `additional-rules` | No | none | JSON array of extra `pr` or `commit` rules to evaluate in addition to the built-in set |
+| `max-expected-occurrences` | No | none | Optional rarity ceiling for built-in rules. Lower values celebrate only rarer events |
+
+Legacy input names (`GITHUB_TOKEN`, `additional_rules`, and `max_expected_occurrences`) are still accepted for compatibility. The token requirement is validated at runtime so either `github-token` or `GITHUB_TOKEN` can satisfy it.
 
 ## Rarity control
 
-`max_expected_occurrences` is optional. If you leave it unset, happy-commit behaves exactly like the classic version and evaluates the built-in rules without any rarity filter.
+`max-expected-occurrences` is optional. If you leave it unset, happy-commit behaves exactly like the classic version and evaluates the built-in rules without any rarity filter.
 
 If you set it, built-in rules are celebrated only when they are still rare enough at the current repository size. For pull request numbers, happy-commit uses the current PR number as the search range. For commit hashes, it uses the total number of commits on the default branch to estimate how often a pattern should have appeared by now.
 
-In practice, `1` is a reasonable starting point if you want to celebrate only events that should happen about once or less at the current repository scale. Smaller values make the action stricter. `additional_rules` are treated as explicit user intent and are not filtered by this rarity threshold.
+In practice, `1` is a reasonable starting point if you want to celebrate only events that should happen about once or less at the current repository scale. Smaller values make the action stricter. `additional-rules` are treated as explicit user intent and are not filtered by this rarity threshold.
 
 ## Custom rules
 
-You can add your own rules with `additional_rules`. The value is a JSON array, and each rule must contain:
+You can add your own rules with `additional-rules`. The value is a JSON array, and each rule must contain:
 
 | Field | Required | Description |
 | --- | --- | --- |
@@ -83,8 +85,8 @@ jobs:
     steps:
       - uses: kitsuyui/happy-commit@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          additional_rules: |
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          additional-rules: |
             [
               {
                 "kind": "commit",
