@@ -37,17 +37,17 @@
     {
       "path": "dist/rarity.d.mts",
       "sizes": {
-        "raw": 1074,
-        "gzip": 319,
-        "brotli": 270
+        "raw": 1188,
+        "gzip": 344,
+        "brotli": 289
       }
     },
     {
       "path": "dist/rules.d.mts",
       "sizes": {
-        "raw": 738,
-        "gzip": 370,
-        "brotli": 308
+        "raw": 672,
+        "gzip": 336,
+        "brotli": 276
       }
     },
     {
@@ -60,8 +60,8 @@
     }
   ],
   "totals": {
-    "raw": 4973541,
-    "gzip": 535584,
-    "brotli": 259481
+    "raw": 4973589,
+    "gzip": 535575,
+    "brotli": 259468
   }
 }

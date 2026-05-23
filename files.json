@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-21T13:35:52.140Z",
+  "generated_at": "2026-05-23T10:20:05.190Z",
   "repository": "kitsuyui/happy-commit",
   "default_branch": "main",
   "publish_branch": "gh-build-size-assets",
   "event_name": "push",
-  "head_reference": "3677d9a989071f130fd6e660187fc52b3f3486c8",
+  "head_reference": "70c2f19cf2d4b3a46f8a20b03fd98eaa661e45ba",
   "files": [
     {
       "path": "dist/ajv-QtvvyOqs.mjs",
@@ -65,16 +65,16 @@
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1774,
-        "gzip": 808,
-        "brotli": 716
+        "raw": 1782,
+        "gzip": 809,
+        "brotli": 719
       }
     },
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 7134,
-        "gzip": 2236,
+        "raw": 7160,
+        "gzip": 2241,
         "brotli": 2007
       }
     },
@@ -89,17 +89,17 @@
     {
       "path": "dist/index.mjs",
       "sizes": {
-        "raw": 507444,
-        "gzip": 157359,
-        "brotli": 120000
+        "raw": 507828,
+        "gzip": 157505,
+        "brotli": 120278
       }
     },
     {
       "path": "dist/index.mjs.map",
       "sizes": {
-        "raw": 1743561,
-        "gzip": 406290,
-        "brotli": 315103
+        "raw": 1745063,
+        "gzip": 406701,
+        "brotli": 315481
       }
     },
     {
@@ -185,65 +185,65 @@
     {
       "path": "dist/rarity.d.mts",
       "sizes": {
-        "raw": 1074,
-        "gzip": 319,
-        "brotli": 270
+        "raw": 1188,
+        "gzip": 344,
+        "brotli": 289
       }
     },
     {
       "path": "dist/rarity.d.mts.map",
       "sizes": {
-        "raw": 3812,
-        "gzip": 213,
-        "brotli": 181
+        "raw": 4194,
+        "gzip": 224,
+        "brotli": 183
       }
     },
     {
       "path": "dist/rarity.mjs",
       "sizes": {
-        "raw": 926,
-        "gzip": 486,
-        "brotli": 431
+        "raw": 1087,
+        "gzip": 561,
+        "brotli": 502
       }
     },
     {
       "path": "dist/rarity.mjs.map",
       "sizes": {
-        "raw": 3504,
-        "gzip": 1154,
-        "brotli": 1038
+        "raw": 4096,
+        "gzip": 1338,
+        "brotli": 1206
       }
     },
     {
       "path": "dist/rules.d.mts",
       "sizes": {
-        "raw": 738,
-        "gzip": 370,
-        "brotli": 308
+        "raw": 672,
+        "gzip": 336,
+        "brotli": 276
       }
     },
     {
       "path": "dist/rules.d.mts.map",
       "sizes": {
-        "raw": 1312,
-        "gzip": 185,
-        "brotli": 170
+        "raw": 1287,
+        "gzip": 168,
+        "brotli": 148
       }
     },
     {
       "path": "dist/rules.mjs",
       "sizes": {
-        "raw": 2528,
-        "gzip": 883,
-        "brotli": 799
+        "raw": 2544,
+        "gzip": 895,
+        "brotli": 776
       }
     },
     {
       "path": "dist/rules.mjs.map",
       "sizes": {
-        "raw": 5833,
-        "gzip": 1699,
-        "brotli": 1528
+        "raw": 5832,
+        "gzip": 1704,
+        "brotli": 1523
       }
     },
     {

@@ -29,17 +29,17 @@
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 7134,
-        "gzip": 2236,
+        "raw": 7160,
+        "gzip": 2241,
         "brotli": 2007
       }
     },
     {
       "path": "dist/index.mjs.map",
       "sizes": {
-        "raw": 1743561,
-        "gzip": 406290,
-        "brotli": 315103
+        "raw": 1745063,
+        "gzip": 406701,
+        "brotli": 315481
       }
     },
     {
@@ -77,33 +77,33 @@
     {
       "path": "dist/rarity.d.mts.map",
       "sizes": {
-        "raw": 3812,
-        "gzip": 213,
-        "brotli": 181
+        "raw": 4194,
+        "gzip": 224,
+        "brotli": 183
       }
     },
     {
       "path": "dist/rarity.mjs.map",
       "sizes": {
-        "raw": 3504,
-        "gzip": 1154,
-        "brotli": 1038
+        "raw": 4096,
+        "gzip": 1338,
+        "brotli": 1206
       }
     },
     {
       "path": "dist/rules.d.mts.map",
       "sizes": {
-        "raw": 1312,
-        "gzip": 185,
-        "brotli": 170
+        "raw": 1287,
+        "gzip": 168,
+        "brotli": 148
       }
     },
     {
       "path": "dist/rules.mjs.map",
       "sizes": {
-        "raw": 5833,
-        "gzip": 1699,
-        "brotli": 1528
+        "raw": 5832,
+        "gzip": 1704,
+        "brotli": 1523
       }
     },
     {
@@ -124,8 +124,8 @@
     }
   ],
   "totals": {
-    "raw": 17124987,
-    "gzip": 1387958,
-    "brotli": 1021296
+    "raw": 17127463,
+    "gzip": 1388557,
+    "brotli": 1021817
   }
 }

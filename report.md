@@ -1,8 +1,8 @@
 # gh-build-size report
 
 - Repository: **kitsuyui/happy-commit**
-- Head: `3677d9a989071f130fd6e660187fc52b3f3486c8`
-- Generated at: 2026-05-21T13:35:52.140Z
+- Head: `70c2f19cf2d4b3a46f8a20b03fd98eaa661e45ba`
+- Generated at: 2026-05-23T10:20:05.190Z
 
 | File | Raw | Gzip | Brotli |
 | --- | ---: | ---: | ---: |
@@ -13,11 +13,11 @@
 | `dist/github-D91hw1gk.mjs.map` | 1,513,259 B | 352,423 B | 271,407 B |
 | `dist/github.d.mts` | 4,935,167 B | 526,099 B | 251,017 B |
 | `dist/github.d.mts.map` | 13,232,900 B | 518,669 B | 341,321 B |
-| `dist/github.mjs` | 1,774 B | 808 B | 716 B |
-| `dist/github.mjs.map` | 7,134 B | 2,236 B | 2,007 B |
+| `dist/github.mjs` | 1,782 B | 809 B | 719 B |
+| `dist/github.mjs.map` | 7,160 B | 2,241 B | 2,007 B |
 | `dist/index.d.mts` | 11 B | 31 B | 15 B |
-| `dist/index.mjs` | 507,444 B | 157,359 B | 120,000 B |
-| `dist/index.mjs.map` | 1,743,561 B | 406,290 B | 315,103 B |
+| `dist/index.mjs` | 507,828 B | 157,505 B | 120,278 B |
+| `dist/index.mjs.map` | 1,745,063 B | 406,701 B | 315,481 B |
 | `dist/interfaces.d.mts` | 1,050 B | 417 B | 364 B |
 | `dist/interfaces.d.mts.map` | 3,571 B | 268 B | 240 B |
 | `dist/interfaces.mjs` | 9 B | 29 B | 13 B |
@@ -28,14 +28,14 @@
 | `dist/message_builder.mjs.map` | 5,447 B | 1,886 B | 1,664 B |
 | `dist/mustache-BhZz4e-Z.mjs` | 6,533 B | 2,697 B | 2,451 B |
 | `dist/mustache-BhZz4e-Z.mjs.map` | 32,899 B | 9,702 B | 8,311 B |
-| `dist/rarity.d.mts` | 1,074 B | 319 B | 270 B |
-| `dist/rarity.d.mts.map` | 3,812 B | 213 B | 181 B |
-| `dist/rarity.mjs` | 926 B | 486 B | 431 B |
-| `dist/rarity.mjs.map` | 3,504 B | 1,154 B | 1,038 B |
-| `dist/rules.d.mts` | 738 B | 370 B | 308 B |
-| `dist/rules.d.mts.map` | 1,312 B | 185 B | 170 B |
-| `dist/rules.mjs` | 2,528 B | 883 B | 799 B |
-| `dist/rules.mjs.map` | 5,833 B | 1,699 B | 1,528 B |
+| `dist/rarity.d.mts` | 1,188 B | 344 B | 289 B |
+| `dist/rarity.d.mts.map` | 4,194 B | 224 B | 183 B |
+| `dist/rarity.mjs` | 1,087 B | 561 B | 502 B |
+| `dist/rarity.mjs.map` | 4,096 B | 1,338 B | 1,206 B |
+| `dist/rules.d.mts` | 672 B | 336 B | 276 B |
+| `dist/rules.d.mts.map` | 1,287 B | 168 B | 148 B |
+| `dist/rules.mjs` | 2,544 B | 895 B | 776 B |
+| `dist/rules.mjs.map` | 5,832 B | 1,704 B | 1,523 B |
 | `dist/validate.d.mts` | 34,417 B | 7,904 B | 7,146 B |
 | `dist/validate.d.mts.map` | 195,650 B | 12,579 B | 10,137 B |
 | `dist/validate.mjs` | 425 B | 303 B | 254 B |

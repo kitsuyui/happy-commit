@@ -29,17 +29,17 @@
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1774,
-        "gzip": 808,
-        "brotli": 716
+        "raw": 1782,
+        "gzip": 809,
+        "brotli": 719
       }
     },
     {
       "path": "dist/index.mjs",
       "sizes": {
-        "raw": 507444,
-        "gzip": 157359,
-        "brotli": 120000
+        "raw": 507828,
+        "gzip": 157505,
+        "brotli": 120278
       }
     },
     {
@@ -69,17 +69,17 @@
     {
       "path": "dist/rarity.mjs",
       "sizes": {
-        "raw": 926,
-        "gzip": 486,
-        "brotli": 431
+        "raw": 1087,
+        "gzip": 561,
+        "brotli": 502
       }
     },
     {
       "path": "dist/rules.mjs",
       "sizes": {
-        "raw": 2528,
-        "gzip": 883,
-        "brotli": 799
+        "raw": 2544,
+        "gzip": 895,
+        "brotli": 776
       }
     },
     {
@@ -92,8 +92,8 @@
     }
   ],
   "totals": {
-    "raw": 1152588,
-    "gzip": 347441,
-    "brotli": 267351
+    "raw": 1153157,
+    "gzip": 347675,
+    "brotli": 267680
   }
 }
