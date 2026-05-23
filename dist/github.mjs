@@ -10,10 +10,10 @@ query ($owner: String!, $repo: String!, $expression: String!) {
     }
   }
 }
-`,{owner:r.repo.owner,repo:r.repo.repo,expression:`refs/heads/${n}`})).repository?.object?.history.totalCount;if(typeof i!=`number`)throw Error(`Could not resolve commit count for ${n}`);return i}async function u(e){return(await e.graphql(`
+`,{owner:r.repo.owner,repo:r.repo.repo,expression:`refs/heads/${n}`})).repository?.object?.history?.totalCount;if(typeof i!=`number`)throw Error(`Could not resolve commit count for ${n}`);return i}async function u(e){let t=(await e.graphql(`
 query {
   viewer {
     login
   }
-}`)).viewer.login}export{i as decideCommentAction,c as getCommitIds,l as getRepositoryCommitCount,u as getUserLogin,a as updateMessage};
+}`)).viewer?.login;if(typeof t!=`string`||t.length===0)throw Error(`Could not resolve current user login`);return t}export{i as decideCommentAction,c as getCommitIds,l as getRepositoryCommitCount,u as getUserLogin,a as updateMessage};
 //# sourceMappingURL=github.mjs.map

@@ -161,7 +161,7 @@ export async function getRepositoryCommitCount(
       object: {
         history: {
           totalCount: number
-        }
+        } | null
       } | null
     } | null
   }
@@ -188,7 +188,7 @@ query ($owner: String!, $repo: String!, $expression: String!) {
     }
   )
 
-  const totalCount = resp.repository?.object?.history.totalCount
+  const totalCount = resp.repository?.object?.history?.totalCount
   if (typeof totalCount !== 'number') {
     throw new Error(`Could not resolve commit count for ${defaultBranch}`)
   }
@@ -205,8 +205,8 @@ query ($owner: String!, $repo: String!, $expression: String!) {
 export async function getUserLogin(octokit: Octokit) {
   interface Result {
     viewer: {
-      login: string
-    }
+      login: string | null
+    } | null
   }
   const resp: Result = await octokit.graphql(`
 query {
@@ -214,5 +214,9 @@ query {
     login
   }
 }`)
-  return resp.viewer.login
+  const login = resp.viewer?.login
+  if (typeof login !== 'string' || login.length === 0) {
+    throw new Error('Could not resolve current user login')
+  }
+  return login
 }
