@@ -112,6 +112,7 @@ async function getManagedComment(
   const comments = await octokit.issues.listComments({
     ...context.repo,
     issue_number: prNum,
+    per_page: 100,
   })
   const comment = comments.data.find((candidate) =>
     isManagedCommentByUser(candidate, userLogin)
