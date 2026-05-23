@@ -11,8 +11,8 @@ import {
   expectedCommitHits777,
   expectedCommitHitsHexspeak,
   expectedCommitHitsSameNumbers,
-  expectedPowersOfTen,
   expectedPowersOfTwo,
+  expectedSingleNonzeroDigitPrNumbers,
 } from './rarity'
 import { validateRules } from './validate'
 
@@ -71,7 +71,8 @@ export const Rules: NamedMessageForRuleSet = {
     kind: 'pr',
     rule: /(?:^[1-9]0+$)/,
     message: `Now pull request issue number reaches **{{prNum}}**. It's time to celebrate!`,
-    expectedOccurrences: ({ prNum }) => expectedPowersOfTen(prNum),
+    expectedOccurrences: ({ prNum }) =>
+      expectedSingleNonzeroDigitPrNumbers(prNum),
   },
   pr_reaches_power_of_2: {
     id: 'pr_reaches_power_of_2',

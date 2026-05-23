@@ -31,6 +31,19 @@ export function expectedPowersOfTen(prNum: number): number {
   return count
 }
 
+export function expectedSingleNonzeroDigitPrNumbers(prNum: number): number {
+  if (prNum < 10) {
+    return 0
+  }
+
+  const digits = prNum.toString().length
+  const shorterDigitMatches = (digits - 2) * 9
+  const currentDigitBase = 10 ** (digits - 1)
+  const currentLeadingDigit = Math.floor(prNum / currentDigitBase)
+
+  return shorterDigitMatches + Math.min(currentLeadingDigit, 9)
+}
+
 export function expectedPowersOfTwo(prNum: number): number {
   const values = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
   return values.filter((value) => value <= prNum).length
