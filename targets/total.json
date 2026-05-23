@@ -69,17 +69,17 @@
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1782,
-        "gzip": 809,
-        "brotli": 719
+        "raw": 1881,
+        "gzip": 845,
+        "brotli": 759
       }
     },
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 7160,
-        "gzip": 2241,
-        "brotli": 2007
+        "raw": 7405,
+        "gzip": 2316,
+        "brotli": 2062
       }
     },
     {
@@ -276,8 +276,8 @@
     }
   ],
   "totals": {
-    "raw": 23296278,
-    "gzip": 2278146,
-    "brotli": 1553897
+    "raw": 23296622,
+    "gzip": 2278257,
+    "brotli": 1553992
   }
 }
