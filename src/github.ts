@@ -46,10 +46,36 @@ export function decideCommentAction(
 }
 
 /**
+ * Delete all but the last managed comment, returning the surviving comment.
+ * This cleans up duplicates created by concurrent Action runs.
+ */
+async function deduplicateManagedComments(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string
+): Promise<Comment | null> {
+  const context = github.context
+  const all = await getAllManagedComments(octokit, prNum, userLogin)
+  for (const dup of all.slice(0, -1)) {
+    await octokit.issues.deleteComment({
+      ...context.repo,
+      comment_id: dup.id,
+    })
+  }
+  return all.length > 0 ? all[all.length - 1] : null
+}
+
+/**
  * Update the comment of the current PR
  * if lucky and past comment does not exist, create it.
  * if lucky and past comment exists, update it.
  * if not lucky, delete the comment.
+ *
+ * When multiple managed comments exist (e.g. left by concurrent runs that
+ * both saw no comment and both called createComment), this function keeps
+ * only the most-recently-created one and deletes the extras.  The
+ * deduplication runs both on the initial fetch and after a create so that
+ * stale comments accumulated by previous races are cleaned up eagerly.
  *
  * @param octokit {Octokit} the octokit instance
  * @param prNum {number} the PR number
@@ -62,10 +88,22 @@ export async function updateMessage(
   userLogin: string,
   message: MessageContext
 ): Promise<void> {
-  const context = github.context
-  const pastComment = await getManagedComment(octokit, prNum, userLogin)
+  const pastComment = await deduplicateManagedComments(
+    octokit,
+    prNum,
+    userLogin
+  )
   const action = decideCommentAction(pastComment, message)
+  await applyCommentAction(octokit, prNum, userLogin, action)
+}
 
+async function applyCommentAction(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string,
+  action: CommentAction
+): Promise<void> {
+  const context = github.context
   switch (action.type) {
     case 'update': {
       await octokit.issues.updateComment({
@@ -81,6 +119,9 @@ export async function updateMessage(
         issue_number: prNum,
         body: action.body,
       })
+      // After create, re-fetch to clean up any duplicate that a concurrent
+      // run may have created in the same window.
+      await deduplicateManagedComments(octokit, prNum, userLogin)
       return
     }
     case 'delete': {
@@ -96,33 +137,31 @@ export async function updateMessage(
 }
 
 /**
- * Get the managed comment of the current PR by the current user
+ * Return ALL managed comments on the PR posted by userLogin, sorted by id
+ * ascending (oldest first).  Most callers need only one comment, but
+ * returning all of them lets updateMessage detect and remove duplicates
+ * created by concurrent Action runs.
+ *
  * @param octokit {Octokit} the octokit instance
  * @param prNum {number} the PR number
  * @param userLogin {string} the user login name
- * @returns comment id {LastComment}
+ * @returns all managed comments sorted by id ascending
  */
-async function getManagedComment(
+async function getAllManagedComments(
   octokit: Octokit,
   prNum: number,
   userLogin: string
-): Promise<Comment | null> {
+): Promise<Comment[]> {
   const context = github.context
-  // get comments on the PR
   const comments = await octokit.issues.listComments({
     ...context.repo,
     issue_number: prNum,
     per_page: 100,
   })
-  const comment = comments.data.find((candidate) =>
-    isManagedCommentByUser(candidate, userLogin)
-  )
-  return comment
-    ? {
-        id: comment.id,
-        body: comment.body || comment.body_text || '',
-      }
-    : null
+  return comments.data
+    .filter((candidate) => isManagedCommentByUser(candidate, userLogin))
+    .map((c) => ({ id: c.id, body: c.body || c.body_text || '' }))
+    .sort((a, b) => a.id - b.id)
 }
 
 function isManagedCommentByUser(

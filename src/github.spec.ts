@@ -281,6 +281,82 @@ describe('updateMessage', () => {
     })
     expect(octokit.issues.updateComment).not.toHaveBeenCalled()
   })
+
+  it('deletes extra managed comments left by a previous concurrent run', async () => {
+    const octokit = createOctokitMock()
+    // Two managed comments exist — simulates a prior race condition result.
+    octokit.issues.listComments.mockResolvedValue({
+      data: [
+        {
+          id: 10,
+          body_text: '<!-- happy-commit -->\nstale body',
+          body: '<!-- happy-commit -->\nstale body',
+          user: { login: 'github-actions[bot]' },
+        },
+        {
+          id: 11,
+          body_text: '<!-- happy-commit -->\nstale body',
+          body: '<!-- happy-commit -->\nstale body',
+          user: { login: 'github-actions[bot]' },
+        },
+      ],
+    })
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: true,
+      body: 'stale body',
+    })
+
+    // The older duplicate (id=10) must be deleted; id=11 is kept and noop'd.
+    expect(octokit.issues.deleteComment).toHaveBeenCalledWith({
+      owner: 'kitsuyui',
+      repo: 'happy-commit',
+      comment_id: 10,
+    })
+    expect(octokit.issues.deleteComment).toHaveBeenCalledTimes(1)
+    // Body unchanged for the surviving comment, so no update.
+    expect(octokit.issues.updateComment).not.toHaveBeenCalled()
+    expect(octokit.issues.createComment).not.toHaveBeenCalled()
+  })
+
+  it('cleans up a race-created duplicate after a create', async () => {
+    const octokit = createOctokitMock()
+    // First fetch: no managed comment yet.
+    // Second fetch (after create): two managed comments exist.
+    octokit.issues.listComments
+      .mockResolvedValueOnce({ data: [] })
+      .mockResolvedValueOnce({
+        data: [
+          {
+            id: 20,
+            body_text: '<!-- happy-commit -->\nnew body',
+            body: '<!-- happy-commit -->\nnew body',
+            user: { login: 'github-actions[bot]' },
+          },
+          {
+            id: 21,
+            body_text: '<!-- happy-commit -->\nnew body',
+            body: '<!-- happy-commit -->\nnew body',
+            user: { login: 'github-actions[bot]' },
+          },
+        ],
+      })
+    octokit.issues.createComment.mockResolvedValue({})
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: true,
+      body: 'new body',
+    })
+
+    expect(octokit.issues.createComment).toHaveBeenCalledOnce()
+    // The older duplicate (id=20) must be deleted after the create.
+    expect(octokit.issues.deleteComment).toHaveBeenCalledWith({
+      owner: 'kitsuyui',
+      repo: 'happy-commit',
+      comment_id: 20,
+    })
+    expect(octokit.issues.deleteComment).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('github helpers', () => {
