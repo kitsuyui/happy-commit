@@ -5,9 +5,9 @@
     {
       "path": "dist/github.d.mts",
       "sizes": {
-        "raw": 4935167,
-        "gzip": 526099,
-        "brotli": 251017
+        "raw": 4935534,
+        "gzip": 526301,
+        "brotli": 251046
       }
     },
     {
@@ -60,8 +60,8 @@
     }
   ],
   "totals": {
-    "raw": 4973589,
-    "gzip": 535575,
-    "brotli": 259468
+    "raw": 4973956,
+    "gzip": 535777,
+    "brotli": 259497
   }
 }

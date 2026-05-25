@@ -29,9 +29,9 @@
     {
       "path": "dist/github.mjs",
       "sizes": {
-        "raw": 1881,
-        "gzip": 845,
-        "brotli": 759
+        "raw": 2144,
+        "gzip": 935,
+        "brotli": 823
       }
     },
     {
@@ -92,8 +92,8 @@
     }
   ],
   "totals": {
-    "raw": 1153256,
-    "gzip": 347711,
-    "brotli": 267720
+    "raw": 1153519,
+    "gzip": 347801,
+    "brotli": 267784
   }
 }
