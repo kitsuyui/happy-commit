@@ -136,6 +136,29 @@ async function applyCommentAction(
   }
 }
 
+async function listAllComments(
+  octokit: Octokit,
+  prNum: number
+): Promise<Awaited<ReturnType<typeof octokit.issues.listComments>>['data']> {
+  const context = github.context
+  const all: Awaited<ReturnType<typeof octokit.issues.listComments>>['data'] =
+    []
+  let page = 1
+  let hasMore = true
+  while (hasMore) {
+    const { data } = await octokit.issues.listComments({
+      ...context.repo,
+      issue_number: prNum,
+      per_page: 100,
+      page,
+    })
+    all.push(...data)
+    hasMore = data.length >= 100
+    page++
+  }
+  return all
+}
+
 /**
  * Return ALL managed comments on the PR posted by userLogin, sorted by id
  * ascending (oldest first).  Most callers need only one comment, but
@@ -152,13 +175,8 @@ async function getAllManagedComments(
   prNum: number,
   userLogin: string
 ): Promise<Comment[]> {
-  const context = github.context
-  const comments = await octokit.issues.listComments({
-    ...context.repo,
-    issue_number: prNum,
-    per_page: 100,
-  })
-  return comments.data
+  const allComments = await listAllComments(octokit, prNum)
+  return allComments
     .filter((candidate) => isManagedCommentByUser(candidate, userLogin))
     .map((c) => ({ id: c.id, body: c.body || c.body_text || '' }))
     .sort((a, b) => a.id - b.id)

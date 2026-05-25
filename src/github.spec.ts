@@ -137,6 +137,7 @@ describe('updateMessage', () => {
       repo: 'happy-commit',
       issue_number: 123,
       per_page: 100,
+      page: 1,
     })
     expect(octokit.issues.createComment).toHaveBeenCalledWith({
       owner: 'kitsuyui',
