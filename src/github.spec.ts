@@ -35,6 +35,7 @@ function createOctokitMock() {
     pulls: {
       listCommits: vi.fn(),
     },
+    paginate: vi.fn(),
     graphql: vi.fn(),
   }
 }
@@ -367,19 +368,33 @@ describe('github helpers', () => {
 
   it('returns commit ids from the current pull request', async () => {
     const octokit = createOctokitMock()
-    octokit.pulls.listCommits.mockResolvedValue({
-      data: [{ sha: 'aaa' }, { sha: 'bbb' }],
-    })
+    octokit.paginate.mockResolvedValue([{ sha: 'aaa' }, { sha: 'bbb' }])
 
     await expect(getCommitIds(octokit as never)).resolves.toEqual([
       'aaa',
       'bbb',
     ])
-    expect(octokit.pulls.listCommits).toHaveBeenCalledWith({
+    expect(octokit.paginate).toHaveBeenCalledWith(octokit.pulls.listCommits, {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       pull_number: 123,
+      per_page: 100,
     })
+  })
+
+  it('returns all commit ids across multiple pages', async () => {
+    const octokit = createOctokitMock()
+    octokit.paginate.mockResolvedValue([
+      { sha: 'aaa' },
+      { sha: 'bbb' },
+      { sha: 'ccc' },
+    ])
+
+    await expect(getCommitIds(octokit as never)).resolves.toEqual([
+      'aaa',
+      'bbb',
+      'ccc',
+    ])
   })
 
   it('returns the current user login from graphql', async () => {

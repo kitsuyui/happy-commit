@@ -203,11 +203,12 @@ function isManagedCommentByUser(
  */
 export async function getCommitIds(octokit: Octokit): Promise<string[]> {
   const context = github.context
-  const commits = await octokit.pulls.listCommits({
+  const commits = await octokit.paginate(octokit.pulls.listCommits, {
     ...context.repo,
     pull_number: context.issue.number,
+    per_page: 100,
   })
-  return commits.data.map((commit: { sha: string }) => commit.sha)
+  return commits.map((commit) => commit.sha)
 }
 
 export async function getRepositoryCommitCount(
