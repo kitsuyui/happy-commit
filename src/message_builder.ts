@@ -113,7 +113,7 @@ class MessageBuilder {
   }
 }
 
-const defaultRules = {
+const defaultRules: { [key in RulesKey]: boolean } = {
   pr_reaches_contain_only_one_nonzero_digit: true,
   pr_reaches_power_of_2: true,
   pr_reaches_777: true,
@@ -122,7 +122,7 @@ const defaultRules = {
   commit_hits_123: true,
   commit_hits_hexspeak: true,
   commit_hits_666: true,
-} as { [key in RulesKey]: boolean }
+}
 
 /**
  * CustomMessageBuilder is a class to build a message for a pull request with custom rules
