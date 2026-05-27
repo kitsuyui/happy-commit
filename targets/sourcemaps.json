@@ -22,16 +22,16 @@
       "path": "dist/github.d.mts.map",
       "sizes": {
         "raw": 13233243,
-        "gzip": 518681,
-        "brotli": 341351
+        "gzip": 518683,
+        "brotli": 341274
       }
     },
     {
       "path": "dist/github.mjs.map",
       "sizes": {
-        "raw": 9364,
-        "gzip": 2971,
-        "brotli": 2606
+        "raw": 10016,
+        "gzip": 3169,
+        "brotli": 2797
       }
     },
     {
@@ -61,9 +61,9 @@
     {
       "path": "dist/message_builder.mjs.map",
       "sizes": {
-        "raw": 5447,
-        "gzip": 1886,
-        "brotli": 1664
+        "raw": 5446,
+        "gzip": 1883,
+        "brotli": 1657
       }
     },
     {
@@ -124,8 +124,8 @@
     }
   ],
   "totals": {
-    "raw": 17130010,
-    "gzip": 1389299,
-    "brotli": 1022446
+    "raw": 17130661,
+    "gzip": 1389496,
+    "brotli": 1022553
   }
 }
