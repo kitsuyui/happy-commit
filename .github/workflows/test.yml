@@ -41,6 +41,12 @@ jobs:
       - name: Verify dist is up to date
         run: git diff --exit-code -- dist
 
+      - name: Verify schema.json is up to date
+        run: |
+          bun run generate-json-schema
+          bun run format
+          git diff --exit-code -- schema.json
+
       - name: Measure build size
         uses: kitsuyui/gh-build-size@v0.1.2
         with:
