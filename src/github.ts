@@ -3,7 +3,9 @@ import type { Octokit } from '@octokit/action'
 
 import type { Comment, MessageContext } from './interfaces'
 
-const COMMENT_MARKER = '<!-- happy-commit -->'
+const COMMENT_MARKER = '<!-- happy-commit:v1 -->'
+const LEGACY_COMMENT_MARKERS = ['<!-- happy-commit -->']
+const COMMENT_MARKERS = [COMMENT_MARKER, ...LEGACY_COMMENT_MARKERS]
 
 type CommentAction =
   | { type: 'create'; body: string }
@@ -13,6 +15,10 @@ type CommentAction =
 
 function buildManagedBody(body: string): string {
   return `${COMMENT_MARKER}\n${body}`
+}
+
+function hasManagedCommentMarker(body: string): boolean {
+  return COMMENT_MARKERS.some((marker) => body.includes(marker))
 }
 
 function createLuckyCommentAction(
@@ -192,7 +198,7 @@ function isManagedCommentByUser(
 ): boolean {
   return (
     comment.user?.login === userLogin &&
-    (comment.body || comment.body_text || '').includes(COMMENT_MARKER)
+    hasManagedCommentMarker(comment.body || comment.body_text || '')
   )
 }
 

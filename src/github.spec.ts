@@ -49,7 +49,7 @@ describe('decideCommentAction', () => {
       })
     ).toEqual({
       type: 'create',
-      body: '<!-- happy-commit -->\nhello',
+      body: '<!-- happy-commit:v1 -->\nhello',
     })
   })
 
@@ -68,11 +68,28 @@ describe('decideCommentAction', () => {
     ).toEqual({
       type: 'update',
       commentId: 1,
-      body: '<!-- happy-commit -->\nnew',
+      body: '<!-- happy-commit:v1 -->\nnew',
     })
   })
 
   it('does nothing when message body is unchanged', () => {
+    expect(
+      decideCommentAction(
+        {
+          id: 1,
+          body: '<!-- happy-commit:v1 -->\nsame',
+        },
+        {
+          lucky: true,
+          body: 'same',
+        }
+      )
+    ).toEqual({
+      type: 'noop',
+    })
+  })
+
+  it('updates a legacy marker to the current marker', () => {
     expect(
       decideCommentAction(
         {
@@ -85,7 +102,9 @@ describe('decideCommentAction', () => {
         }
       )
     ).toEqual({
-      type: 'noop',
+      type: 'update',
+      commentId: 1,
+      body: '<!-- happy-commit:v1 -->\nsame',
     })
   })
 
@@ -144,7 +163,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       issue_number: 123,
-      body: '<!-- happy-commit -->\nnew body',
+      body: '<!-- happy-commit:v1 -->\nnew body',
     })
     expect(octokit.issues.updateComment).not.toHaveBeenCalled()
     expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
@@ -157,7 +176,7 @@ describe('updateMessage', () => {
         {
           id: 55,
           body_text: 'old body',
-          body: '<!-- happy-commit -->\nold body',
+          body: '<!-- happy-commit:v1 -->\nold body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -172,7 +191,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       comment_id: 55,
-      body: '<!-- happy-commit -->\nnew body',
+      body: '<!-- happy-commit:v1 -->\nnew body',
     })
     expect(octokit.issues.createComment).not.toHaveBeenCalled()
     expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
@@ -185,7 +204,7 @@ describe('updateMessage', () => {
         {
           id: 55,
           body_text: 'same body',
-          body: '<!-- happy-commit -->\nsame body',
+          body: '<!-- happy-commit:v1 -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -201,6 +220,34 @@ describe('updateMessage', () => {
     expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
   })
 
+  it('updates a legacy managed comment to the current marker', async () => {
+    const octokit = createOctokitMock()
+    octokit.issues.listComments.mockResolvedValue({
+      data: [
+        {
+          id: 55,
+          body_text: '<!-- happy-commit -->\nsame body',
+          body: '<!-- happy-commit -->\nsame body',
+          user: { login: 'github-actions[bot]' },
+        },
+      ],
+    })
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: true,
+      body: 'same body',
+    })
+
+    expect(octokit.issues.updateComment).toHaveBeenCalledWith({
+      owner: 'kitsuyui',
+      repo: 'happy-commit',
+      comment_id: 55,
+      body: '<!-- happy-commit:v1 -->\nsame body',
+    })
+    expect(octokit.issues.createComment).not.toHaveBeenCalled()
+    expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
+  })
+
   it('deletes an existing comment when the message is no longer lucky', async () => {
     const octokit = createOctokitMock()
     octokit.issues.listComments.mockResolvedValue({
@@ -208,7 +255,7 @@ describe('updateMessage', () => {
         {
           id: 55,
           body_text: 'same body',
-          body: '<!-- happy-commit -->\nsame body',
+          body: '<!-- happy-commit:v1 -->\nsame body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -237,8 +284,8 @@ describe('updateMessage', () => {
         },
         {
           id: 11,
-          body_text: '<!-- happy-commit -->\nstale body',
-          body: '<!-- happy-commit -->\nstale body',
+          body_text: '<!-- happy-commit:v1 -->\nstale body',
+          body: '<!-- happy-commit:v1 -->\nstale body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -253,7 +300,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       issue_number: 123,
-      body: '<!-- happy-commit -->\nfresh body',
+      body: '<!-- happy-commit:v1 -->\nfresh body',
     })
   })
 
@@ -279,7 +326,7 @@ describe('updateMessage', () => {
       owner: 'kitsuyui',
       repo: 'happy-commit',
       issue_number: 123,
-      body: '<!-- happy-commit -->\nfresh body',
+      body: '<!-- happy-commit:v1 -->\nfresh body',
     })
     expect(octokit.issues.updateComment).not.toHaveBeenCalled()
   })
@@ -291,14 +338,14 @@ describe('updateMessage', () => {
       data: [
         {
           id: 10,
-          body_text: '<!-- happy-commit -->\nstale body',
-          body: '<!-- happy-commit -->\nstale body',
+          body_text: '<!-- happy-commit:v1 -->\nstale body',
+          body: '<!-- happy-commit:v1 -->\nstale body',
           user: { login: 'github-actions[bot]' },
         },
         {
           id: 11,
-          body_text: '<!-- happy-commit -->\nstale body',
-          body: '<!-- happy-commit -->\nstale body',
+          body_text: '<!-- happy-commit:v1 -->\nstale body',
+          body: '<!-- happy-commit:v1 -->\nstale body',
           user: { login: 'github-actions[bot]' },
         },
       ],
@@ -331,14 +378,14 @@ describe('updateMessage', () => {
         data: [
           {
             id: 20,
-            body_text: '<!-- happy-commit -->\nnew body',
-            body: '<!-- happy-commit -->\nnew body',
+            body_text: '<!-- happy-commit:v1 -->\nnew body',
+            body: '<!-- happy-commit:v1 -->\nnew body',
             user: { login: 'github-actions[bot]' },
           },
           {
             id: 21,
-            body_text: '<!-- happy-commit -->\nnew body',
-            body: '<!-- happy-commit -->\nnew body',
+            body_text: '<!-- happy-commit:v1 -->\nnew body',
+            body: '<!-- happy-commit:v1 -->\nnew body',
             user: { login: 'github-actions[bot]' },
           },
         ],
