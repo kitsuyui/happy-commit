@@ -100,6 +100,21 @@ jobs:
 
 This repository keeps a local example workflow in `.github/workflows/main.yml`. It uses `pull_request` and `uses: ./` so changes in the current branch are tested before release. That pattern should stay limited to the action repository itself, because a local action from an untrusted fork must not run with `pull_request_target`.
 
+## Development
+
+Install [lefthook](https://github.com/evilmartians/lefthook) and run:
+
+```sh
+lefthook install
+```
+
+This sets up the following Git hooks:
+
+- **pre-commit**: runs `bun run lint` (Biome checks) — fast static feedback before each commit.
+- **pre-push**: runs `bun run lint` and `bun run test` — full local validation before pushing.
+
+CI still runs the complete suite on every pull request and push to main; the hooks bring that feedback earlier in your workflow.
+
 ## License
 
 MIT
