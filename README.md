@@ -76,6 +76,16 @@ You can add your own rules with `additional-rules`. The value is a JSON array, a
 | `rule` | Yes | Regular expression pattern evaluated against the PR number or commit SHA |
 | `message` | Yes | Mustache template rendered into the comment when the rule matches |
 
+### Template variables
+
+The following Mustache variables are available in `message`, depending on `kind`:
+
+| Variable | Available when | Description |
+| --- | --- | --- |
+| `{{prNum}}` | `kind: "pr"` | Pull request number as a string |
+| `{{commitId}}` | `kind: "commit"` | Commit SHA |
+| `{{matched}}` | both | First capture of `rule` matched against the target value |
+
 For example, this rule celebrates any commit SHA containing `1`.
 
 ```yaml
