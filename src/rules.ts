@@ -115,7 +115,7 @@ export const Rules: NamedMessageForRuleSet = {
   commit_hits_hexspeak: {
     id: 'commit_hits_hexspeak',
     kind: 'commit',
-    rule: /(?:(?:f00d|feed|cafe|c0ffee|deadbeef|defecated|0ffice|badcable))/i,
+    rule: /(?:(?:f00d|feed|cafe|c0ffee|deadbeef))/,
     message: 'Commit `{{commitId}}` is lucky! It contains **{{matched}}**!.',
     expectedOccurrences: ({ repositoryCommitCount }) =>
       expectedCommitHitsHexspeak(repositoryCommitCount),
