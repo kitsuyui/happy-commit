@@ -83,16 +83,7 @@ export function expectedCommitHitsSameNumbers(
 export function expectedCommitHitsHexspeak(
   repositoryCommitCount: number
 ): number {
-  const patterns = [
-    'f00d',
-    'feed',
-    'cafe',
-    'c0ffee',
-    'deadbeef',
-    'defecated',
-    '0ffice',
-    'badcable',
-  ]
+  const patterns = ['f00d', 'feed', 'cafe', 'c0ffee', 'deadbeef']
 
   const probability = patterns.reduce((sum, pattern) => {
     return sum + slidingWindows(pattern.length) / 16 ** pattern.length

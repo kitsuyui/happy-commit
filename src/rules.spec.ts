@@ -88,4 +88,18 @@ describe('parseRules', () => {
       })
     ).toBeGreaterThan(0)
   })
+
+  it('hexspeak rule only matches patterns composed of valid hex characters', () => {
+    const rule = Rules.commit_hits_hexspeak.rule
+    // SHA hashes consist only of [0-9a-f]; these former patterns contain non-hex chars
+    expect(rule.test('defecated')).toBe(false) // 't' is not hex
+    expect(rule.test('0ffice')).toBe(false) // 'i' is not hex
+    expect(rule.test('badcable')).toBe(false) // 'l' is not hex
+    // Valid hexspeak patterns should still match
+    expect(rule.test('f00d')).toBe(true)
+    expect(rule.test('deadbeef')).toBe(true)
+    expect(rule.test('cafe')).toBe(true)
+    expect(rule.test('c0ffee')).toBe(true)
+    expect(rule.test('feed')).toBe(true)
+  })
 })
