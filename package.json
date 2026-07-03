@@ -4,7 +4,8 @@
     "test": "vitest run --coverage",
     "lint": "biome check ./",
     "format": "biome check --write ./",
-    "generate-json-schema": "typescript-json-schema --strictNullChecks true --noExtraProps true --required src/rules.ts RuleStringPatterns > ./schema.json"
+    "generate-json-schema": "typescript-json-schema --strictNullChecks true --noExtraProps true --required src/rules.ts RuleStringPatterns > ./schema.json",
+    "release:verify": "bun ./scripts/verify-release-version.mjs"
   },
   "dependencies": {
     "@actions/core": "^3.0.0",

@@ -125,6 +125,18 @@ This sets up the following Git hooks:
 
 CI still runs the complete suite on every pull request and push to main; the hooks bring that feedback earlier in your workflow.
 
+## Release process
+
+Releases are published from GitHub Releases and version tags. The release
+workflow verifies the tagged commit by installing dependencies, running lint and
+tests, rebuilding `dist/`, and checking that the release tag matches
+`package.json`.
+
+Before publishing a release, update `package.json` to the release version,
+rebuild and commit `dist/`, and create a GitHub Release for the matching tag.
+Use the manual Release workflow dispatch to re-run the same verification for an
+existing tag.
+
 ## License
 
 MIT
