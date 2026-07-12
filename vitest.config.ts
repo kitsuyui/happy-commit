@@ -14,6 +14,10 @@ export default defineConfig({
       '**/coverage/**',
       '**/.git/**',
     ],
+    coverage: {
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.spec.ts'],
+    },
   },
   /**
    * clearScreen: true clears the screen when running tests. The default is true
