@@ -406,6 +406,73 @@ describe('updateMessage', () => {
     })
     expect(octokit.issues.deleteComment).toHaveBeenCalledTimes(1)
   })
+
+  it('skips deleting when a newer lucky run already replaced the managed comment state', async () => {
+    const octokit = createOctokitMock()
+    octokit.issues.listComments
+      .mockResolvedValueOnce({
+        data: [
+          {
+            id: 55,
+            body_text: '<!-- happy-commit:v1 -->\nold body',
+            body: '<!-- happy-commit:v1 -->\nold body',
+            user: { login: 'github-actions[bot]' },
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        data: [
+          {
+            id: 55,
+            body_text: '<!-- happy-commit:v1 -->\nnew body',
+            body: '<!-- happy-commit:v1 -->\nnew body',
+            user: { login: 'github-actions[bot]' },
+          },
+        ],
+      })
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: false,
+      body: '',
+    })
+
+    expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
+    expect(octokit.issues.updateComment).not.toHaveBeenCalled()
+    expect(octokit.issues.createComment).not.toHaveBeenCalled()
+  })
+
+  it('skips updating when a newer run already changed the managed comment body', async () => {
+    const octokit = createOctokitMock()
+    octokit.issues.listComments
+      .mockResolvedValueOnce({
+        data: [
+          {
+            id: 55,
+            body_text: '<!-- happy-commit:v1 -->\nold body',
+            body: '<!-- happy-commit:v1 -->\nold body',
+            user: { login: 'github-actions[bot]' },
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        data: [
+          {
+            id: 55,
+            body_text: '<!-- happy-commit:v1 -->\nnewer body',
+            body: '<!-- happy-commit:v1 -->\nnewer body',
+            user: { login: 'github-actions[bot]' },
+          },
+        ],
+      })
+
+    await updateMessage(octokit as never, 123, 'github-actions[bot]', {
+      lucky: true,
+      body: 'updated by older run',
+    })
+
+    expect(octokit.issues.updateComment).not.toHaveBeenCalled()
+    expect(octokit.issues.deleteComment).not.toHaveBeenCalled()
+  })
 })
 
 describe('github helpers', () => {
