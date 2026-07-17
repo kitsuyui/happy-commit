@@ -100,46 +100,119 @@ export async function updateMessage(
     userLogin
   )
   const action = decideCommentAction(pastComment, message)
-  await applyCommentAction(octokit, prNum, userLogin, action)
+  await applyCommentAction(octokit, prNum, userLogin, pastComment, action)
 }
 
 async function applyCommentAction(
   octokit: Octokit,
   prNum: number,
   userLogin: string,
+  pastComment: Comment | null,
   action: CommentAction
 ): Promise<void> {
-  const context = github.context
   switch (action.type) {
-    case 'update': {
-      await octokit.issues.updateComment({
-        ...context.repo,
-        comment_id: action.commentId,
-        body: action.body,
-      })
+    case 'update':
+      await updateManagedComment(octokit, prNum, userLogin, pastComment, action)
       return
-    }
-    case 'create': {
-      await octokit.issues.createComment({
-        ...context.repo,
-        issue_number: prNum,
-        body: action.body,
-      })
-      // After create, re-fetch to clean up any duplicate that a concurrent
-      // run may have created in the same window.
-      await deduplicateManagedComments(octokit, prNum, userLogin)
+    case 'create':
+      await createManagedComment(octokit, prNum, userLogin, action.body)
       return
-    }
-    case 'delete': {
-      await octokit.issues.deleteComment({
-        ...context.repo,
-        comment_id: action.commentId,
-      })
+    case 'delete':
+      await deleteManagedComment(octokit, prNum, userLogin, pastComment, action)
       return
-    }
     case 'noop':
       return
   }
+}
+
+async function updateManagedComment(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string,
+  pastComment: Comment | null,
+  action: Extract<CommentAction, { type: 'update' }>
+): Promise<void> {
+  if (
+    !(await canApplyMutatingAction(
+      octokit,
+      prNum,
+      userLogin,
+      pastComment,
+      action.commentId
+    ))
+  ) {
+    return
+  }
+
+  await octokit.issues.updateComment({
+    ...github.context.repo,
+    comment_id: action.commentId,
+    body: action.body,
+  })
+}
+
+async function createManagedComment(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string,
+  body: string
+): Promise<void> {
+  await octokit.issues.createComment({
+    ...github.context.repo,
+    issue_number: prNum,
+    body,
+  })
+  // After create, re-fetch to clean up any duplicate that a concurrent
+  // run may have created in the same window.
+  await deduplicateManagedComments(octokit, prNum, userLogin)
+}
+
+async function deleteManagedComment(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string,
+  pastComment: Comment | null,
+  action: Extract<CommentAction, { type: 'delete' }>
+): Promise<void> {
+  if (
+    !(await canApplyMutatingAction(
+      octokit,
+      prNum,
+      userLogin,
+      pastComment,
+      action.commentId
+    ))
+  ) {
+    return
+  }
+
+  await octokit.issues.deleteComment({
+    ...github.context.repo,
+    comment_id: action.commentId,
+  })
+}
+
+async function canApplyMutatingAction(
+  octokit: Octokit,
+  prNum: number,
+  userLogin: string,
+  pastComment: Comment | null,
+  commentId: number
+): Promise<boolean> {
+  if (!pastComment || pastComment.id !== commentId) {
+    return false
+  }
+
+  const latestComment = await deduplicateManagedComments(
+    octokit,
+    prNum,
+    userLogin
+  )
+  return (
+    latestComment !== null &&
+    latestComment.id === pastComment.id &&
+    latestComment.body === pastComment.body
+  )
 }
 
 async function listAllComments(
