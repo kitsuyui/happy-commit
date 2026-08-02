@@ -19,18 +19,6 @@ function expectedOccurrencesFromSubstringProbability(
   )
 }
 
-export function expectedPowersOfTen(prNum: number): number {
-  let count = 0
-  let current = 10
-
-  while (current <= prNum) {
-    count += 1
-    current *= 10
-  }
-
-  return count
-}
-
 export function expectedSingleNonzeroDigitPrNumbers(prNum: number): number {
   if (prNum < 10) {
     return 0
