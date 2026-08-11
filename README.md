@@ -15,7 +15,7 @@ It also tracks built action artifact size with
 
 By default, happy-commit posts a managed PR comment when it finds one of these built-in patterns:
 
-- Celebrate when issue number reaches 10, 100, 1000, ... etc.
+- Celebrate when issue number is a non-zero digit followed by one or more zeros (e.g. 10, 20, 90, 100, 200, 1000, ... etc.)
 - Celebrate when issue number is all sevens (e.g. 777, 7777, ... etc.)
 - Celebrate when commit id contains lucky number (e.g. 7, 77, 777, ... etc.)
 - Celebrate when commit id is a sequence of digits (e.g. 123, 1234, ... etc.)
