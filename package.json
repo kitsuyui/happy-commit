@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@actions/core": "^3.0.0",
-    "@actions/github": "^9.0.0",
+    "@actions/github": "^9.1.1",
     "@octokit/action": "^8.0.4",
     "ajv": "^8.17.1",
     "mustache": "^4.2.0"
