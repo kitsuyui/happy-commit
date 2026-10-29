@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^2.6.3",
-    "@swc/core": "^1.15.11",
+    "@swc/core": "^1.16.20",
     "@types/mustache": "^4.2.6",
     "@types/node": "^24",
     "@vitest/coverage-v8": "^5.0.5",
