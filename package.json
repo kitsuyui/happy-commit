@@ -21,7 +21,7 @@
   "author": "kitsuyui <kitsuyui@kitsuyui.com>",
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "^2.6.3",
+    "@biomejs/biome": "^2.6.4",
     "@swc/core": "^1.16.20",
     "@types/mustache": "^4.2.6",
     "@types/node": "^24",
