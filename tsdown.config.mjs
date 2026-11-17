@@ -38,4 +38,9 @@ export default defineConfig({
     'mustache',
   ],
   inlineOnly: false,
+  deps: {
+    dts: {
+      neverBundle: ['ajv'],
+    },
+  },
 })
