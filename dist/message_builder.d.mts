@@ -1,7 +1,5 @@
 import { LuckyJudgeContext, MessageContext, MessageForRule } from "./interfaces.mjs";
 import { RulesKey } from "./rules.mjs";
-
-//#region src/message_builder.d.ts
 /**
  * MessageBuilder is a class to build a message for a pull request
  *
@@ -21,11 +19,10 @@ declare class MessageBuilder {
 /**
  * CustomMessageBuilder is a class to build a message for a pull request with custom rules
  */
-declare class CustomMessageBuilder {
+export declare class CustomMessageBuilder {
   builder: MessageBuilder;
-  constructor(message: string, overrides?: { [key in RulesKey]?: boolean }, additionalRules?: MessageForRule[]);
+  constructor(message: string, overrides?: { [key in RulesKey]?: boolean; }, additionalRules?: MessageForRule[]);
   build(context: LuckyJudgeContext): MessageContext;
 }
-//#endregion
-export { CustomMessageBuilder };
+export {};
 //# sourceMappingURL=message_builder.d.mts.map

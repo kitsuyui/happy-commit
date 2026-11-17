@@ -1,41 +1,38 @@
-//#region src/interfaces.d.ts
-interface MessageContext {
+export interface MessageContext {
   lucky: boolean;
   body: string;
 }
-interface Comment {
+export interface Comment {
   id: number;
   body: string;
 }
-interface LuckyJudgeContext {
+export interface LuckyJudgeContext {
   commitIds: string[];
   prNum: number;
   repositoryCommitCount: number;
   maxExpectedOccurrences?: number;
 }
-interface LuckyCommitResult {
+export interface LuckyCommitResult {
   lucky: boolean;
   match: string;
 }
-type Rule = RegExp;
-type Message = string;
-interface MessageForRule {
+export type Rule = RegExp;
+export type Message = string;
+export interface MessageForRule {
   id?: string;
   kind: 'commit' | 'pr';
   rule: Rule;
   message: string;
   expectedOccurrences?: (context: LuckyJudgeContext) => number;
 }
-type MessageForRuleSet = MessageForRule[];
-type NamedMessageForRuleSet = {
+export type MessageForRuleSet = MessageForRule[];
+export type NamedMessageForRuleSet = {
   [key: string]: MessageForRule;
 };
-type RuleStringPattern = {
+export type RuleStringPattern = {
   kind: 'pr' | 'commit';
   rule: string;
   message: string;
 };
-type RuleStringPatterns = RuleStringPattern[];
-//#endregion
-export { Comment, LuckyCommitResult, LuckyJudgeContext, Message, MessageContext, MessageForRule, MessageForRuleSet, NamedMessageForRuleSet, Rule, RuleStringPattern, RuleStringPatterns };
+export type RuleStringPatterns = RuleStringPattern[];
 //# sourceMappingURL=interfaces.d.mts.map
