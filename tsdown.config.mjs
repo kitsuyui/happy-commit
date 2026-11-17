@@ -35,6 +35,7 @@ export default defineConfig({
     '@octokit/action',
     '@octokit/core',
     '@octokit/types',
+    'ajv',
     'mustache',
   ],
   inlineOnly: false,

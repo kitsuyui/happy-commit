@@ -1,2 +1,1 @@
-import e from"ajv";const t=new e().compile({$schema:`http://json-schema.org/draft-07/schema#`,items:{additionalProperties:!1,properties:{kind:{enum:[`commit`,`pr`],type:`string`},message:{type:`string`},rule:{type:`string`}},required:[`kind`,`rule`,`message`],type:`object`},type:`array`});export{t as validateRules};
-//# sourceMappingURL=validate.mjs.map
+export{t as validateRules}from"./validate-C6P2clxt.mjs";
